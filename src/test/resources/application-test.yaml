@@ -1,0 +1,24 @@
+spring:
+  test:
+    database:
+      replace: none
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8:///noti
+    username: noti
+    password: noti
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      format_sql: true
+      ddl-auto: create-drop
+    show-sql: true
+
+
+externalUrl: https://github.com/Noti-iOS/noti-backend/wiki
+#logging:
+#  level:
+#    com:
+#      zaxxer:
+#        hikari: debug
