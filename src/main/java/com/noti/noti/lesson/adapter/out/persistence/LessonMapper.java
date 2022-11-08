@@ -10,6 +10,7 @@ public class LessonMapper {
   Lesson mapToDomainEntity(LessonJpaEntity lessonJpaEntity) {
     return Lesson.builder()
         .id(lessonJpaEntity.getId())
+        .days(lessonJpaEntity.getDaySet())
         .lessonName(lessonJpaEntity.getLessonName())
         .startTime(lessonJpaEntity.getStartTime())
         .endTime(lessonJpaEntity.getEndTime())
@@ -21,6 +22,7 @@ public class LessonMapper {
   LessonJpaEntity mapToJpaEntity(Lesson lesson) {
     return LessonJpaEntity.builder()
         .id(lesson.getId())
+        .daySet(lesson.getDays())
         .lessonName(lesson.getLessonName())
         .endTime(lesson.getEndTime())
         .startTime(lesson.getStartTime())

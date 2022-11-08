@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class LessonPersistenceAdapter implements SaveLessonPort {
 
