@@ -9,13 +9,13 @@ import lombok.Getter;
 public class LessonBook {
 
   private Long id;
-  private Long bookId;
-  private Long lessonId;
+  private Book book;
+  private Lesson lesson;
 
   @Builder
-  public LessonBook(Long id, Long bookId, Long lessonId) {
+  public LessonBook(Long id, Book book, Lesson lesson) {
     this.id = id;
-    this.bookId = bookId;
-    this.lessonId = lessonId;
+    this.book = book;
+    this.lesson = lesson;
   }
 }

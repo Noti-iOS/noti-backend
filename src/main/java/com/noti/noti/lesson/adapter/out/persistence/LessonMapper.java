@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LessonMapper {
 
-  Lesson mapToDomainEntity(LessonJpaEntity lessonJpaEntity) {
+  public Lesson mapToDomainEntity(LessonJpaEntity lessonJpaEntity) {
     return Lesson.builder()
         .id(lessonJpaEntity.getId())
         .days(lessonJpaEntity.getDaySet())
@@ -19,7 +19,7 @@ public class LessonMapper {
         .build();
   }
 
-  LessonJpaEntity mapToJpaEntity(Lesson lesson) {
+  public LessonJpaEntity mapToJpaEntity(Lesson lesson) {
     return LessonJpaEntity.builder()
         .id(lesson.getId())
         .daySet(lesson.getDays())
