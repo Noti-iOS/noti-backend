@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookMapper {
 
-  Book mapToDomainEntity(BookJpaEntity bookJpaEntity) {
+  public Book mapToDomainEntity(BookJpaEntity bookJpaEntity) {
 
     return Book.builder()
         .id(bookJpaEntity.getId())
@@ -16,7 +16,7 @@ public class BookMapper {
         .build();
   }
 
-  BookJpaEntity mapToJpaEntity(Book book) {
+  public BookJpaEntity mapToJpaEntity(Book book) {
     return BookJpaEntity.builder()
         .id(book.getId())
         .title(book.getTitle())
