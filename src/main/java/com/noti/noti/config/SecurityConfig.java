@@ -44,7 +44,7 @@ public class SecurityConfig {
 
         .and()
         .authorizeRequests()
-        .antMatchers("/api/teacher/login/**").permitAll()
+        .antMatchers("/api/teacher/login/**","/", "/swagger-ui/**", "/swagger-ui.html","/api-docs").permitAll()
         .anyRequest().authenticated()
 
         .and()
