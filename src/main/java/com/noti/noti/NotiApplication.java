@@ -8,6 +8,7 @@ public class NotiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotiApplication.class, args);
+
 	}
 
 }
