@@ -32,7 +32,8 @@ public class SecurityConfig {
 
     http
         .csrf().disable()
-        .cors().disable()
+        .cors()
+        .and()
         .httpBasic().disable()
 
         .exceptionHandling()
@@ -44,7 +45,7 @@ public class SecurityConfig {
 
         .and()
         .authorizeRequests()
-        .antMatchers("/api/teacher/login/**","/", "/swagger-ui/**", "/swagger-ui.html","/api-docs").permitAll()
+        .antMatchers("/api/teacher/login/**","/", "/swagger-ui.html","/swagger-ui/**", "/api-docs/**").permitAll()
         .anyRequest().authenticated()
 
         .and()
