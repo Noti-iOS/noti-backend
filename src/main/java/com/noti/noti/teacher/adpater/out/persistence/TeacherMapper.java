@@ -20,9 +20,14 @@ public class TeacherMapper {
   // jpaEntity -> domain
   Teacher mapToDomainEntity(TeacherJpaEntity teacherJpaEntity) {
 
-    return new Teacher(teacherJpaEntity.getUsername(), teacherJpaEntity.getSocialId(),
-        teacherJpaEntity.getNickname(), teacherJpaEntity.getEmail(),
-        teacherJpaEntity.getProfile(), teacherJpaEntity.getRole());
+    return Teacher.builder()
+        .id(teacherJpaEntity.getUsername())
+        .social(teacherJpaEntity.getSocialId())
+        .nickname(teacherJpaEntity.getNickname())
+        .email(teacherJpaEntity.getEmail())
+        .profile(teacherJpaEntity.getProfile())
+        .role(teacherJpaEntity.getRole())
+        .build();
   }
 
 }

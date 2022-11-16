@@ -10,4 +10,6 @@ public interface TeacherRepository extends JpaRepository<TeacherJpaEntity, Long>
 
   Optional<TeacherJpaEntity> findBySocialId(Long social);
 
+  @Override
+  <S extends TeacherJpaEntity> S save(S entity);
 }
