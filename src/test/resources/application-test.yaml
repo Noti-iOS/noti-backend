@@ -15,7 +15,8 @@ spring:
       ddl-auto: create-drop
     show-sql: true
 
-
+jwt:
+  secret: secretKey-test-jwt-for-noti-project-update
 externalUrl: https://github.com/Noti-iOS/noti-backend/wiki
 #logging:
 #  level:
