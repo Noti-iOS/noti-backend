@@ -31,7 +31,7 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
       AuthenticationManager authenticationManager) {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
         authenticationManager, teacherPersistenceAdapter, jwtTokenProvider);
-    customAuthenticationFilter.setFilterProcessesUrl("/api/teacher/login");
+    customAuthenticationFilter.setFilterProcessesUrl("/api/teacher/login/**");
     return customAuthenticationFilter;
   }
 }

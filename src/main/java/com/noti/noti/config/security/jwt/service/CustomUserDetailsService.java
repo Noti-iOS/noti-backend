@@ -2,7 +2,9 @@ package com.noti.noti.config.security.jwt.service;
 
 import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
 import com.noti.noti.teacher.domain.Role;
+import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
+import java.util.Arrays;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,15 +25,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
     UserDetails userDetails;
 
-    boolean validate = teacherPersistenceAdapter.validate(username);
+    String[] s = username.split("_"); //String[0]-id, String[1]-social
+
+    String id = s[0];
+    SocialType socialType = Arrays.stream(SocialType.values())
+        .filter(type -> type.getSocialName().equals(s[1]))
+        .findFirst()
+        .orElseThrow(()->new IllegalArgumentException("잘못된 요청입니다."));
+
+    boolean validate = teacherPersistenceAdapter.validate(id, socialType);
 
     if (validate) {// id값 저장되어 있으면 -> 로그인
-      Teacher teacher = teacherPersistenceAdapter.findBySocialId(Long.parseLong(username));
+      Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(id));
       userDetails = createUserDetails(teacher);
     } else {// id 값 저장 안되어 있으면 -> 회원가입 -> 로그인
-      Teacher teacher = signIn(username);
+      Teacher teacher = signIn(id, socialType);
       userDetails = createUserDetails(teacher);
     }
     return userDetails;
@@ -45,10 +56,11 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   /* 회원가입 - 해당 아이디 없으면 저장 */
-  private Teacher signIn(String username) {
+  private Teacher signIn(String id, SocialType socialType) {
     Teacher teacher = Teacher.builder()
-        .social(Long.parseLong(username))
+        .social(Long.parseLong(id))
         .role(Role.ROLE_TEACHER)
+        .socialType(socialType)
         .build();
 
     return teacherPersistenceAdapter.saveTeacher(teacher);

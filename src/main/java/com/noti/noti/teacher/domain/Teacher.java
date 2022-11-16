@@ -17,14 +17,17 @@ public class Teacher {
   private Role role;
   private Long social;
 
+  private SocialType socialType;
+
   @Builder
-  public Teacher(Long id, Long social, String nickname, String email, String profile, Role role) {
+  public Teacher(Long id, Long social, String nickname, String email, String profile, Role role, SocialType socialType) {
     this.id = id;
     this.social = social;
     this.nickname = nickname;
     this.email = email;
     this.profile = profile;
     this.role = role;
+    this.socialType = socialType;
   }
 
 

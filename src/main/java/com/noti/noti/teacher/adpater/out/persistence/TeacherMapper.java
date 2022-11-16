@@ -14,6 +14,7 @@ public class TeacherMapper {
         .email(teacher.getEmail())
         .role(teacher.getRole())
         .profile(teacher.getProfile())
+        .socialType(teacher.getSocialType())
         .build();
   }
 
@@ -26,6 +27,7 @@ public class TeacherMapper {
         .email(teacherJpaEntity.getEmail())
         .profile(teacherJpaEntity.getProfile())
         .role(teacherJpaEntity.getRole())
+        .socialType(teacherJpaEntity.getSocialType())
         .build();
   }
 
