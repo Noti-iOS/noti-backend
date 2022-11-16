@@ -1,21 +1,16 @@
 package com.noti.noti.teacher.adpater.out.persistence;
 
-import com.noti.noti.teacher.application.port.FindTeacherPort;
+import com.noti.noti.teacher.application.port.out.FindTeacherPort;
+import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
 import com.noti.noti.teacher.domain.Teacher;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-/*
-The adapter implements the LoadTeacherPort(), updateActivities()
-methods required by the implemented output ports.
-It uses Spring Data repositories to load data from and save data to the database
-and an AccountMapper to map Account domain objects into AccountJpaEntity objects
-which represent an account within the database.
-* */
+
 @RequiredArgsConstructor
 @Repository
-public class TeacherPersistenceAdapter implements FindTeacherPort {
+public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPort {
 
   private final TeacherRepository teacherRepository;
   private final TeacherMapper teacherMapper;
@@ -27,5 +22,20 @@ public class TeacherPersistenceAdapter implements FindTeacherPort {
         .orElseThrow(NoSuchElementException::new);
     Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
     return teacher;
+  }
+
+
+  /* 선생님 저장 */
+  @Override
+  public Teacher saveTeacher(Teacher teacher) {
+    TeacherJpaEntity teacherJpaEntity = teacherMapper.mapToJpaEntity(teacher);
+    TeacherJpaEntity newTeacher = teacherRepository.save(teacherJpaEntity);
+
+    return teacherMapper.mapToDomainEntity(newTeacher);
+  }
+
+  /* 회원 여부 확인 */
+  public boolean validate(String username) {
+    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
   }
 }

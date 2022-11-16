@@ -8,7 +8,7 @@ public class TeacherMapper {
 
   TeacherJpaEntity mapToJpaEntity(Teacher teacher) {
     return new TeacherJpaEntity.TeacherJpaEntityBuilder()
-        .username(teacher.getUsername())
+        .id(teacher.getId())
         .socialId(teacher.getSocial())
         .nickname(teacher.getNickname())
         .email(teacher.getEmail())
@@ -17,12 +17,16 @@ public class TeacherMapper {
         .build();
   }
 
-  // jpaEntity -> domain
   Teacher mapToDomainEntity(TeacherJpaEntity teacherJpaEntity) {
 
-    return new Teacher(teacherJpaEntity.getUsername(), teacherJpaEntity.getSocialId(),
-        teacherJpaEntity.getNickname(), teacherJpaEntity.getEmail(),
-        teacherJpaEntity.getProfile(), teacherJpaEntity.getRole());
+    return Teacher.builder()
+        .id(teacherJpaEntity.getId())
+        .social(teacherJpaEntity.getSocialId())
+        .nickname(teacherJpaEntity.getNickname())
+        .email(teacherJpaEntity.getEmail())
+        .profile(teacherJpaEntity.getProfile())
+        .role(teacherJpaEntity.getRole())
+        .build();
   }
 
 }

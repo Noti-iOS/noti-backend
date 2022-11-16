@@ -1,4 +1,4 @@
-package com.noti.noti.teacher.application.port;
+package com.noti.noti.teacher.application.port.out;
 
 import com.noti.noti.teacher.domain.Teacher;
 
