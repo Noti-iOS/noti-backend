@@ -1,0 +1,21 @@
+# appspec.yml
+
+version: 0.0
+os: linux
+files:
+  - source:  /
+    destination: /home/ubuntu/app/zip
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  BeforeInstall:
+    - location: scripts/beforeInstall.sh
+  ApplicationStart:
+    - location: scripts/deploy.sh
+      timeout: 360
