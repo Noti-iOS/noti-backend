@@ -5,6 +5,6 @@ import com.noti.noti.teacher.domain.Teacher;
 
 public interface SaveTeacherPort {
 
-  TeacherJpaEntity saveTeacher(Teacher teacher);
+  Teacher saveTeacher(Teacher teacher);
 
 }

@@ -1,6 +1,5 @@
 package com.noti.noti.teacher.domain;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Teacher {
 
-  private Long username;
+  private Long id;
   private String nickname;
   private String email;
   private String profile;
@@ -20,7 +19,7 @@ public class Teacher {
 
   @Builder
   public Teacher(Long id, Long social, String nickname, String email, String profile, Role role) {
-    this.username = getUsername();
+    this.id = id;
     this.social = social;
     this.nickname = nickname;
     this.email = email;

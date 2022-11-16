@@ -27,9 +27,15 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
 
   /* 선생님 저장 */
   @Override
-  public TeacherJpaEntity saveTeacher(Teacher teacher) {
+  public Teacher saveTeacher(Teacher teacher) {
     TeacherJpaEntity teacherJpaEntity = teacherMapper.mapToJpaEntity(teacher);
     TeacherJpaEntity newTeacher = teacherRepository.save(teacherJpaEntity);
-    return newTeacher;
+
+    return teacherMapper.mapToDomainEntity(newTeacher);
+  }
+
+  /* 회원 여부 확인 */
+  public boolean validate(String username) {
+    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
   }
 }
