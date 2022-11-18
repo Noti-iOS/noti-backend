@@ -29,16 +29,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
   private final TeacherPersistenceAdapter teacherPersistenceAdapter;
   private final JwtTokenProvider jwtTokenProvider;
+  private final OAuthManager oAuthManager;
 
   private final String PREFIX_URL = "/api/teacher/login/";
 
 
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager,
       TeacherPersistenceAdapter teacherPersistenceAdapter,
-      JwtTokenProvider jwtTokenProvider) {
+      JwtTokenProvider jwtTokenProvider,
+      OAuthManager oAuthManager) {
     super(authenticationManager);
     this.jwtTokenProvider = jwtTokenProvider;
     this.teacherPersistenceAdapter = teacherPersistenceAdapter;
+    this.oAuthManager = oAuthManager;
   }
 
   /* /login 으로 요청이 올 때 */
@@ -49,11 +52,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     String accessToken = request.getHeader("access_token");
     SocialType socialType = extractSocialType(request);
 
-    TeacherInfo teacherInfo = getTeacherInfo(accessToken, socialType);
+//    TeacherInfo teacherInfo = getTeacherInfo(accessToken, socialType);
+    // 값이 카카오면 kakaoTeacherAdapter
+    // 값이 애플이면 AppleTeacherAdapter
+    String socialId = oAuthManager.getSocialId(socialType, accessToken);
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            teacherInfo.getId().toString()+"_"+socialType.getSocialName(), "");
+            socialId+"_"+socialType.getSocialName(), "");
 
 
     return getAuthenticationManager().authenticate(authenticationToken);

@@ -3,6 +3,7 @@ package com.noti.noti.config;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.config.security.jwt.filter.CustomAuthenticationFilter;
 import com.noti.noti.config.security.jwt.filter.JwtFilter;
+import com.noti.noti.config.security.jwt.filter.OAuthManager;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
   private final JwtTokenProvider jwtTokenProvider;
   private final JwtFilter jwtFilter;
   private final TeacherPersistenceAdapter teacherPersistenceAdapter;
+  private final OAuthManager oAuthManager;
 
   @Override
   public void configure(HttpSecurity builder) throws Exception {
@@ -30,7 +32,7 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
   public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter(
       AuthenticationManager authenticationManager) {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
-        authenticationManager, teacherPersistenceAdapter, jwtTokenProvider);
+        authenticationManager, teacherPersistenceAdapter, jwtTokenProvider, oAuthManager);
     customAuthenticationFilter.setFilterProcessesUrl("/api/teacher/login/**");
     return customAuthenticationFilter;
   }
