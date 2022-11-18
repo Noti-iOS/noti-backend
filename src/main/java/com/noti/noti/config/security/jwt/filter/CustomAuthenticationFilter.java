@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.teacher.adpater.in.web.dto.KakaoDto.TeacherInfo;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
+import com.noti.noti.teacher.domain.SocialType;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.FilterChain;
@@ -27,14 +29,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
   private final TeacherPersistenceAdapter teacherPersistenceAdapter;
   private final JwtTokenProvider jwtTokenProvider;
+  private final OAuthManager oAuthManager;
+
+  private final String PREFIX_URL = "/api/teacher/login/";
 
 
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager,
       TeacherPersistenceAdapter teacherPersistenceAdapter,
-      JwtTokenProvider jwtTokenProvider) {
+      JwtTokenProvider jwtTokenProvider,
+      OAuthManager oAuthManager) {
     super(authenticationManager);
     this.jwtTokenProvider = jwtTokenProvider;
     this.teacherPersistenceAdapter = teacherPersistenceAdapter;
+    this.oAuthManager = oAuthManager;
   }
 
   /* /login 으로 요청이 올 때 */
@@ -42,10 +49,28 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticationException {
 
-    String accessToken = request.getHeader("access_token"); // 1
+    String accessToken = request.getHeader("access_token");
+    SocialType socialType = extractSocialType(request);
 
-    TeacherInfo teacherInfo = WebClient.create( // 2
-            "https://kapi.kakao.com/v2/user/me")
+//    TeacherInfo teacherInfo = getTeacherInfo(accessToken, socialType);
+    // 값이 카카오면 kakaoTeacherAdapter
+    // 값이 애플이면 AppleTeacherAdapter
+    String socialId = oAuthManager.getSocialId(socialType, accessToken);
+
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(
+            socialId+"_"+socialType.getSocialName(), "");
+
+
+    return getAuthenticationManager().authenticate(authenticationToken);
+  }
+
+
+  /* 소셜 api로 사용자 정보 가져오기 */
+  private TeacherInfo getTeacherInfo(String accessToken, SocialType socialType) {
+
+    TeacherInfo teacherInfo = WebClient.create(
+            socialType.getUerInfoUrl())
         .get()
         .header("Authorization", "Bearer " + accessToken)
         .retrieve()
@@ -53,11 +78,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(RuntimeException::new))
         .bodyToMono(TeacherInfo.class)
         .block();
-
-    UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(teacherInfo.getId().toString(), "");
-
-    return getAuthenticationManager().authenticate(authenticationToken);
+    return teacherInfo;
   }
 
   /* 로그인 성공 시 호출 */
@@ -90,5 +111,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     body.put("bool", false);
 
     new ObjectMapper().writeValue(response.getOutputStream(), body);
+  }
+
+  /* 소셜로그인 구분 */
+  private SocialType extractSocialType(HttpServletRequest request) {
+    return Arrays.stream(SocialType.values())
+        .filter(socialType -> socialType.getSocialName()
+            .equals(request.getRequestURI().substring(PREFIX_URL.length())))
+        .findFirst()
+        .orElseThrow(()-> new IllegalArgumentException("잘못된 url 주소입니다."));
   }
 }
