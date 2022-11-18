@@ -1,4 +1,4 @@
-package com.noti.noti.studentlesson.domain;
+package com.noti.noti.studentlesson.domain.model;
 
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.student.domain.model.Student;

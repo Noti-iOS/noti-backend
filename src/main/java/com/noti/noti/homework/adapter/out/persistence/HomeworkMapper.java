@@ -14,7 +14,7 @@ public class HomeworkMapper {
   private final LessonMapper lessonMapper;
   private final BookMapper bookMapper;
 
-  Homework mapToDomainEntity(HomeworkJpaEntity homeworkJpaEntity){
+  public Homework mapToDomainEntity(HomeworkJpaEntity homeworkJpaEntity){
     return Homework.builder()
         .id(homeworkJpaEntity.getId())
         .lesson(lessonMapper.mapToDomainEntity(homeworkJpaEntity.getLesson()))
@@ -24,7 +24,7 @@ public class HomeworkMapper {
         .build();
   }
 
-  HomeworkJpaEntity mapToJpaEntity(Homework homework) {
+  public HomeworkJpaEntity mapToJpaEntity(Homework homework) {
     return HomeworkJpaEntity.builder()
         .id(homework.getId())
         .content(homework.getContent())

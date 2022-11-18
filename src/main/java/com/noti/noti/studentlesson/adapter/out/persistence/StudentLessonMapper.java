@@ -3,7 +3,7 @@ package com.noti.noti.studentlesson.adapter.out.persistence;
 import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
 import com.noti.noti.student.adapter.out.persistence.StudentMapper;
 import com.noti.noti.studentlesson.adapter.out.persistence.jpa.model.StudentLessonJpaEntity;
-import com.noti.noti.studentlesson.domain.StudentLesson;
+import com.noti.noti.studentlesson.domain.model.StudentLesson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
