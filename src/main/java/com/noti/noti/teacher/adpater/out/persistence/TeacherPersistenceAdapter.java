@@ -2,6 +2,7 @@ package com.noti.noti.teacher.adpater.out.persistence;
 
 import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
+import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,15 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
     return teacher;
   }
 
+  @Override
+  public Teacher findBySocialTypeAndSocialId(SocialType socialType, Long socialId) {
+    TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialTypeAndSocialId(socialType,
+            socialId)
+        .orElseThrow(NoSuchElementException::new);
+    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
+    return teacher;
+  }
+
 
   /* 선생님 저장 */
   @Override
@@ -35,7 +45,9 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   }
 
   /* 회원 여부 확인 */
-  public boolean validate(String username) {
-    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
+  public boolean validate(String username, SocialType socialType) {
+    return teacherRepository
+        .findBySocialTypeAndSocialId(socialType, Long.parseLong(username)).isPresent();
+//    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
   }
 }
