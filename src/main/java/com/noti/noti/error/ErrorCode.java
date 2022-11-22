@@ -3,8 +3,8 @@ package com.noti.noti.error;
 public enum ErrorCode {
 
   // Common
-  INVALID_INPUT_VALUE(400, "C001", " 옳바르지 않는 입력 값 입니다"),
-  METHOD_NOT_ALLOWED(405, "C002", " 옳바르지 않는 입력 값 입니다"),
+  INVALID_INPUT_VALUE(400, "C001", " 올바르지 않은 입력 값입니다"),
+  METHOD_NOT_ALLOWED(405, "C002", " 올바르지 않은 호출입니다"),
   ENTITY_NOT_FOUND(400, "C003", " 정보가 존재하지 않습니다"),
   INTERNAL_SERVER_ERROR(500, "C004", "서버 에러"),
   INVALID_TYPE_VALUE(400, "C005", " 옳바르지 않는 타입의 값을 입력했습니다"),
