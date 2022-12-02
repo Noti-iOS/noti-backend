@@ -1,6 +1,8 @@
 package com.noti.noti.lesson.domain.model;
 
 import com.noti.noti.common.domain.model.Day;
+import com.noti.noti.teacher.domain.Teacher;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Set;
@@ -11,18 +13,20 @@ import lombok.Getter;
 public class Lesson {
   private Long id;
 
-  //private Teacher teacher;
+  private Teacher teacher;
   private String lessonName;
-  private Set<Day> days;
+  private Set<DayOfWeek> days;
   private LocalTime startTime;
   private LocalTime endTime;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
   @Builder
-  public Lesson(Long id, String lessonName, Set<Day> days, LocalTime startTime, LocalTime endTime,
-      LocalDateTime createdAt, LocalDateTime modifiedAt) {
+  public Lesson(Long id, Teacher teacher, String lessonName, Set<DayOfWeek> days,
+      LocalTime startTime,
+      LocalTime endTime, LocalDateTime createdAt, LocalDateTime modifiedAt) {
     this.id = id;
+    this.teacher = teacher;
     this.lessonName = lessonName;
     this.days = days;
     this.startTime = startTime;
