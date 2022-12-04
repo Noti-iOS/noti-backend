@@ -1,6 +1,7 @@
 package com.noti.noti.common.adapter.out.persistance;
 
 import com.noti.noti.common.domain.model.Day;
+import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,10 +9,10 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class DaySetConvertor implements AttributeConverter<Set<Day>, String> {
+public class DaySetConvertor implements AttributeConverter<Set<DayOfWeek>, String> {
 
   @Override
-  public String convertToDatabaseColumn(Set<Day> attribute) {
+  public String convertToDatabaseColumn(Set<DayOfWeek> attribute) {
     if (attribute == null) {
       return null;
     }
@@ -21,13 +22,13 @@ public class DaySetConvertor implements AttributeConverter<Set<Day>, String> {
   }
 
   @Override
-  public Set<Day> convertToEntityAttribute(String dbData) {
+  public Set<DayOfWeek> convertToEntityAttribute(String dbData) {
     if (dbData == null) {
       return null;
     }
     String[] days = dbData.split(",");
     return Arrays.stream(days)
-        .map(value -> Day.valueOf(value))
+        .map(value -> DayOfWeek.valueOf(value))
         .collect(Collectors.toSet());
   }
 }
