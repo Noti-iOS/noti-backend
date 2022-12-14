@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
 import com.noti.noti.lesson.domain.model.Lesson;
+import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class LessonMapperTest {
 
-  private LessonMapper lessonMapper = new LessonMapper();
+  private LessonMapper lessonMapper = new LessonMapper(new TeacherMapper());
 
   @Nested
   class mapToDomainEntity_메소드는 {
