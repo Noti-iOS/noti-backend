@@ -30,20 +30,20 @@ public class StudentHomeworkJpaEntity extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "homework_id")
-  private HomeworkJpaEntity homework;
+  private HomeworkJpaEntity homeworkJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "student_id")
-  private StudentJpaEntity student;
+  private StudentJpaEntity studentJpaEntity;
 
   private boolean homeworkStatus;
 
   @Builder
-  public StudentHomeworkJpaEntity(Long id, HomeworkJpaEntity homework, StudentJpaEntity student,
+  public StudentHomeworkJpaEntity(Long id, HomeworkJpaEntity homeworkJpaEntity, StudentJpaEntity studentJpaEntity,
       boolean homeworkStatus) {
     this.id = id;
-    this.homework = homework;
-    this.student = student;
+    this.homeworkJpaEntity = homeworkJpaEntity;
+    this.studentJpaEntity = studentJpaEntity;
     this.homeworkStatus = homeworkStatus;
   }
 }

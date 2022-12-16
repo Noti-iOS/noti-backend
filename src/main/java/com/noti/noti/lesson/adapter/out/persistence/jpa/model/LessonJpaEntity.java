@@ -34,7 +34,7 @@ public class LessonJpaEntity extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "teacher_id")
-  private TeacherJpaEntity teacher;
+  private TeacherJpaEntity teacherJpaEntity;
 
   @Column
   private String lessonName;
@@ -46,17 +46,16 @@ public class LessonJpaEntity extends BaseTimeEntity {
   private LocalTime endTime;
 
   @Column(name = "days")
-  @Convert(converter = DaySetConvertor.class)
-  private Set<DayOfWeek> daySet;
+  private String days;
 
   @Builder
-  public LessonJpaEntity(Long id, TeacherJpaEntity teacher, String lessonName, LocalTime startTime,
-      LocalTime endTime, Set<DayOfWeek> daySet) {
+  public LessonJpaEntity(Long id, TeacherJpaEntity teacherJpaEntity, String lessonName, LocalTime startTime,
+      LocalTime endTime, String days) {
     this.id = id;
-    this.teacher = teacher;
+    this.teacherJpaEntity = teacherJpaEntity;
     this.lessonName = lessonName;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.daySet = daySet;
+    this.days = days;
   }
 }

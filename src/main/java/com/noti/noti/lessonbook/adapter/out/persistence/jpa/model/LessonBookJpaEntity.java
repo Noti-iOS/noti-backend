@@ -30,16 +30,16 @@ public class LessonBookJpaEntity extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "lesson_id")
-  private LessonJpaEntity lesson;
+  private LessonJpaEntity lessonJpaEnity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "book_id")
-  private BookJpaEntity book;
+  private BookJpaEntity bookJpaEntity;
 
   @Builder
-  public LessonBookJpaEntity(Long id, LessonJpaEntity lesson, BookJpaEntity book) {
+  public LessonBookJpaEntity(Long id, LessonJpaEntity lessonJpaEnity, BookJpaEntity bookJpaEntity) {
     this.id = id;
-    this.lesson = lesson;
-    this.book = book;
+    this.lessonJpaEnity = lessonJpaEnity;
+    this.bookJpaEntity = bookJpaEntity;
   }
 }

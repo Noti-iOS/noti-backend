@@ -3,9 +3,7 @@ package com.noti.noti.homework.adapter.out.persistence.jpa.model;
 import com.noti.noti.book.adapter.out.persistence.jpa.model.BookJpaEntity;
 import com.noti.noti.common.adapter.out.persistance.jpa.model.BaseTimeEntity;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
-import com.noti.noti.lesson.domain.model.Lesson;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,21 +43,21 @@ public class HomeworkJpaEntity extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "lesson_id")
-  private LessonJpaEntity lesson;
+  private LessonJpaEntity lessonJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "book_id")
-  private BookJpaEntity book;
+  private BookJpaEntity bookJpaEntity;
 
   @Builder
   public HomeworkJpaEntity(Long id, String homeworkName, String content, LocalDateTime startTime,
-      LocalDateTime endTime, LessonJpaEntity lesson, BookJpaEntity book) {
+      LocalDateTime endTime, LessonJpaEntity lessonJpaEntity, BookJpaEntity bookJpaEntity) {
     this.id = id;
     this.homeworkName = homeworkName;
     this.content = content;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.lesson = lesson;
-    this.book = book;
+    this.lessonJpaEntity = lessonJpaEntity;
+    this.bookJpaEntity = bookJpaEntity;
   }
 }

@@ -7,11 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import org.springframework.stereotype.Component;
 
-@Converter
-public class DaySetConvertor implements AttributeConverter<Set<DayOfWeek>, String> {
+@Component
+public class DaySetConvertor {
 
-  @Override
   public String convertToDatabaseColumn(Set<DayOfWeek> attribute) {
     if (attribute == null) {
       return null;
@@ -21,7 +21,6 @@ public class DaySetConvertor implements AttributeConverter<Set<DayOfWeek>, Strin
         .collect(Collectors.joining(","));
   }
 
-  @Override
   public Set<DayOfWeek> convertToEntityAttribute(String dbData) {
     if (dbData == null) {
       return null;

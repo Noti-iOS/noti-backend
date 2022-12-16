@@ -17,8 +17,8 @@ public class HomeworkMapper {
   public Homework mapToDomainEntity(HomeworkJpaEntity homeworkJpaEntity){
     return Homework.builder()
         .id(homeworkJpaEntity.getId())
-        .lesson(lessonMapper.mapToDomainEntity(homeworkJpaEntity.getLesson()))
-        .book(bookMapper.mapToDomainEntity(homeworkJpaEntity.getBook()))
+        .lesson(lessonMapper.mapToDomainEntity(homeworkJpaEntity.getLessonJpaEntity()))
+        .book(bookMapper.mapToDomainEntity(homeworkJpaEntity.getBookJpaEntity()))
         .startTime(homeworkJpaEntity.getStartTime())
         .endTime(homeworkJpaEntity.getEndTime())
         .build();
@@ -28,8 +28,8 @@ public class HomeworkMapper {
     return HomeworkJpaEntity.builder()
         .id(homework.getId())
         .content(homework.getContent())
-        .lesson(lessonMapper.mapToJpaEntity(homework.getLesson()))
-        .book(bookMapper.mapToJpaEntity(homework.getBook()))
+        .lessonJpaEntity(lessonMapper.mapToJpaEntity(homework.getLesson()))
+        .bookJpaEntity(bookMapper.mapToJpaEntity(homework.getBook()))
         .startTime(homework.getStartTime())
         .endTime(homework.getEndTime())
         .build();
