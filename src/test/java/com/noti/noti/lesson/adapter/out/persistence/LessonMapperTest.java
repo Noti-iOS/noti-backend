@@ -2,6 +2,7 @@ package com.noti.noti.lesson.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test;
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class LessonMapperTest {
 
-  private LessonMapper lessonMapper = new LessonMapper(new TeacherMapper());
+  private LessonMapper lessonMapper = new LessonMapper(new TeacherMapper(), new DaySetConvertor());
 
   @Nested
   class mapToDomainEntity_메소드는 {
