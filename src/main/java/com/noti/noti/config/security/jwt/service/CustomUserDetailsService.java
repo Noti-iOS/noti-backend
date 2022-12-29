@@ -35,7 +35,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     SocialType socialType = Arrays.stream(SocialType.values())
-        .filter(type -> type.getSocialCode().equals(socialCode))
+        .filter(type -> type.getCode().equals(socialCode))
         .findFirst()
         .orElseThrow(()->new IllegalArgumentException("잘못된 요청입니다."));
 
@@ -63,7 +63,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   /* 회원가입 - 해당 아이디 없으면 저장 */
   private Teacher signIn(String socialId, SocialType socialType) {
     Teacher teacher = Teacher.builder()
-        .id(Long.parseLong(socialType.getSocialCode()+socialId)) // id = socialType.code + socialId
+        .id(Long.parseLong(socialType.getCode()+socialId)) // id = socialType.code + socialId
         .social(Long.parseLong(socialId))
         .role(Role.ROLE_TEACHER)
         .socialType(socialType)
