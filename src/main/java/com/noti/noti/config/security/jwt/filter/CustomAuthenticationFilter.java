@@ -51,15 +51,24 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     String accessToken = request.getHeader("access_token");
     SocialType socialType = extractSocialType(request);
+    String socialCode = null;
 
-//    TeacherInfo teacherInfo = getTeacherInfo(accessToken, socialType);
     // 값이 카카오면 kakaoTeacherAdapter
     // 값이 애플이면 AppleTeacherAdapter
-    String socialId = oAuthManager.getSocialId(socialType, accessToken);
+    String socialId = oAuthManager.getSocialId(socialType, accessToken); // 각 소셜로그인의 socialId 값
+
+    // 만약 카카오면 카카오 고유 번호 저장 : 010101
+    // 만약 애플이면 애플 고유 번호 저장 : 101010
+
+    if (socialType.getSocialName() == "kakao") {
+      socialCode = "010101";
+    } else if (socialType.getSocialName() == "apple") {
+      socialCode = "101010";
+    }
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            socialId+"_"+socialType.getSocialName(), "");
+            socialCode+socialId, ""); //
 
 
     return getAuthenticationManager().authenticate(authenticationToken);
