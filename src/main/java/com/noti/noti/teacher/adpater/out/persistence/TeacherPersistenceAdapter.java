@@ -1,5 +1,6 @@
 package com.noti.noti.teacher.adpater.out.persistence;
 
+import com.noti.noti.teacher.application.port.out.FindTeacherNicknamePort;
 import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
 import com.noti.noti.teacher.domain.SocialType;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPort {
+public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPort,
+    FindTeacherNicknamePort {
 
   private final TeacherRepository teacherRepository;
+  private final TeacherQueryRepository teacherQueryRepository;
   private final TeacherMapper teacherMapper;
 
   /* db에 해당 social id 있는지 확인 */
@@ -49,5 +52,10 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
     return teacherRepository
         .findBySocialTypeAndSocialId(socialType, Long.parseLong(username)).isPresent();
 //    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
+  }
+
+  @Override
+  public String findTeacherNickname(Long teacherId) {
+    return teacherQueryRepository.findTeacherNickname(teacherId);
   }
 }
