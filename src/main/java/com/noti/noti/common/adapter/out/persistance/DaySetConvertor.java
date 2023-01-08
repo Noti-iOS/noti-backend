@@ -1,12 +1,9 @@
 package com.noti.noti.common.adapter.out.persistance;
 
-import com.noti.noti.common.domain.model.Day;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,6 @@
 package com.noti.noti.homework.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.noti.noti.book.adapter.out.persistence.BookMapper;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
@@ -9,8 +8,6 @@ import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
-import com.noti.noti.lesson.adapter.out.persistence.LessonPersistenceAdapter;
-import com.noti.noti.lesson.adapter.out.persistence.LessonQueryRepository;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -96,7 +93,6 @@ class HomeworkPersistenceAdapterTest {
         List<TodaysHomework> todaysHomeworks = homeworkPersistenceAdapter.findTodaysHomeworks(
             condition);
 
-        System.out.println(todaysHomeworks);
         assertThat(todaysHomeworks).isNotEmpty();
       }
     }

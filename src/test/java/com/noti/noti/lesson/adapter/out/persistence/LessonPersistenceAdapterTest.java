@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
@@ -14,7 +13,6 @@ import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -37,10 +35,6 @@ class LessonPersistenceAdapterTest {
 
   @Autowired
   LessonPersistenceAdapter lessonPersistenceAdapter;
-
-  @Autowired
-  LessonJpaRepository lessonJpaRepository;
-
 
   @Nested
   class save_메소드는 {
@@ -96,7 +90,6 @@ class LessonPersistenceAdapterTest {
       void 선생님_ID에_해당하는_수업목록_List를_반환한다(){
         List<TodaysLesson> todaysLessons = lessonPersistenceAdapter.findTodaysLessons(condition);
 
-        System.out.println(todaysLessons.size());
         assertThat(todaysLessons).isNotEmpty();
       }
     }
