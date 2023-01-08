@@ -5,7 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
 import com.noti.noti.lesson.domain.model.Lesson;
+import com.noti.noti.teacher.adpater.out.persistence.TeacherJpaEntity;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
+import com.noti.noti.teacher.domain.Teacher;
+import java.time.DayOfWeek;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -25,6 +29,8 @@ class LessonMapperTest {
         LessonJpaEntity.builder()
             .id(1L)
             .lessonName("lesson")
+            .days("MONDAY")
+            .teacherJpaEntity(TeacherJpaEntity.builder().build())
             .build();
 
     @Nested
@@ -48,6 +54,8 @@ class LessonMapperTest {
           Lesson.builder()
               .id(1L)
               .lessonName("Lesson")
+              .days(Set.of(DayOfWeek.MONDAY))
+              .teacher(Teacher.builder().build())
               .build();
 
       @Test
