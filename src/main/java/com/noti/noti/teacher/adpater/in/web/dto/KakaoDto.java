@@ -20,7 +20,7 @@ public class KakaoDto {
     private String app_id;
 
     public TeacherInfo getTeacherInfo(SocialType socialType, String accessToken) {
-      return WebClient.create(socialType.getUerInfoUrl())
+      return WebClient.create(socialType.getUserInfoUrl())
           .get()
           .header("Authorization", "Bearer " + accessToken)
           .retrieve()
