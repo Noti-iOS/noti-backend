@@ -8,6 +8,8 @@ services:
       - "80:80"
     volumes:
       - /etc/nginx/:/etc/nginx/
+    environment:
+      TZ : Asia/Seoul
   blue:
     build: .
     image: blue
@@ -19,6 +21,7 @@ services:
       - /etc/localtime:/etc/localtime
     environment:
       active: dev
+      TZ : Asia/Seoul
 
   green:
     build: .
@@ -31,3 +34,4 @@ services:
       - /etc/localtime:/etc/localtime
     environment:
       active: dev
+      TZ : Asia/Seoul

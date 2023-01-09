@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TeacherMapper {
 
-  TeacherJpaEntity mapToJpaEntity(Teacher teacher) {
+  public TeacherJpaEntity mapToJpaEntity(Teacher teacher) {
     return new TeacherJpaEntity.TeacherJpaEntityBuilder()
         .id(teacher.getId())
         .socialId(teacher.getSocial())
@@ -18,7 +18,7 @@ public class TeacherMapper {
         .build();
   }
 
-  Teacher mapToDomainEntity(TeacherJpaEntity teacherJpaEntity) {
+  public Teacher mapToDomainEntity(TeacherJpaEntity teacherJpaEntity) {
 
     return Teacher.builder()
         .id(teacherJpaEntity.getId())

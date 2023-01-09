@@ -59,7 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   private Teacher signIn(String id, SocialType socialType) {
     Teacher teacher = Teacher.builder()
         .social(Long.parseLong(id))
-        .role(Role.ROLE_TEACHER)
+        .role(Role.TEACHER)
         .socialType(socialType)
         .build();
 

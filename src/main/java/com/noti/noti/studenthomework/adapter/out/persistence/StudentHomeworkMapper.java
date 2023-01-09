@@ -17,8 +17,8 @@ public class StudentHomeworkMapper {
   public StudentHomework mapToDomainEntity(StudentHomeworkJpaEntity studentHomeworkJpaEntity) {
     return StudentHomework.builder()
         .id(studentHomeworkJpaEntity.getId())
-        .homework(homeworkMapper.mapToDomainEntity(studentHomeworkJpaEntity.getHomework()))
-        .student(studentMapper.mapToDomainEntity(studentHomeworkJpaEntity.getStudent()))
+        .homework(homeworkMapper.mapToDomainEntity(studentHomeworkJpaEntity.getHomeworkJpaEntity()))
+        .student(studentMapper.mapToDomainEntity(studentHomeworkJpaEntity.getStudentJpaEntity()))
         .homeworkStatus(studentHomeworkJpaEntity.isHomeworkStatus())
         .build();
   }
@@ -26,8 +26,8 @@ public class StudentHomeworkMapper {
   public StudentHomeworkJpaEntity mapToJpaEntity(StudentHomework studentHomework) {
     return StudentHomeworkJpaEntity.builder()
         .id(studentHomework.getId())
-        .student(studentMapper.mapToJpaEntity(studentHomework.getStudent()))
-        .homework(homeworkMapper.mapToJpaEntity(studentHomework.getHomework()))
+        .studentJpaEntity(studentMapper.mapToJpaEntity(studentHomework.getStudent()))
+        .homeworkJpaEntity(homeworkMapper.mapToJpaEntity(studentHomework.getHomework()))
         .homeworkStatus(studentHomework.isHomeworkStatus())
         .build();
   }

@@ -1,7 +1,6 @@
 package com.noti.noti.studentlesson.adapter.out.persistence.jpa.model;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
-import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.student.adapter.out.persistence.jpa.model.StudentJpaEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,18 +32,18 @@ public class StudentLessonJpaEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "lesson_id")
-  private LessonJpaEntity lesson;
+  private LessonJpaEntity lessonJpaEntity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "student_id")
-  private StudentJpaEntity student;
+  private StudentJpaEntity studentJpaEntity;
 
   @Builder
-  public StudentLessonJpaEntity(Long id, boolean focusStatus, LessonJpaEntity lesson,
-      StudentJpaEntity student) {
+  public StudentLessonJpaEntity(Long id, boolean focusStatus, LessonJpaEntity lessonJpaEntity,
+      StudentJpaEntity studentJpaEntity) {
     this.id = id;
     this.focusStatus = focusStatus;
-    this.lesson = lesson;
-    this.student = student;
+    this.lessonJpaEntity = lessonJpaEntity;
+    this.studentJpaEntity = studentJpaEntity;
   }
 }
