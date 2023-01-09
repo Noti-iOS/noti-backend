@@ -56,13 +56,14 @@ public class TodaysLessonHomework {
       this.endTime = todaysLesson.getEndTime();
 
       todaysLesson.getStudents()
-            .forEach(s -> this.students.put(s.getStudentId(),
-                new StudentInLesson(s.getStudentId(), s.getStudentNickname(), s.isFocusStatus())));
+          .forEach(s -> this.students.put(s.getStudentId(),
+              new StudentInLesson(s.getStudentId(), s.getStudentNickname(), s.getProfileImage(),
+                  s.isFocusStatus())));
     }
 
     private void calculateHomeworkCompletion(List<HomeworkOfStudent> students) {
       students.forEach(s -> {
-        if(s.isHomeworkStatus()){
+        if (s.isHomeworkStatus()) {
           this.students.get(s.getStudentId()).increaseHomeworkProgressCount();
         }
       });
@@ -74,16 +75,20 @@ public class TodaysLessonHomework {
 
     private Long studentId;
     private String studentNickname;
+    private String profileImage;
     private boolean focusStatus;
 
     private int homeworkProgressCount = 0;
 
-    private void increaseHomeworkProgressCount(){
-      this.homeworkProgressCount ++;
+    private void increaseHomeworkProgressCount() {
+      this.homeworkProgressCount++;
     }
-    private StudentInLesson(Long studentId, String studentNickname, boolean focusStatus) {
+
+    public StudentInLesson(Long studentId, String studentNickname, String profileImage,
+        boolean focusStatus) {
       this.studentId = studentId;
       this.studentNickname = studentNickname;
+      this.profileImage = profileImage;
       this.focusStatus = focusStatus;
     }
   }
@@ -109,8 +114,8 @@ public class TodaysLessonHomework {
       }
     }
 
-    private void increaseNumberOfCompletions(){
-      this.numberOfCompletions ++;
+    private void increaseNumberOfCompletions() {
+      this.numberOfCompletions++;
     }
   }
 }

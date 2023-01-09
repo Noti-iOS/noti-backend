@@ -3,7 +3,6 @@ package com.noti.noti.lesson.application.port.out;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +44,7 @@ public class TodaysLesson {
   public static class LessonOfStudent {
     private Long studentId;
     private String studentNickname;
+    private String profileImage;
     private boolean focusStatus;
 
     @Override
@@ -56,9 +56,11 @@ public class TodaysLesson {
           '}';
     }
 
-    public LessonOfStudent(Long studentId, String studentNickname, boolean focusStatus) {
+    public LessonOfStudent(Long studentId, String studentNickname, String studentProfileImage,
+        boolean focusStatus) {
       this.studentId = studentId;
       this.studentNickname = studentNickname;
+      this.profileImage = studentProfileImage;
       this.focusStatus = focusStatus;
     }
   }

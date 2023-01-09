@@ -75,6 +75,7 @@ public class TodaysLessonHomeworkDto {
     private Long studentId;
     private String studentNickname;
     private boolean focusStatus;
+    private String profileImage;
 
     // "NONE", "IN_PROGRESS", "COMPLETION"
     private String homeworkProgressStatus;
@@ -83,6 +84,7 @@ public class TodaysLessonHomeworkDto {
       this.studentId = studentInLesson.getStudentId();
       this.studentNickname = studentInLesson.getStudentNickname();
       this.focusStatus = studentInLesson.isFocusStatus();
+      this.profileImage = studentInLesson.getProfileImage();
       this.homeworkProgressStatus = chooseStatus(studentInLesson.getHomeworkProgressCount(),
           totalHomeworkCount);
     }

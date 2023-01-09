@@ -32,9 +32,9 @@ class TodaysLessonHomeworkTest {
     final LocalTime startTime = LocalTime.now();
     final LocalTime endTime = LocalTime.now();
     final String days = "MONDAY";
-    LessonOfStudent student1 = new LessonOfStudent(1L, "student1", false);
-    LessonOfStudent student2 = new LessonOfStudent(2L, "student2", false);
-    LessonOfStudent student3 = new LessonOfStudent(3L, "student3", false);
+    LessonOfStudent student1 = new LessonOfStudent(1L, "student1", "image",false);
+    LessonOfStudent student2 = new LessonOfStudent(2L, "student2", "image",false);
+    LessonOfStudent student3 = new LessonOfStudent(3L, "student3", "image",false);
 
     TodaysLesson lesson1 = new TodaysLesson(1L, "lesson1", startTime, endTime, days,
         List.of(student1, student2, student3));

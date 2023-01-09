@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
+import com.noti.noti.lesson.application.port.out.TodaysLesson.LessonOfStudent;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
