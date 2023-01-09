@@ -2,6 +2,7 @@ package com.noti.noti.config;
 
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
+import com.noti.noti.teacher.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +47,7 @@ public class SecurityConfig {
         .and()
         .authorizeRequests()
         .antMatchers("/api/teacher/login/**","/", "/swagger-ui.html","/swagger-ui/**", "/api-docs/**").permitAll()
+        .antMatchers("api/teacher/home").hasRole("TEACHER")
         .anyRequest().authenticated()
 
         .and()
