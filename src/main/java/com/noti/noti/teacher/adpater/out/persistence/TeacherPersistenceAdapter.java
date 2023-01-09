@@ -37,6 +37,14 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
     return teacher;
   }
 
+  @Override
+  public Teacher findById(Long id) {
+    TeacherJpaEntity teacherJpaEntity = teacherRepository.findById(id)
+        .orElseThrow(NoSuchElementException::new);
+    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
+    return teacher;
+  }
+
 
   /* 선생님 저장 */
   @Override
@@ -48,7 +56,8 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   }
 
   /* 회원 여부 확인 */
-  public boolean validate(String username, SocialType socialType) {
+  public boolean validate(String username, SocialType socialType) {// username=socialId
+
     return teacherRepository
         .findBySocialTypeAndSocialId(socialType, Long.parseLong(username)).isPresent();
 //    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
