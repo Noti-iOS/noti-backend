@@ -10,4 +10,6 @@ public interface FindTeacherPort {
 
   Teacher findBySocialTypeAndSocialId(SocialType socialType, Long socialId);
 
+  Teacher findById(Long Id);
+
 }

@@ -26,23 +26,28 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+    // username = id = socialType.code + socialId
+
     UserDetails userDetails;
 
-    String[] s = username.split("_"); //String[0]-id, String[1]-social
+    String socialCode = username.substring(0, 6);
+    String socialId = username.substring(6);
 
-    String id = s[0];
+
     SocialType socialType = Arrays.stream(SocialType.values())
-        .filter(type -> type.getSocialName().equals(s[1]))
+        .filter(type -> type.getCode().equals(socialCode))
         .findFirst()
         .orElseThrow(()->new IllegalArgumentException("잘못된 요청입니다."));
 
-    boolean validate = teacherPersistenceAdapter.validate(id, socialType);
+    boolean validate = teacherPersistenceAdapter.validate(socialId, socialType);
+
 
     if (validate) {// id값 저장되어 있으면 -> 로그인
-      Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(id));
+      Teacher teacher = teacherPersistenceAdapter.findById(Long.parseLong(username));
+      //Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(socialId));
       userDetails = createUserDetails(teacher);
     } else {// id 값 저장 안되어 있으면 -> 회원가입 -> 로그인
-      Teacher teacher = signIn(id, socialType);
+      Teacher teacher = signIn(socialId, socialType);
       userDetails = createUserDetails(teacher);
     }
     return userDetails;
@@ -56,9 +61,10 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   /* 회원가입 - 해당 아이디 없으면 저장 */
-  private Teacher signIn(String id, SocialType socialType) {
+  private Teacher signIn(String socialId, SocialType socialType) {
     Teacher teacher = Teacher.builder()
-        .social(Long.parseLong(id))
+        .id(Long.parseLong(socialType.getCode()+socialId)) // id = socialType.code + socialId
+        .social(Long.parseLong(socialId))
         .role(Role.TEACHER)
         .socialType(socialType)
         .build();
