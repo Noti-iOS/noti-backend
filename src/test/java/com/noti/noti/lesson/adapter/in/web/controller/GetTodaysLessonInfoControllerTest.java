@@ -60,9 +60,9 @@ class GetTodaysLessonInfoControllerTest {
     final LocalTime startTime = LocalTime.now();
     final LocalTime endTime = LocalTime.now();
     final String days = LocalDateTime.now().getDayOfWeek().toString();
-    LessonOfStudent student1 = new LessonOfStudent(1L, "student1", false);
-    LessonOfStudent student2 = new LessonOfStudent(2L, "student2", false);
-    LessonOfStudent student3 = new LessonOfStudent(3L, "student3", false);
+    LessonOfStudent student1 = new LessonOfStudent(1L, "student1", "image", false);
+    LessonOfStudent student2 = new LessonOfStudent(2L, "student2", "image", false);
+    LessonOfStudent student3 = new LessonOfStudent(3L, "student3", "image", false);
 
     TodaysLesson lesson1 =
         new TodaysLesson(1L, "lesson1", startTime, endTime, days,
@@ -168,11 +168,11 @@ class GetTodaysLessonInfoControllerTest {
         givenTodaysLessonHomework.changeLessonCreatedStatus();
 
         LessonOfStudent student1 =
-            new LessonOfStudent(1L, "student1", false);
+            new LessonOfStudent(1L, "student1", "image", false);
         LessonOfStudent student2 =
-            new LessonOfStudent(2L, "student2", false);
+            new LessonOfStudent(2L, "student2", "image", false);
         LessonOfStudent student3 =
-            new LessonOfStudent(3L, "student3", false);
+            new LessonOfStudent(3L, "student3", "image", false);
 
         givenTodaysLessonHomework.addLesson(
             new TodaysLesson(1L, "lesson1", startTime, endTime, days,

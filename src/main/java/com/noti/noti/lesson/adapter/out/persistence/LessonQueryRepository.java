@@ -48,6 +48,7 @@ public class LessonQueryRepository {
                 list(Projections.fields(TodaysLesson.LessonOfStudent.class,
                     studentLessonJpaEntity.studentJpaEntity.id.as("studentId"),
                     studentLessonJpaEntity.studentJpaEntity.nickname.as("studentNickname"),
+                    studentJpaEntity.profileImage,
                     studentLessonJpaEntity.focusStatus).skipNulls()).as("students"))));
   }
 
