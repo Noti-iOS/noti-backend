@@ -98,12 +98,14 @@ public class TodaysLessonHomework {
 
     private Long homeworkId;
     private String homeworkName;
+    private String content;
     private int numberOfStudents;
     private int numberOfCompletions = 0;
 
     private HomeworkInLesson(TodaysHomework todaysHomework) {
       this.homeworkId = todaysHomework.getHomeworkId();
       this.homeworkName = todaysHomework.getHomeworkName();
+      this.content = todaysHomework.getContent();
       this.numberOfStudents = todaysHomework.getStudents().size();
       todaysHomework.getStudents().forEach(this::calNumberOfCompletions);
     }
