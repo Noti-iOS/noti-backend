@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.common.WithAuthUser;
+import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.application.port.out.TodaysHomework.HomeworkOfStudent;
@@ -30,12 +31,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 
 @WebMvcTest(GetTodaysLessonInfoController.class)
 @DisplayName("GetTodaysLessonInfoControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
+@Import(JacksonConfiguration.class)
 class GetTodaysLessonInfoControllerTest {
 
   @Autowired
