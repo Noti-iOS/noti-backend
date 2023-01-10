@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-@Component
+@Component("apple")
 public class AppleOAuthUtil implements OAuthUtil {
 
   // 토큰을 검증하기 위한 공개키 요청

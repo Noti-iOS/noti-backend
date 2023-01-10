@@ -1,8 +1,5 @@
 package com.noti.noti.config;
 
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
-import com.noti.noti.teacher.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,8 +20,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final TeacherPersistenceAdapter teacherPersistenceAdapter;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final UserDetailsService userDetailsService;
   private final AccessDeniedHandler accessDeniedHandler;
   private final AuthenticationEntryPoint authenticationEntryPoint;
   private final JwtConfig jwtConfig;
@@ -64,11 +61,8 @@ public class SecurityConfig {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
-
   @Bean
   BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
-
 }

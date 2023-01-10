@@ -15,7 +15,6 @@ import javax.persistence.*;
 public class TeacherJpaEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private Long socialId;
   private String nickname;
