@@ -2,8 +2,6 @@ package com.noti.noti.config.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.teacher.adpater.in.web.dto.KakaoDto.TeacherInfo;
-import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
 import com.noti.noti.teacher.domain.SocialType;
 import java.io.IOException;
 import java.util.Arrays;
@@ -21,13 +19,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final TeacherPersistenceAdapter teacherPersistenceAdapter;
   private final JwtTokenProvider jwtTokenProvider;
   private final OAuthManager oAuthManager;
 
@@ -35,12 +31,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager,
-      TeacherPersistenceAdapter teacherPersistenceAdapter,
       JwtTokenProvider jwtTokenProvider,
       OAuthManager oAuthManager) {
     super(authenticationManager);
     this.jwtTokenProvider = jwtTokenProvider;
-    this.teacherPersistenceAdapter = teacherPersistenceAdapter;
     this.oAuthManager = oAuthManager;
   }
 
@@ -66,22 +60,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
     return getAuthenticationManager().authenticate(authenticationToken);
-  }
-
-
-  /* 소셜 api로 사용자 정보 가져오기 */
-  private TeacherInfo getTeacherInfo(String accessToken, SocialType socialType) {
-
-    TeacherInfo teacherInfo = WebClient.create(
-            socialType.getUserInfoUrl())
-        .get()
-        .header("Authorization", "Bearer " + accessToken)
-        .retrieve()
-        .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(RuntimeException::new))
-        .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(RuntimeException::new))
-        .bodyToMono(TeacherInfo.class)
-        .block();
-    return teacherInfo;
   }
 
   /* 로그인 성공 시 호출 */

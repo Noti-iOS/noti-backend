@@ -9,10 +9,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuthManager {
 
-  public final Map<String, OAuthUtil> authMap;
+  private final Map<String, OAuthUtil> authMap;
 
   public String getSocialId(SocialType socialType, String token) {
-    return authMap.get(socialType).getSocialIdBy(token);
+    return authMap.get(socialType.getSocialName()).getSocialIdBy(token);
   }
-
 }

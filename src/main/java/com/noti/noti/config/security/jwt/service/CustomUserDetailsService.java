@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
   private final TeacherPersistenceAdapter teacherPersistenceAdapter;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,9 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     UserDetails userDetails;
 
-    String socialCode = username.substring(0, 6);
-    String socialId = username.substring(6);
-
+    String socialCode = username.substring(0, 3);
+    String socialId = username.substring(3);
 
     SocialType socialType = Arrays.stream(SocialType.values())
         .filter(type -> type.getCode().equals(socialCode))
@@ -41,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     boolean validate = teacherPersistenceAdapter.validate(socialId, socialType);
 
-
+    System.out.println(validate);
     if (validate) {// id값 저장되어 있으면 -> 로그인
       Teacher teacher = teacherPersistenceAdapter.findById(Long.parseLong(username));
       //Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(socialId));
@@ -56,7 +54,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   private UserDetails createUserDetails(Teacher teacher) {
     GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(teacher.getRole().name());
     UserDetails userDetails = new User(teacher.getId().toString(),
-        bCryptPasswordEncoder.encode(""), Collections.singleton(grantedAuthority));
+        new BCryptPasswordEncoder().encode(""), Collections.singleton(grantedAuthority));
     return userDetails;
   }
 

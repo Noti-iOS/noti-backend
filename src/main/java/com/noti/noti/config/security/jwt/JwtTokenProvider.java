@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,14 +21,13 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
 
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
+  @Value("${jwt.secret}")
   private String SECRET_KEY;
 
-  public JwtTokenProvider(@Value("${jwt.secret}") String SECRET_KEY) {
-    this.SECRET_KEY = SECRET_KEY;
-  }
 
   /* String 타입의 SECRET_KEY Key타입으로 변환*/
   public Key getSigningKey(String secretKey) {
@@ -38,7 +38,7 @@ public class JwtTokenProvider {
   /* accessToken 발급 */
   public String createAccessToken(Authentication authentication) {
 
-    Long expiredTime = Long.valueOf(1000 * 601);
+    Long expiredTime = 1000L * 60 * 60 * 24 *7;
 
     Date now = new Date();
     return Jwts.builder()
@@ -57,7 +57,7 @@ public class JwtTokenProvider {
   public String createRefreshToken(Authentication authentication) {
 
     Date now = new Date();
-    Long expiredTime = Long.valueOf(1000 * 601);
+    Long expiredTime = 1000L * 60 * 60 * 24 *7;
     return Jwts.builder()
         // header
         .setHeaderParam("typ", "REFRESH_TOKEN").setHeaderParam("alg", "HS256")
