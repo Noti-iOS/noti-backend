@@ -9,6 +9,7 @@ public enum ErrorCode {
   INTERNAL_SERVER_ERROR(500, "C004", "서버 에러"),
   INVALID_TYPE_VALUE(400, "C005", " 바르지 않는 타입의 값을 입력했습니다"),
   HANDLE_ACCESS_DENIED(403, "C006", "접근이 거부되었습니다"),
+  AUTHENTICATION_ENTRY_POINT(401, "C007", "인증되지 않은 사용자입니다"),
 
 
   /*
