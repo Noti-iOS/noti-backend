@@ -71,15 +71,15 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-processResources.dependsOn('copyPrivate')
-
-task copyPrivate(type: Copy) {
-	copy {
-		from './noti-config'
-		include "*.yaml"
-		into 'src/main/resources'
-	}
-}
+//processResources.dependsOn('copyPrivate')
+//
+//task copyPrivate(type: Copy) {
+//	copy {
+//		from './noti-config'
+//		include "*.yaml"
+//		into 'src/main/resources'
+//	}
+//}
 
 jar {
 	enabled = false

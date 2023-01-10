@@ -43,9 +43,9 @@ public class TodaysLessonHomeworkDto {
     private Long lessonId;
     @Schema(description = "수업 이름", example = "수학 A")
     private String lessonName;
-    @Schema(description = "수업시작 시간", example = "13:00")
+    @Schema(description = "수업시작 시간", example = "13:00", type = "string")
     private LocalTime startTime;
-    @Schema(description = "수업종료 시간", example = "15:00")
+    @Schema(description = "수업종료 시간", example = "15:00", type = "string")
     private LocalTime endTime;
     @Schema(description = "숙제 완료 비율", example = "33")
     private int homeworkCompletionRate;
