@@ -73,8 +73,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-    response.setHeader("access_token", jwtTokenProvider.createAccessToken(authResult));
-    response.setHeader("refresh_token", jwtTokenProvider.createRefreshToken(authResult));
+    response.setHeader("access-token", jwtTokenProvider.createAccessToken(authResult));
+    response.setHeader("refresh-token", jwtTokenProvider.createRefreshToken(authResult));
 
     Map<String, Object> body = new LinkedHashMap<>();
     body.put("bool", true);

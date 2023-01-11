@@ -1,5 +1,6 @@
 package com.noti.noti.config.security.jwt.filter;
 
+import com.noti.noti.error.exception.InvalidValueException;
 import com.noti.noti.teacher.adpater.in.web.dto.KakaoDto.TeacherInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,9 @@ public class KakaoOAuthUtil implements OAuthUtil {
         .get()
         .header("Authorization", "Bearer " + token)
         .retrieve()
-        .onStatus(HttpStatus::is4xxClientError, clientResponse -> Mono.error(RuntimeException::new))
+        .onStatus(HttpStatus::is4xxClientError, clientResponse -> clientResponse.bodyToMono(String.class)
+            .flatMap(error ->
+                Mono.error(new InvalidValueException(error))))
         .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(RuntimeException::new))
         .bodyToMono(TeacherInfo.class)
         .block();
