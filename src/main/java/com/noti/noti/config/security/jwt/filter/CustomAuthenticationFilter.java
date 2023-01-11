@@ -45,6 +45,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     String accessToken = request.getHeader("access_token");
 
+    log.info("request: {}", request.toString());
+
+
     log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);
     String socialCode;
