@@ -39,7 +39,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     boolean validate = teacherPersistenceAdapter.validate(socialId, socialType);
 
-    System.out.println(validate);
     if (validate) {// id값 저장되어 있으면 -> 로그인
       Teacher teacher = teacherPersistenceAdapter.findById(Long.parseLong(username));
       //Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(socialId));

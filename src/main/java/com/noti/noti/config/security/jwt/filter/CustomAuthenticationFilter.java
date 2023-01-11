@@ -44,12 +44,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) throws AuthenticationException {
 
-    String accessToken = request.getHeader("access_token");
-
-    Enumeration<String> headerNames = request.getHeaderNames();
-    while (headerNames.hasMoreElements()) {
-      log.info("header: {}", headerNames.nextElement());
-    }
+    String accessToken = request.getHeader("access-token");
 
     log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);
@@ -95,7 +90,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     response.setStatus(HttpStatus.UNAUTHORIZED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-    System.out.println(failed.toString());
     Map<String, Object> body = new LinkedHashMap<>();
     body.put("bool", false);
 
