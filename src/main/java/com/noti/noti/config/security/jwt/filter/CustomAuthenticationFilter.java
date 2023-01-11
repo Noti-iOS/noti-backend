@@ -44,6 +44,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletResponse response) throws AuthenticationException {
 
     String accessToken = request.getHeader("access_token");
+
+    log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);
     String socialCode;
 

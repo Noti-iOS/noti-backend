@@ -22,7 +22,7 @@ if [ -n "$RUNNING_APPLICATION"  ];then
 
 	sed -i 's/blue/green/g' $DEFAULT_CONF
 	#docker exec nginx nginx -s reload
-	docker compose restart nginx
+	docker compose restart web-server
 	docker compose stop blue
 else
 	echo "blue Deploy..."
@@ -42,6 +42,6 @@ else
 
 	sed -i 's/green/blue/g' $DEFAULT_CONF
 	#docker exec nginx nginx -s reload
-	docker compose restart nginx
+	docker compose restart web-server
 	docker compose stop green
 fi
