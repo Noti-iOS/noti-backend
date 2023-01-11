@@ -5,12 +5,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.book.adapter.out.persistence.BookMapper;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
+import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -96,5 +98,38 @@ class HomeworkPersistenceAdapterTest {
         assertThat(todaysHomeworks).isNotEmpty();
       }
     }
+  }
+
+
+  @Nested
+  class 년_월이_주어지고 {
+
+    final String yearMonth = YearMonth.now().toString();
+
+    @Sql("/data/homework-lesson.sql")
+    @Nested
+    class 주어진_월에_숙제가_있다면 {
+
+      @Test
+      void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
+
+        List<FrequencyOfLessonsDto> frequencyOfLessons = homeworkPersistenceAdapter.findFrequencyOfLessons(
+            yearMonth);
+        assertThat(frequencyOfLessons).size().isEqualTo(2);
+      }
+    }
+
+    @Sql("/data/no-homework-lesson.sql")
+    @Nested
+    class 주어진_월에_숙제가_없다면 {
+      @Test
+      void 비어있는_list를_반환한다() {
+        List<FrequencyOfLessonsDto> frequencyOfLessons = homeworkPersistenceAdapter.findFrequencyOfLessons(yearMonth);
+
+        assertThat(frequencyOfLessons).isEmpty();
+      }
+
+    }
+
   }
 }

@@ -31,7 +31,7 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, Frequ
   public List<FrequencyOfLessonsDto> findFrequencyOfLessons(String yearMonth) {
 
     LocalDateTime startTime = stringToLocalDateTime(yearMonth);
-    LocalDateTime endTime = startTime.plusDays(1);
+    LocalDateTime endTime = startTime.plusMonths(1);
 
     return homeworkQueryRepository.findFrequencyOfLesson(startTime, endTime);
   }

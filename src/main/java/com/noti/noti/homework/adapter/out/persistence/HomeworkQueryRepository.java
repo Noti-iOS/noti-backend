@@ -7,8 +7,11 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.homework.adapter.in.web.dto.QFrequencyOfLessonsDto;
+import com.noti.noti.homework.adapter.out.persistence.jpa.model.QHomeworkJpaEntity;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.Projections;
@@ -17,10 +20,13 @@ import com.querydsl.core.types.dsl.DateTemplate;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,26 +93,14 @@ public class HomeworkQueryRepository {
    */
   public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end) {
 
-    DateTemplate<String> formattedEndTime = Expressions.dateTemplate(
-        String.class
-        , "Date_Format({0}, {1})"
-        , homeworkJpaEntity.endTime
-        , ConstantImpl.create("%Y-%m-%d")
-    );
-
-
     return queryFactory
-        .select(Projections.fields(FrequencyOfLessonsDto.class,
-            formattedEndTime, lessonJpaEntity.countDistinct()))
+        .select(Projections.constructor(FrequencyOfLessonsDto.class,
+            homeworkJpaEntity.endTime.as("dateOfLesson"),
+            homeworkJpaEntity.lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
         .from(homeworkJpaEntity)
-        .join(homeworkJpaEntity).on(homeworkJpaEntity.lessonJpaEntity.id.eq(lessonJpaEntity.id))
-        .where(homeworkJpaEntity.endTime.in(start, end.plusDays(1)))
-        .transform(groupBy(formattedEndTime)
-            .list(
-                Projections.fields(FrequencyOfLessonsDto.class,
-                    formattedEndTime,
-                    lessonJpaEntity.countDistinct())
-            ));
+        .where(homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)))
+        .groupBy(homeworkJpaEntity.endTime)
+        .fetch();
 
   }
 
