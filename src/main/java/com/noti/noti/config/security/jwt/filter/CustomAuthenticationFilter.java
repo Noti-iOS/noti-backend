@@ -5,6 +5,7 @@ import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.teacher.domain.SocialType;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.FilterChain;
@@ -45,8 +46,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     String accessToken = request.getHeader("access_token");
 
-    log.info("request: {}", request.toString());
-
+    Enumeration<String> headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+      log.info("header: {}", headerNames.nextElement());
+    }
 
     log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);

@@ -68,6 +68,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         .build();
 
     return teacherPersistenceAdapter.saveTeacher(teacher);
-
   }
 }
