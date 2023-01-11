@@ -3,7 +3,6 @@ package com.noti.noti.config.security.jwt.filter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.teacher.adpater.in.web.dto.ApplePublicKeyResponse;
-import com.noti.noti.teacher.domain.SocialType;
 import io.jsonwebtoken.Jwts;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
