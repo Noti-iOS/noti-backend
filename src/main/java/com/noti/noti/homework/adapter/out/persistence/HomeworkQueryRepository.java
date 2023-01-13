@@ -118,6 +118,7 @@ public class HomeworkQueryRepository {
         .where(
             homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)),
             lessonJpaEntity.teacherJpaEntity.id.eq(teacherId))
+        .groupBy(homeworkJpaEntity.endTime)
         .fetch();
 
 
