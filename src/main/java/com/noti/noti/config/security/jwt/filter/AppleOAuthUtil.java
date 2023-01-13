@@ -19,10 +19,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-@Component("apple")
+@Component
 public class AppleOAuthUtil implements OAuthUtil {
 
   // 토큰을 검증하기 위한 공개키 요청
+  @Override
   public String getSocialIdBy(String identityToken) {
 
     String socialId = null;

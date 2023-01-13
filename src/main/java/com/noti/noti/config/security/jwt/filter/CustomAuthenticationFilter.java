@@ -1,11 +1,14 @@
 package com.noti.noti.config.security.jwt.filter;
 
+import static com.noti.noti.error.ErrorCode.INVALID_REQUEST;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.error.exception.InvalidRequestException;
+import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.domain.SocialType;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.FilterChain;
@@ -52,15 +55,21 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     // 값이 카카오면 kakaoTeacherAdapter
     // 값이 애플이면 AppleTeacherAdapter
-    String socialId = oAuthManager.getSocialId(socialType, accessToken); // 각 소셜로그인의 socialId 값
+    String socialId;// 각 소셜로그인의 socialId 값
 
+    try {
+      socialId = oAuthManager.getSocialId(socialType, accessToken);
+    } catch (OauthAuthenticationException e) {
+      log.error(e.getMessage());
+      request.setAttribute("exception", e.getErrorCode());
+      throw e;
+    }
     // 고유번호 저장
-    socialCode=socialType.getCode();
+    socialCode = socialType.getCode();
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            socialCode+socialId, ""); //
-
+            socialCode + socialId, "");
 
     return getAuthenticationManager().authenticate(authenticationToken);
   }
@@ -81,19 +90,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     new ObjectMapper().writeValue(response.getOutputStream(), body);
   }
 
-  /* 로그인 실패 시 호출 */
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request,
       HttpServletResponse response, AuthenticationException failed)
       throws IOException, ServletException {
 
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    log.info("Authentication failed");
 
-    Map<String, Object> body = new LinkedHashMap<>();
-    body.put("bool", false);
-
-    new ObjectMapper().writeValue(response.getOutputStream(), body);
   }
 
   /* 소셜로그인 구분 */
@@ -102,6 +105,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         .filter(socialType -> socialType.getSocialName()
             .equals(request.getRequestURI().substring(PREFIX_URL.length())))
         .findFirst()
-        .orElseThrow(()-> new IllegalArgumentException("잘못된 url 주소입니다."));
+        .orElseThrow(() ->{
+          log.info("URI : {}", request.getServletPath());
+          request.setAttribute("exception", INVALID_REQUEST);
+          throw new InvalidRequestException("잘못된 url 주소입니다");
+        });
   }
 }
