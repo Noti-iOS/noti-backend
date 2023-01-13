@@ -1,10 +1,13 @@
 package com.noti.noti.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -28,6 +31,9 @@ public class JwtTokenProvider {
   @Value("${jwt.secret}")
   private String SECRET_KEY;
 
+  private final Long ACCESS_EXPIRATION_TIME = 1000L * 60 * 60 * 24;
+  private final Long REFRESH_EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 14;
+
 
   /* String 타입의 SECRET_KEY Key타입으로 변환*/
   public Key getSigningKey(String secretKey) {
@@ -38,15 +44,13 @@ public class JwtTokenProvider {
   /* accessToken 발급 */
   public String createAccessToken(Authentication authentication) {
 
-    Long expiredTime = 1000L * 60 * 60 * 24 *7;
-
     Date now = new Date();
     return Jwts.builder()
         // header
         .setHeaderParam("typ", "ACCESS_TOKEN").setHeaderParam("alg", "HS256")
         // payload
         .setSubject(authentication.getName()).setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + expiredTime))
+        .setExpiration(new Date(now.getTime()+ ACCESS_EXPIRATION_TIME))
         .claim("role", authentication.getAuthorities())
         // signature
         .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256).compact();
@@ -57,13 +61,12 @@ public class JwtTokenProvider {
   public String createRefreshToken(Authentication authentication) {
 
     Date now = new Date();
-    Long expiredTime = 1000L * 60 * 60 * 24 *7;
     return Jwts.builder()
         // header
         .setHeaderParam("typ", "REFRESH_TOKEN").setHeaderParam("alg", "HS256")
         // payload
         .setSubject(authentication.getName()).setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + expiredTime))
+        .setExpiration(new Date(now.getTime() + REFRESH_EXPIRATION_TIME))
         .claim("role", authentication.getAuthorities())
         // signature
         .signWith(getSigningKey(SECRET_KEY)).compact();
@@ -71,16 +74,15 @@ public class JwtTokenProvider {
 
 
   /* 토큰 검증 */
-  public boolean validateToken(String token) {
-    Jws<Claims> jws;
+  public boolean validateToken(String token)
+      throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
     try {
-      jws = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build()
+      Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build()
           .parseClaimsJws(token);
       return true;
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
-    return false;
   }
 
   /* 토큰 갱신 */
