@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
@@ -49,8 +48,6 @@ class GetTodaysLessonInfoControllerTest {
 
   @MockBean
   private GetTodaysLessonQuery getTodaysLessonQuery;
-
-  private ObjectMapper objectMapper = new ObjectMapper();
 
   final String TEACHER_NAME = "teacher";
   final String ID = "1";
