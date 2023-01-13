@@ -91,16 +91,35 @@ public class HomeworkQueryRepository {
    * @param end 끝 날짜
    * @return 시작 ~ 끝 날짜에서 숙제가 있는 날의 날짜와 그 날짜의 분반 개수목록
    */
-  public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end) {
+  public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end, Long teacherId) {
+
+    /**
+     * B
+     * select count(distinct h.lessonId) as cnt, h.endTime
+     * from (select l.id as lessonId from lesson l where l.teacherId=주어진Id) a left join homework h
+     * on a.lessonId = h.lessonId
+     * where h.endTime between startTime and endTime
+     * groupBy(h.endTime
+     *
+     *
+     * 1. 수업과 숙제 표를 lessonId로 조인 V
+     * 2. 그 테이블에서 teacherID가 주어진 선생님id와 같아야 함 V
+     * 3. 그 테이블에서 endTime이 주어진 start와 end 사이가 되어야함 V
+     * 4. endTime으로 groupBy하고 count(lessonId), endTime을 출력함
+    */
 
     return queryFactory
         .select(Projections.constructor(FrequencyOfLessonsDto.class,
             homeworkJpaEntity.endTime.as("dateOfLesson"),
             homeworkJpaEntity.lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
         .from(homeworkJpaEntity)
-        .where(homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)))
-        .groupBy(homeworkJpaEntity.endTime)
+        .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
+        .on(homeworkJpaEntity.lessonJpaEntity.id.eq(lessonJpaEntity.id))
+        .where(
+            homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)),
+            lessonJpaEntity.teacherJpaEntity.id.eq(teacherId))
         .fetch();
+
 
   }
 

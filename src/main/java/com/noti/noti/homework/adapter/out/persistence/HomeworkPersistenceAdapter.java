@@ -28,12 +28,12 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, Frequ
   }
 
   @Override
-  public List<FrequencyOfLessonsDto> findFrequencyOfLessons(String yearMonth) {
+  public List<FrequencyOfLessonsDto> findFrequencyOfLessons(String yearMonth, Long teacherId) {
 
     LocalDateTime startTime = stringToLocalDateTime(yearMonth);
     LocalDateTime endTime = startTime.plusMonths(1);
 
-    return homeworkQueryRepository.findFrequencyOfLesson(startTime, endTime);
+    return homeworkQueryRepository.findFrequencyOfLesson(startTime, endTime, teacherId);
   }
 
   /**
