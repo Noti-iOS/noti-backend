@@ -6,8 +6,11 @@ insert into teacher values (3,'teacher3@gmail.com', 'teacher3','','','TEACHER',3
 insert into lesson values (1, now(), now(), 'MONDAY,TUESDAY,WEDNESDAY,THURSDAY', '13:00:00', '수학', '12:00:00',1);
 insert into lesson values (2, now(), now(), 'MONDAY,FRIDAY', '17:00:00', '수학2', '15:00:00',1);
 insert into lesson values (3, now(), now(), 'FRIDAY,THURSDAY', '15:00:00', '수학3', '13:00:00',1);
+
 insert into lesson values (4, now(), now(), 'FRIDAY', '10:00:00', '과학', '09:00:00',2);
 insert into lesson values (5, now(), now(), 'FRIDAY', '12:00:00', '과학2', '11:00:00',2);
+insert into lesson values (6, now(), now(), 'FRIDAY', '10:00:00', '과학', '09:00:00',2);
+insert into lesson values (7, now(), now(), 'FRIDAY', '12:00:00', '과학2', '11:00:00',2);
 
 
 
@@ -39,6 +42,15 @@ values (6, now(), now(), 'p 0 ~ 10', now(), '물리2 숙제', now(), 4, 5);
 
 insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
 values (2, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 1);
+
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
+values (16, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 4);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
+values (13, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 4);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
+values (14, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 5);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
+values (15, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 5);
 
 
 
