@@ -7,6 +7,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.homework.adapter.in.web.dto.HomeworkOfGivenDateDto;
 import com.noti.noti.homework.adapter.in.web.dto.QFrequencyOfLessonsDto;
 import com.noti.noti.homework.adapter.out.persistence.jpa.model.QHomeworkJpaEntity;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
@@ -93,21 +94,6 @@ public class HomeworkQueryRepository {
    */
   public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end, Long teacherId) {
 
-    /**
-     * B
-     * select count(distinct h.lessonId) as cnt, h.endTime
-     * from (select l.id as lessonId from lesson l where l.teacherId=주어진Id) a left join homework h
-     * on a.lessonId = h.lessonId
-     * where h.endTime between startTime and endTime
-     * groupBy(h.endTime
-     *
-     *
-     * 1. 수업과 숙제 표를 lessonId로 조인 V
-     * 2. 그 테이블에서 teacherID가 주어진 선생님id와 같아야 함 V
-     * 3. 그 테이블에서 endTime이 주어진 start와 end 사이가 되어야함 V
-     * 4. endTime으로 groupBy하고 count(lessonId), endTime을 출력함
-    */
-
     return queryFactory
         .select(Projections.constructor(FrequencyOfLessonsDto.class,
             homeworkJpaEntity.endTime.as("dateOfLesson"),
@@ -121,6 +107,49 @@ public class HomeworkQueryRepository {
         .groupBy(homeworkJpaEntity.endTime)
         .fetch();
 
+
+  }
+
+  /**
+   * 주어진 날에 대한 분반과 숙제를 조회하는 메서드
+   * @param date 조회하고 싶은 날짜를 나타내는 파라미터
+   * @param teacherId 선생님 ID
+   * @return day에 해당하는 분반과 숙제목록
+   */
+  public List<HomeworkOfGivenDateDto> findHomeworksBy(LocalDateTime date, Long teacherId) {
+    /**
+     * select l.name, l.startTime, l.endTime, h.content, count(hs.studentId) as 학생수
+     *        ,count(case when sh.check=true then 1 end) as 완료학생수
+     * from homework h join homeworkStudent hs on h.homeworkId=hs.homeworkId
+     *      join lesson l on h.lessonId=l.id
+     * where l.teacherId=teacherId
+     * groupBy(l.id, h.id)
+     *
+     */
+
+    return queryFactory
+        .select(Projections.constructor(HomeworkOfGivenDateDto.class,
+            lessonJpaEntity.id.as("lessonId"),
+            lessonJpaEntity.lessonName.as("lessonName"),
+            lessonJpaEntity.startTime.as("startTimeOfLesson"),
+            lessonJpaEntity.endTime.as("endTimeOfLesson"),
+            list(Projections.constructor(HomeworkOfGivenDateDto.HomeworkDto.class,
+                homeworkJpaEntity.id.as("homeworkId"),
+                homeworkJpaEntity.content.as("homeworkContent"),
+                studentHomeworkJpaEntity.id.countDistinct().as("studentCnt"),
+                studentHomeworkJpaEntity.homeworkStatus.eq(true).count().as("completeCnt"))
+            ).as("homeworks")))
+        .from(homeworkJpaEntity)
+        .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
+        .on(homeworkJpaEntity.lessonJpaEntity.id.eq(lessonJpaEntity.id))
+        .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
+        .on(studentHomeworkJpaEntity.homeworkJpaEntity.id.eq(homeworkJpaEntity.id))
+        .where(
+            eqTeacherId(teacherId),
+            homeworkJpaEntity.endTime.between(date, date.plusDays(1))
+        )
+        .groupBy(lessonJpaEntity.id, homeworkJpaEntity.id)
+        .fetch();
 
   }
 
