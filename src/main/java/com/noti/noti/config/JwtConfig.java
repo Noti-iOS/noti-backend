@@ -2,7 +2,7 @@ package com.noti.noti.config;
 
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.config.security.jwt.filter.CustomAuthenticationFilter;
-import com.noti.noti.config.security.jwt.filter.JwtFilter;
+import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.config.security.jwt.filter.OAuthManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
 
   private final JwtTokenProvider jwtTokenProvider;
-  private final JwtFilter jwtFilter;
+  private final CustomJwtFilter customJwtFilter;
   private final OAuthManager oAuthManager;
 
   @Override
@@ -24,7 +24,7 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
     AuthenticationManager authenticationManager = builder.getSharedObject(
         AuthenticationManager.class);
     builder.addFilter(usernamePasswordAuthenticationFilter(authenticationManager))
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
   public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter(
