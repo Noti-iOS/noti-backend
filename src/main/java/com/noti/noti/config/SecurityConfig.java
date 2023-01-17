@@ -2,7 +2,7 @@ package com.noti.noti.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,7 +40,9 @@ public class SecurityConfig {
 
         .and()
         .authorizeRequests()
-        .antMatchers("/api/teacher/login/**","/", "/swagger-ui.html","/swagger-ui/**", "/api-docs/**").permitAll()
+        .antMatchers("/api/teacher/login/**", "/", "/swagger-ui.html", "/swagger-ui/**",
+            "/api-docs/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/api/auth/reissue").permitAll()
         .antMatchers("/api/teacher/**").hasRole("TEACHER")
         .anyRequest().authenticated()
 
