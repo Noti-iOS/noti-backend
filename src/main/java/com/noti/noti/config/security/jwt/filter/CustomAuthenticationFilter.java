@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
@@ -82,11 +84,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     response.setStatus(HttpStatus.OK.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-    response.setHeader("access-token", jwtTokenProvider.createAccessToken(authResult));
-    response.setHeader("refresh-token", jwtTokenProvider.createRefreshToken(authResult));
+    String authorities = authResult.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-    Map<String, Object> body = new LinkedHashMap<>();
-    body.put("bool", true);
+    Map<String, String> body = new LinkedHashMap<>();
+    body.put("accessToken", jwtTokenProvider.createAccessToken(authResult.getName(), authorities));
+    body.put("refreshToken", jwtTokenProvider.createRefreshToken(authResult.getName(), authorities));
+
     new ObjectMapper().writeValue(response.getOutputStream(), body);
   }
 

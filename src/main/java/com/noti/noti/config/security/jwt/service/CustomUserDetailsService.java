@@ -62,7 +62,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     Teacher teacher = Teacher.builder()
         .id(Long.parseLong(socialType.getCode()+socialId)) // id = socialType.code + socialId
         .social(Long.parseLong(socialId))
-        .role(Role.TEACHER)
+        .role(Role.ROLE_TEACHER)
         .socialType(socialType)
         .build();
 

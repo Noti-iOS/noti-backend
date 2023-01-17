@@ -27,6 +27,14 @@ public class SwaggerConfig {
   }
 
   @Bean
+  public GroupedOpenApi authApi() {
+    return GroupedOpenApi.builder()
+        .group("NOTI-auth")
+        .pathsToMatch("/api/auth/**")
+        .build();
+  }
+
+  @Bean
   public GroupedOpenApi classApi() {
     return GroupedOpenApi.builder()
         .group("NOTI-class")
