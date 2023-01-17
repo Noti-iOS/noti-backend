@@ -1,5 +1,6 @@
 package com.noti.noti.teacher.adpater.out.persistence;
 
+import com.noti.noti.teacher.application.exception.TeacherNotFoundException;
 import com.noti.noti.teacher.application.port.out.FindTeacherNicknamePort;
 import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
@@ -23,7 +24,7 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   @Override
   public Teacher findBySocialId(Long social) {
     TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialId(social)
-        .orElseThrow(NoSuchElementException::new);
+        .orElseThrow(TeacherNotFoundException::new);
     Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
     return teacher;
   }
@@ -32,7 +33,7 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   public Teacher findBySocialTypeAndSocialId(SocialType socialType, Long socialId) {
     TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialTypeAndSocialId(socialType,
             socialId)
-        .orElseThrow(NoSuchElementException::new);
+        .orElseThrow(TeacherNotFoundException::new);
     Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
     return teacher;
   }
@@ -40,7 +41,7 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   @Override
   public Teacher findById(Long id) {
     TeacherJpaEntity teacherJpaEntity = teacherRepository.findById(id)
-        .orElseThrow(NoSuchElementException::new);
+        .orElseThrow(() -> new TeacherNotFoundException(id));
     Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
     return teacher;
   }
