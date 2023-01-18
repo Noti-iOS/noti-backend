@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.error.exception.InvalidRequestException;
 import com.noti.noti.error.exception.OauthAuthenticationException;
+import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
 import com.noti.noti.teacher.domain.SocialType;
+import com.noti.noti.teacher.domain.Teacher;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,15 +36,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
   private final JwtTokenProvider jwtTokenProvider;
   private final OAuthManager oAuthManager;
 
+  private final ObjectMapper objectMapper;
+
   private final String PREFIX_URL = "/api/teacher/login/";
 
 
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager,
       JwtTokenProvider jwtTokenProvider,
-      OAuthManager oAuthManager) {
+      OAuthManager oAuthManager,  ObjectMapper objectMapper) {
     super(authenticationManager);
     this.jwtTokenProvider = jwtTokenProvider;
     this.oAuthManager = oAuthManager;
+    this.objectMapper = objectMapper;
   }
 
   /* /login 으로 요청이 올 때 */
@@ -53,25 +59,32 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);
-    String socialCode;
 
     // 값이 카카오면 kakaoTeacherAdapter
     // 값이 애플이면 AppleTeacherAdapter
-    String socialId;// 각 소셜로그인의 socialId 값
+    OAuthInfo oauthInfo = null; ;// 각 소셜로그인의 socialId 값
 
+    Teacher teacher = null;
     try {
-      socialId = oAuthManager.getSocialId(socialType, accessToken);
+      oauthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
+      //socialId = oAuthManager.getSocialId(socialType, accessToken);
+      teacher = Teacher.builder().id(Long.parseLong(oauthInfo.getSocialId()))
+          .profile(oauthInfo.getThumbnailImageUrl()).nickname(
+              oauthInfo.getNickname()).build();
     } catch (OauthAuthenticationException e) {
       log.error(e.getMessage());
       request.setAttribute("exception", e.getErrorCode());
       throw e;
     }
     // 고유번호 저장
-    socialCode = socialType.getCode();
+    String socialCode = socialType.getCode();
+
+    request.setAttribute("teacher", teacher);
+
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            socialCode + socialId, "");
+            socialCode + oauthInfo.getSocialId(), "");
 
     return getAuthenticationManager().authenticate(authenticationToken);
   }
@@ -100,6 +113,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       throws IOException, ServletException {
 
     log.info("Authentication failed");
+
+    Teacher teacher = (Teacher)request.getAttribute("teacher");
+
+    System.out.println(teacher.getId());
+    System.out.println(teacher.getNickname());
+    System.out.println(teacher.getProfile());
+
+    response.setStatus(HttpStatus.FAILED_DEPENDENCY.value());
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+    Map<String, LocalDateTime> body = new LinkedHashMap<>();
+    body.put("time", LocalDateTime.now());
+    objectMapper.writeValue(response.getOutputStream(), body);
 
   }
 
