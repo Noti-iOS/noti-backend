@@ -1,8 +1,8 @@
 package com.noti.noti.config.security.jwt.filter;
 
-import com.noti.noti.error.exception.InvalidValueException;
 import com.noti.noti.error.exception.OauthAuthenticationException;
-import com.noti.noti.teacher.adpater.in.web.dto.KakaoDto.TeacherInfo;
+import com.noti.noti.teacher.adpater.in.web.dto.KakaoOAuthInfo;
+import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -12,8 +12,8 @@ import reactor.core.publisher.Mono;
 public class KakaoOAuthUtil implements OAuthUtil {
 
   @Override
-  public String getSocialIdBy(String token) throws OauthAuthenticationException{
-    TeacherInfo teacherInfo = WebClient.create("https://kapi.kakao.com/v2/user/me")
+  public OAuthInfo getOAuthInfo(String token) throws OauthAuthenticationException{
+    KakaoOAuthInfo kakaoOAuthInfo = WebClient.create("https://kapi.kakao.com/v2/user/me")
         .get()
         .header("Authorization", "Bearer " + token)
         .retrieve()
@@ -21,10 +21,12 @@ public class KakaoOAuthUtil implements OAuthUtil {
             .flatMap(error ->
                 Mono.error(new OauthAuthenticationException(error))))
         .onStatus(HttpStatus::is5xxServerError, clientResponse -> Mono.error(RuntimeException::new))
-        .bodyToMono(TeacherInfo.class)
+        .bodyToMono(KakaoOAuthInfo.class)
         .block();
 
-
-    return teacherInfo.getId().toString();
+    System.out.println(kakaoOAuthInfo);
+    return OAuthInfo.builder().socialId(kakaoOAuthInfo.getId())
+        .nickname(kakaoOAuthInfo.getKakaoAccount().getProfile().getNickname())
+        .thumbnailImageUrl(kakaoOAuthInfo.getKakaoAccount().getProfile().getThumbnailImageUrl()).build();
   }
 }
