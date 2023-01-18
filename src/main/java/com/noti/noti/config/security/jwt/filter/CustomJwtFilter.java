@@ -37,15 +37,14 @@ public class CustomJwtFilter extends OncePerRequestFilter {
     String jwt = resolveToken(request);
 
     try {
-      if (StringUtils.hasText(jwt)) {
+      if(StringUtils.hasText(jwt)){
         jwtTokenProvider.validateToken(jwt);
         Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     } catch (BusinessException e) {
-      log.error(e.getMessage());
-      request.setAttribute("exception", e.getErrorCode());
-    }
+        request.setAttribute("exception", e.getErrorCode());
+      }
 
     filterChain.doFilter(request, response);
   }

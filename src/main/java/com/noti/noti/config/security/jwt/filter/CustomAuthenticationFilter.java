@@ -57,7 +57,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     String accessToken = request.getHeader("access-token");
 
-    log.info("access token: {}", accessToken);
     SocialType socialType = extractSocialType(request);
 
     // 값이 카카오면 kakaoTeacherAdapter
@@ -72,7 +71,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
           .profile(oauthInfo.getThumbnailImageUrl()).nickname(
               oauthInfo.getNickname()).build();
     } catch (OauthAuthenticationException e) {
-      log.error(e.getMessage());
       request.setAttribute("exception", e.getErrorCode());
       throw e;
     }
@@ -136,7 +134,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             .equals(request.getRequestURI().substring(PREFIX_URL.length())))
         .findFirst()
         .orElseThrow(() ->{
-          log.info("URI : {}", request.getServletPath());
           request.setAttribute("exception", INVALID_REQUEST);
           throw new InvalidRequestException("잘못된 url 주소입니다");
         });
