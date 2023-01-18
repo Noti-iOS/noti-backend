@@ -43,7 +43,6 @@ public class CustomJwtFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     } catch (BusinessException e) {
-        log.error(e.getMessage());
         request.setAttribute("exception", e.getErrorCode());
       }
 
