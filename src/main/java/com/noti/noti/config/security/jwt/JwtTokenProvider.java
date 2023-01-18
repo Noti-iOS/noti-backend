@@ -2,6 +2,7 @@ package com.noti.noti.config.security.jwt;
 
 import com.noti.noti.common.application.port.out.JwtPort;
 import com.noti.noti.error.exception.CustomExpiredJwtException;
+import com.noti.noti.error.exception.CustomIllegalArgumentException;
 import com.noti.noti.error.exception.CustomMalformedJwtException;
 import com.noti.noti.error.exception.CustomSignatureException;
 import com.noti.noti.error.exception.CustomUnsupportedJwtException;
@@ -90,7 +91,7 @@ public class JwtTokenProvider implements JwtPort {
     } catch (SignatureException e) {
       throw new CustomSignatureException(e.getMessage());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException(e.getMessage());
+      throw new CustomIllegalArgumentException(e.getMessage());
     } catch (Exception e) {
       throw e;
     }

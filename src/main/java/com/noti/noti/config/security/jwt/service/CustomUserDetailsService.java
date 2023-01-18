@@ -47,7 +47,9 @@ public class CustomUserDetailsService implements UserDetailsService {
       Teacher teacher = signIn(socialId, socialType);
       userDetails = createUserDetails(teacher);
     }
-    return userDetails;
+
+    throw new UsernameNotFoundException("sdfsdf");
+    //return userDetails;
   }
 
   private UserDetails createUserDetails(Teacher teacher) {
