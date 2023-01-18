@@ -1,6 +1,6 @@
 package com.noti.noti.config.security.jwt.filter;
 
-import com.noti.noti.error.exception.InvalidValueException;
+import com.noti.noti.aop.ExecutionTimeChecker;
 import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.adpater.in.web.dto.KakaoDto.TeacherInfo;
 import org.springframework.http.HttpStatus;
@@ -9,6 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
+@ExecutionTimeChecker
 public class KakaoOAuthUtil implements OAuthUtil {
 
   @Override
