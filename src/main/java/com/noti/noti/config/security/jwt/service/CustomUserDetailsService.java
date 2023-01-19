@@ -1,7 +1,6 @@
 package com.noti.noti.config.security.jwt.service;
 
-import com.noti.noti.teacher.adpater.out.persistence.TeacherPersistenceAdapter;
-import com.noti.noti.teacher.domain.Role;
+import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
 import java.util.Arrays;
@@ -20,34 +19,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-  private final TeacherPersistenceAdapter teacherPersistenceAdapter;
+  private final FindTeacherPort findTeacherPort;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
     // username = id = socialType.code + socialId
-
-    UserDetails userDetails;
-
     String socialCode = username.substring(0, 3);
     String socialId = username.substring(3);
 
     SocialType socialType = Arrays.stream(SocialType.values())
         .filter(type -> type.getCode().equals(socialCode))
         .findFirst()
-        .orElseThrow(()->new IllegalArgumentException("잘못된 요청입니다."));
+        .orElseThrow(() -> new UsernameNotFoundException("회원 정보가 없습니다"));
 
-    boolean validate = teacherPersistenceAdapter.validate(socialId, socialType);
+    Teacher teacher = findTeacherPort.findBySocialTypeAndSocialId(socialType, socialId)
+        .orElseThrow(() -> new UsernameNotFoundException("회원 정보가 없습니다"));
 
-    if (validate) {// id값 저장되어 있으면 -> 로그인
-      Teacher teacher = teacherPersistenceAdapter.findById(Long.parseLong(username));
-      //Teacher teacher = teacherPersistenceAdapter.findBySocialTypeAndSocialId(socialType, Long.parseLong(socialId));
-      userDetails = createUserDetails(teacher);
-    } else {// id 값 저장 안되어 있으면 -> 회원가입 -> 로그인
-      Teacher teacher = signIn(socialId, socialType);
-      userDetails = createUserDetails(teacher);
-    }
-    return userDetails;
+    return createUserDetails(teacher);
   }
 
   private UserDetails createUserDetails(Teacher teacher) {
@@ -55,17 +44,5 @@ public class CustomUserDetailsService implements UserDetailsService {
     UserDetails userDetails = new User(teacher.getId().toString(),
         new BCryptPasswordEncoder().encode(""), Collections.singleton(grantedAuthority));
     return userDetails;
-  }
-
-  /* 회원가입 - 해당 아이디 없으면 저장 */
-  private Teacher signIn(String socialId, SocialType socialType) {
-    Teacher teacher = Teacher.builder()
-        .id(Long.parseLong(socialType.getCode()+socialId)) // id = socialType.code + socialId
-        .social(Long.parseLong(socialId))
-        .role(Role.ROLE_TEACHER)
-        .socialType(socialType)
-        .build();
-
-    return teacherPersistenceAdapter.saveTeacher(teacher);
   }
 }
