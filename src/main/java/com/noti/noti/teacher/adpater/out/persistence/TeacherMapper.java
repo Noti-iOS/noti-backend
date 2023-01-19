@@ -9,7 +9,7 @@ public class TeacherMapper {
   public TeacherJpaEntity mapToJpaEntity(Teacher teacher) {
     return new TeacherJpaEntity.TeacherJpaEntityBuilder()
         .id(teacher.getId())
-        .socialId(teacher.getSocial())
+        .socialId(teacher.getSocialId())
         .nickname(teacher.getNickname())
         .email(teacher.getEmail())
         .role(teacher.getRole())
@@ -22,7 +22,7 @@ public class TeacherMapper {
 
     return Teacher.builder()
         .id(teacherJpaEntity.getId())
-        .social(teacherJpaEntity.getSocialId())
+        .socialId(teacherJpaEntity.getSocialId())
         .nickname(teacherJpaEntity.getNickname())
         .email(teacherJpaEntity.getEmail())
         .profile(teacherJpaEntity.getProfile())
