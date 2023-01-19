@@ -33,7 +33,7 @@ public class GetTodaysLessonInfoController {
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
-      @ApiResponse(responseCode = "401", description = "안증되지 않은 유저입니다", content = {
+      @ApiResponse(responseCode = "401", description = "인증되지 않은 유저입니다", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
       @ApiResponse(responseCode = "403", description = "권한이 없습니다", content = {
