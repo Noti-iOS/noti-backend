@@ -6,7 +6,7 @@ import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
 import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -30,12 +30,9 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   }
 
   @Override
-  public Teacher findBySocialTypeAndSocialId(SocialType socialType, Long socialId) {
-    TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialTypeAndSocialId(socialType,
-            socialId)
-        .orElseThrow(TeacherNotFoundException::new);
-    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
-    return teacher;
+  public Optional<Teacher> findBySocialTypeAndSocialId(SocialType socialType, String socialId) {
+    return teacherRepository.findBySocialTypeAndSocialId(socialType, socialId)
+        .map(teacherMapper::mapToDomainEntity);
   }
 
   @Override
@@ -54,14 +51,6 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
     TeacherJpaEntity newTeacher = teacherRepository.save(teacherJpaEntity);
 
     return teacherMapper.mapToDomainEntity(newTeacher);
-  }
-
-  /* 회원 여부 확인 */
-  public boolean validate(String username, SocialType socialType) {// username=socialId
-
-    return teacherRepository
-        .findBySocialTypeAndSocialId(socialType, Long.parseLong(username)).isPresent();
-//    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
   }
 
   @Override
