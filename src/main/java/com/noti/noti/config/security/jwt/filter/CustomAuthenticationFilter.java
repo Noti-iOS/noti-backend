@@ -3,17 +3,17 @@ package com.noti.noti.config.security.jwt.filter;
 import static com.noti.noti.error.ErrorCode.INVALID_REQUEST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.noti.noti.auth.application.port.in.JwtToken;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.error.exception.InvalidRequestException;
 import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
+import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
+import com.noti.noti.teacher.domain.Role;
 import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,15 +38,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
   private final ObjectMapper objectMapper;
 
-  private final String PREFIX_URL = "/api/teacher/login/";
+  private final SaveTeacherPort saveTeacherPort;
 
+  private final String PREFIX_URL = "/api/teacher/login/";
 
   public CustomAuthenticationFilter(AuthenticationManager authenticationManager,
       JwtTokenProvider jwtTokenProvider,
-      OAuthManager oAuthManager,  ObjectMapper objectMapper) {
+      OAuthManager oAuthManager, ObjectMapper objectMapper, SaveTeacherPort saveTeacherPort) {
     super(authenticationManager);
     this.jwtTokenProvider = jwtTokenProvider;
     this.oAuthManager = oAuthManager;
+    this.saveTeacherPort = saveTeacherPort;
     this.objectMapper = objectMapper;
   }
 
@@ -59,30 +61,29 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     SocialType socialType = extractSocialType(request);
 
-    // 값이 카카오면 kakaoTeacherAdapter
-    // 값이 애플이면 AppleTeacherAdapter
-    OAuthInfo oauthInfo = null; ;// 각 소셜로그인의 socialId 값
+    OAuthInfo oAuthInfo = null;
 
-    Teacher teacher = null;
     try {
-      oauthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
-      //socialId = oAuthManager.getSocialId(socialType, accessToken);
-      teacher = Teacher.builder().id(Long.parseLong(oauthInfo.getSocialId()))
-          .profile(oauthInfo.getThumbnailImageUrl()).nickname(
-              oauthInfo.getNickname()).build();
+      oAuthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
     } catch (OauthAuthenticationException e) {
       request.setAttribute("exception", e.getErrorCode());
       throw e;
     }
-    // 고유번호 저장
-    String socialCode = socialType.getCode();
 
-    request.setAttribute("teacher", teacher);
+    Teacher teacher = Teacher.builder()
+        .id(Long.parseLong(socialType.getCode() + oAuthInfo.getSocialId()))
+        .profile(oAuthInfo.getThumbnailImageUrl())
+        .nickname(oAuthInfo.getNickname())
+        .email(oAuthInfo.getEmail())
+        .socialId(oAuthInfo.getSocialId())
+        .socialType(socialType)
+        .role(Role.ROLE_TEACHER).build();
 
+    request.setAttribute("teacherInfo", teacher);
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            socialCode + oauthInfo.getSocialId(), "");
+            socialType.getCode() + oAuthInfo.getSocialId(), "");
 
     return getAuthenticationManager().authenticate(authenticationToken);
   }
@@ -98,11 +99,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     String authorities = authResult.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-    Map<String, String> body = new LinkedHashMap<>();
-    body.put("accessToken", jwtTokenProvider.createAccessToken(authResult.getName(), authorities));
-    body.put("refreshToken", jwtTokenProvider.createRefreshToken(authResult.getName(), authorities));
-
-    new ObjectMapper().writeValue(response.getOutputStream(), body);
+    new ObjectMapper().writeValue(response.getOutputStream(),
+        generateToken(authResult.getName(), authorities));
   }
 
   @Override
@@ -112,19 +110,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     log.info("Authentication failed");
 
-    Teacher teacher = (Teacher)request.getAttribute("teacher");
+    Teacher teacherInfo = (Teacher) request.getAttribute("teacherInfo");
 
-    System.out.println(teacher.getId());
-    System.out.println(teacher.getNickname());
-    System.out.println(teacher.getProfile());
+    Teacher savedTeacher = saveTeacherPort.saveTeacher(teacherInfo);
 
-    response.setStatus(HttpStatus.FAILED_DEPENDENCY.value());
+    response.setStatus(HttpStatus.CREATED.value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-    Map<String, LocalDateTime> body = new LinkedHashMap<>();
-    body.put("time", LocalDateTime.now());
-    objectMapper.writeValue(response.getOutputStream(), body);
-
+    objectMapper.writeValue(response.getOutputStream(),
+        generateToken(savedTeacher.getId().toString(), savedTeacher.getRole().name()));
   }
 
   /* 소셜로그인 구분 */
@@ -133,9 +127,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         .filter(socialType -> socialType.getSocialName()
             .equals(request.getRequestURI().substring(PREFIX_URL.length())))
         .findFirst()
-        .orElseThrow(() ->{
+        .orElseThrow(() -> {
           request.setAttribute("exception", INVALID_REQUEST);
           throw new InvalidRequestException("잘못된 url 주소입니다");
         });
+  }
+
+  private JwtToken generateToken(String subject, String role) {
+    return new JwtToken(jwtTokenProvider.createAccessToken(subject, role),
+        jwtTokenProvider.createRefreshToken(subject, role));
   }
 }
