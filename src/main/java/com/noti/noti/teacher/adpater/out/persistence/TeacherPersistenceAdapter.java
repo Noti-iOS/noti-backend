@@ -36,11 +36,8 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   }
 
   @Override
-  public Teacher findById(Long id) {
-    TeacherJpaEntity teacherJpaEntity = teacherRepository.findById(id)
-        .orElseThrow(() -> new TeacherNotFoundException(id));
-    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
-    return teacher;
+  public Optional<Teacher> findById(Long id) {
+    return teacherRepository.findById(id).map(teacherMapper::mapToDomainEntity);
   }
 
 

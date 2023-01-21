@@ -11,6 +11,6 @@ public interface FindTeacherPort {
 
   Optional<Teacher> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
-  Teacher findById(Long Id);
+  Optional<Teacher> findById(Long Id);
 
 }

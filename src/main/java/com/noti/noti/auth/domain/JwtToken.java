@@ -1,4 +1,4 @@
-package com.noti.noti.auth.application.port.in;
+package com.noti.noti.auth.domain;
 
 import lombok.Getter;
 
