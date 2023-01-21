@@ -3,7 +3,7 @@ package com.noti.noti.config.security.jwt.filter;
 import static com.noti.noti.error.ErrorCode.INVALID_REQUEST;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.noti.noti.auth.application.port.in.JwtToken;
+import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.error.exception.InvalidRequestException;
 import com.noti.noti.error.exception.OauthAuthenticationException;

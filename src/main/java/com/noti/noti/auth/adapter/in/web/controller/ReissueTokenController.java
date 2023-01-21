@@ -1,7 +1,7 @@
 package com.noti.noti.auth.adapter.in.web.controller;
 
 import com.noti.noti.auth.adapter.in.web.dto.response.ResponseReissueTokenDto;
-import com.noti.noti.auth.application.port.in.JwtToken;
+import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.auth.application.port.in.ReissueTokenUsecace;
 import com.noti.noti.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;

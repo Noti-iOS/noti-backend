@@ -21,10 +21,10 @@ public enum ErrorCode {
   /**
    * JWT 관련 error code
    */
-  EXPIRED_JWT(401, "J001", "만료된 토근입니다"),
-  UNSUPPORTED_JWT(401, "J002", "지원하지 않는 토근입니다"),
-  MALFORMED_JWT(401, "J003", "잘못된 토근입니다"),
-  INVALID_SIGNATURE_JWT(401, "J004", "잘못된 토근입니다"),
+  EXPIRED_JWT(401, "J001", "만료된 토큰입니다"),
+  UNSUPPORTED_JWT(401, "J002", "지원하지 않는 토큰입니다"),
+  MALFORMED_JWT(401, "J003", "잘못된 토큰입니다"),
+  INVALID_SIGNATURE_JWT(401, "J004", "잘못된 토큰입니다"),
   ILLEGAL_ARGUMENT_JWT(401, "J005", "토큰이 비어있거나 잘못되었습니다"),
 
   // Student
