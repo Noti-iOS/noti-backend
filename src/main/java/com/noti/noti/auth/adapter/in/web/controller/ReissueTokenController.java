@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +42,7 @@ public class ReissueTokenController {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))})
   })
-  @GetMapping("/api/auth/reissue")
+  @PostMapping("/api/auth/reissue")
   @Parameter(name = "Authorization", description = "refresh token")
   public ResponseEntity reissueToken(@RequestHeader(AUTHORIZATION_HEADER) String token) {
     JwtToken jwtToken = reissueTokenUsecace.reissueToken(resolveToken(token));

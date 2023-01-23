@@ -39,7 +39,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     response.setCharacterEncoding("utf-8");
 
     if (Objects.isNull(code)) {
-      log.info(AUTHENTICATION_FAILED.getCode());
+      log.error(AUTHENTICATION_FAILED.getCode());
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       objectMapper.writeValue(response.getOutputStream(), ErrorResponse.of(AUTHENTICATION_FAILED));
     } else {

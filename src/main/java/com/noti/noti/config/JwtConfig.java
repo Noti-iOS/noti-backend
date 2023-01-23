@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,7 +36,8 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
       AuthenticationManager authenticationManager) {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
         authenticationManager, jwtTokenProvider, oAuthManager,objectMapper,saveTeacherPort);
-    customAuthenticationFilter.setFilterProcessesUrl("/api/teacher/login/**");
+    customAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/teacher/login/**",
+        "POST"));
     return customAuthenticationFilter;
   }
 

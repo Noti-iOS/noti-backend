@@ -44,7 +44,7 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/api/teacher/login/**", "/", "/favicon.ico", "/swagger-ui.html", "/swagger-ui/**",
             "/api-docs/**").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/auth/reissue").permitAll()
+        .antMatchers( "/api/auth/reissue").permitAll()
         .antMatchers("/api/teacher/**").hasRole("TEACHER")
         .anyRequest().authenticated()
 
