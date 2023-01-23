@@ -1,8 +1,16 @@
 package com.noti.noti.studenthomework.adapter.in.web.controller;
 
+import com.noti.noti.error.ErrorResponse;
+import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto;
 import com.noti.noti.studenthomework.adapter.out.persistence.StudentHomeworkAdapter;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +28,18 @@ public class GetHomeworksOfCalendar {
 
   private final StudentHomeworkAdapter studentHomeworkAdapter;
 
+  @Operation(summary = "HomeworksOfCalendarInfo", description = "요청 선생님의 날짜에 해당하는 수업목록 및 숙제목록을 조회한다.")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "성공",
+          content = {@Content(mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = HomeworkOfGivenDateDto.class)))}),
+      @ApiResponse(responseCode = "500", description = "서버에러", content = {
+          @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ErrorResponse.class))}),
+      @ApiResponse(responseCode = "400", description = "올바르지 않은 값입니다.", content = {
+          @Content(mediaType = "application/json",
+              schema = @Schema(implementation = ErrorResponse.class))})
+  })
   @GetMapping("/api/teacher/calendar/{year}/{month}/{day}")
   @Parameter(name = "userDetails", hidden = true)
   ResponseEntity<List<HomeworkOfGivenDateDto>> getHomeworksOfCalendar(
