@@ -1,16 +1,12 @@
 package com.noti.noti.homework.adapter.out.persistence;
 
 import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
-import com.noti.noti.homework.adapter.in.web.dto.HomeworkOfGivenDateDto;
 import com.noti.noti.homework.adapter.out.persistence.jpa.HomeworkJpaRepository;
-import com.noti.noti.homework.application.port.out.FindHomeworkOfDatePort;
 import com.noti.noti.homework.application.port.out.FindTodaysHomeworkPort;
 import com.noti.noti.homework.application.port.out.FrequencyOfLessonsPort;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, FrequencyOfLessonsPort,
-    FindHomeworkOfDatePort {
+public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, FrequencyOfLessonsPort {
 
   private final HomeworkMapper homeworkMapper;
   private final HomeworkJpaRepository homeworkJpaRepository;
@@ -53,11 +48,6 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, Frequ
     return LocalDateTime.parse(stringBuilder, formatter);
   }
 
-
-  @Override
-  public List<HomeworkOfGivenDateDto> findHomeworksBy(LocalDate date, Long teacherId) {
-    return homeworkQueryRepository.findHomeworksBy(date.atStartOfDay(), teacherId);
-  }
 
 
 }
