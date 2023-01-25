@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.book.adapter.out.persistence.BookMapper;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
@@ -101,54 +101,4 @@ class HomeworkPersistenceAdapterTest {
   }
 
 
-  @Nested
-  class 년_월이_주어지고 {
-
-    final String yearMonth = YearMonth.now().toString();
-
-    Long teacherId1 = 1L;
-    Long teacherId2 = 2L;
-    Long teacherId3 = 3L;
-    @Sql("/data/homework-lesson.sql")
-    @Nested
-    class 주어진_월에_숙제가_있다면 {
-
-      @Test
-      void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
-
-        List<FrequencyOfLessonsDto> frequencyOfLessons1 = homeworkPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId1);
-
-        List<FrequencyOfLessonsDto> frequencyOfLessons2 = homeworkPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId2);
-
-        List<FrequencyOfLessonsDto> frequencyOfLessons3 = homeworkPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId3);
-
-
-        for (FrequencyOfLessonsDto dto : frequencyOfLessons3) {
-          System.out.println(dto.dateOfLesson);
-          System.out.println(dto.frequencyOfLesson);
-        }
-
-        assertThat(frequencyOfLessons1).size().isEqualTo(2);
-        assertThat(frequencyOfLessons2).size().isEqualTo(2);
-        assertThat(frequencyOfLessons3).size().isEqualTo(0);
-
-      }
-    }
-
-    @Sql("/data/no-homework-lesson.sql")
-    @Nested
-    class 주어진_월에_숙제가_없다면 {
-      @Test
-      void 비어있는_list를_반환한다() {
-        List<FrequencyOfLessonsDto> frequencyOfLessons = homeworkPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
-
-        assertThat(frequencyOfLessons).isEmpty();
-      }
-
-    }
-
-  }
 }
