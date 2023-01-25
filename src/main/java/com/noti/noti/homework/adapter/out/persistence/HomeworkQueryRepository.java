@@ -6,7 +6,7 @@ import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QS
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.Ops;
@@ -73,30 +73,7 @@ public class HomeworkQueryRepository {
   }
 
 
-  /**
-   * 숙제가 있는 날과 그 날의 분반 개수를 조회하는 메서드
-   * @param start 시작 날짜
-   * @param end   끝 날짜
-   * @return 시작 ~ 끝 날짜에서 숙제가 있는 날의 날짜와 그 날짜의 분반 개수목록
-   */
-  public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end,
-      Long teacherId) {
 
-    return queryFactory
-        .select(Projections.constructor(FrequencyOfLessonsDto.class,
-            homeworkJpaEntity.endTime.as("dateOfLesson"),
-            homeworkJpaEntity.lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
-        .from(homeworkJpaEntity)
-        .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
-        .on(homeworkJpaEntity.lessonJpaEntity.id.eq(lessonJpaEntity.id))
-        .where(
-            homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)),
-            lessonJpaEntity.teacherJpaEntity.id.eq(teacherId))
-        .groupBy(homeworkJpaEntity.endTime)
-        .fetch();
-
-
-  }
 
 
 }

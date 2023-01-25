@@ -1,8 +1,9 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
 import com.noti.noti.error.ErrorResponse;
-import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.homework.adapter.out.persistence.HomeworkPersistenceAdapter;
+import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GetFrequencyOfLessonsController {
 
+  private final GetFrequencyOfLessonsQuery getFrequencyOfLessonsQuery;
   private final HomeworkPersistenceAdapter homeworkPersistenceAdapter;
 
 
@@ -46,7 +48,7 @@ public class GetFrequencyOfLessonsController {
 
     long teacherId = Long.parseLong(userDetails.getUsername());
     String yearMonth = new StringBuilder().append(year).append("-").append(month).toString();
-    List<FrequencyOfLessonsDto> responseDto = homeworkPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId);
+    List<FrequencyOfLessonsDto> responseDto = getFrequencyOfLessonsQuery.findFrequencyOfLessons(yearMonth, teacherId);
 
     return ResponseEntity.ok(responseDto);
   }

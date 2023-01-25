@@ -1,7 +1,6 @@
-package com.noti.noti.homework.application.port.out;
+package com.noti.noti.lesson.application.port.out;
 
-import com.noti.noti.homework.adapter.in.web.dto.FrequencyOfLessonsDto;
-import java.time.YearMonth;
+import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import java.util.List;
 
 public interface FrequencyOfLessonsPort {
