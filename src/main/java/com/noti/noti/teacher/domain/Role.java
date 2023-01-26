@@ -1,5 +1,5 @@
 package com.noti.noti.teacher.domain;
 
 public enum Role {
-  TEACHER, STUDENT, ADMIN
+  ROLE_TEACHER, ROLE_STUDENT, ROLE_ADMIN
 }

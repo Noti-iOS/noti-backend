@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
@@ -50,8 +49,6 @@ class GetTodaysLessonInfoControllerTest {
   @MockBean
   private GetTodaysLessonQuery getTodaysLessonQuery;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
-
   final String TEACHER_NAME = "teacher";
   final String ID = "1";
 
@@ -88,7 +85,7 @@ class GetTodaysLessonInfoControllerTest {
     class 해당_선생님이_수업을_생성한적이_없으면 {
 
       @Test
-      @WithAuthUser(id = ID, role = "TEACHER")
+      @WithAuthUser(id = ID, role = "ROLE_TEACHER")
       void isLessonCreated가_false_이고_수업목록이_비어있는_응답객체를_반환한다() throws Exception {
         when(getTodaysLessonQuery.getTodaysLessons(any(Long.class))).thenReturn(
             createEmptyTodaysLessonHomework());
@@ -104,7 +101,7 @@ class GetTodaysLessonInfoControllerTest {
     class 해당_선생님의_오늘에_해당하는_수업이_없으면 {
 
       @Test
-      @WithAuthUser(id = ID, role = "TEACHER")
+      @WithAuthUser(id = ID, role = "ROLE_TEACHER")
       void isLessonCreated가_true_이고_수업목록이_비어있는_응답객체를_반환한다() throws Exception {
         TodaysLessonHomework givenTodaysLessonHomework = createEmptyTodaysLessonHomework();
         givenTodaysLessonHomework.changeLessonCreatedStatus();
@@ -145,7 +142,7 @@ class GetTodaysLessonInfoControllerTest {
       }
 
       @Test
-      @WithAuthUser(id = ID, role = "TEACHER")
+      @WithAuthUser(id = ID, role = "ROLE_TEACHER")
       void 학생목록과_숙제목록이_비어있는_응답객체를_반환한다() throws Exception {
         when(getTodaysLessonQuery.getTodaysLessons(any(Long.class))).thenReturn(
             createEmptyStudentsTodaysLessonHomework());
@@ -194,7 +191,7 @@ class GetTodaysLessonInfoControllerTest {
       }
 
       @Test
-      @WithAuthUser(id = ID, role = "TEACHER")
+      @WithAuthUser(id = ID, role = "ROLE_TEACHER")
       void 숙제목록이_비어있는_응답객체를_반환한다() throws Exception {
         when(getTodaysLessonQuery.getTodaysLessons(any(Long.class))).thenReturn(
             createEmptyHomeworksTodaysLessonHomework());
@@ -248,7 +245,7 @@ class GetTodaysLessonInfoControllerTest {
       }
 
       @Test
-      @WithAuthUser(id = ID, role = "TEACHER")
+      @WithAuthUser(id = ID, role = "ROLE_TEACHER")
       void 오늘에_해당하는_수업_학생_숙제목록의_응답객체를_반환한다() throws Exception {
         when(getTodaysLessonQuery.getTodaysLessons(any(Long.class))).thenReturn(
             createTodaysLessonHomework());

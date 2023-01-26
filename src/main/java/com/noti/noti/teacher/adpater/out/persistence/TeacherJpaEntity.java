@@ -15,13 +15,11 @@ import javax.persistence.*;
 public class TeacherJpaEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private Long socialId;
+  private String socialId;
   private String nickname;
   private String email;
   private String profile;
-  private String password;
 
   @Enumerated(EnumType.STRING)
   private Role role;
@@ -30,7 +28,7 @@ public class TeacherJpaEntity {
   private SocialType socialType;
 
   @Builder
-  public TeacherJpaEntity(Long id, Long socialId, String nickname, String email, String profile,
+  public TeacherJpaEntity(Long id, String socialId, String nickname, String email, String profile,
       Role role, SocialType socialType) {
     this.id = id;
     this.socialId = socialId;

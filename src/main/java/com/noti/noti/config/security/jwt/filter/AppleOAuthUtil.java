@@ -3,6 +3,7 @@ package com.noti.noti.config.security.jwt.filter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.teacher.adpater.in.web.dto.ApplePublicKeyResponse;
+import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
 import io.jsonwebtoken.Jwts;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,8 @@ import reactor.core.publisher.Mono;
 public class AppleOAuthUtil implements OAuthUtil {
 
   // 토큰을 검증하기 위한 공개키 요청
-  public String getSocialIdBy(String identityToken) {
+  @Override
+  public OAuthInfo getOAuthInfo(String identityToken) {
 
     String socialId = null;
 
@@ -79,7 +81,7 @@ public class AppleOAuthUtil implements OAuthUtil {
       e.printStackTrace();
     }
 
-    return socialId;
+    return OAuthInfo.builder().build();
 
   }
 

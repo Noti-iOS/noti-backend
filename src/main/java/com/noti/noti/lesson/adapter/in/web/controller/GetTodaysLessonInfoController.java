@@ -25,7 +25,7 @@ public class GetTodaysLessonInfoController {
 
   private final GetTodaysLessonQuery getTodaysLessonQuery;
 
-  @Operation(summary = "todaysLessonInfo", description = "요청 선생님의 오늘에 해당하는 수업목록을 조회한다.")
+  @Operation(tags = "오늘의 수업목록 조회 API ", summary = "todaysLessonInfo", description = "요청 선생님의 오늘에 해당하는 수업목록을 조회한다.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "성공",
           content = {@Content(mediaType = "application/json",
@@ -33,7 +33,7 @@ public class GetTodaysLessonInfoController {
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
-      @ApiResponse(responseCode = "401", description = "안증되지 않은 유저입니다", content = {
+      @ApiResponse(responseCode = "401", description = "인증되지 않은 유저입니다", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
       @ApiResponse(responseCode = "403", description = "권한이 없습니다", content = {
