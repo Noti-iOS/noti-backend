@@ -17,7 +17,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-src/main/resources
+#src/main/resources
 
 ### IntelliJ IDEA ###
 .idea
@@ -38,4 +38,5 @@ out/
 ### VS Code ###
 .vscode/
 
-src/main/resources/**.yaml
+noti-config
+## src/main/resources/**.yaml
