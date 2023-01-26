@@ -1,30 +1,21 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.homework.domain.model.Homework;
 import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
-import com.noti.noti.lesson.application.port.in.GetTodaysLessonQuery;
-import com.noti.noti.lesson.domain.model.Lesson;
-import com.noti.noti.teacher.domain.Role;
-import com.noti.noti.teacher.domain.SocialType;
-import com.noti.noti.teacher.domain.Teacher;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
