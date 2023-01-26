@@ -3,6 +3,7 @@ package com.noti.noti.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +15,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-
-@Configuration
 @EnableWebSecurity
+@Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -33,7 +33,6 @@ public class SecurityConfig {
         .cors()
         .and()
         .httpBasic().disable()
-
         .exceptionHandling()
         .authenticationEntryPoint(authenticationEntryPoint)
         .accessDeniedHandler(accessDeniedHandler)
@@ -43,9 +42,10 @@ public class SecurityConfig {
 
         .and()
         .authorizeRequests()
-        .antMatchers("/api/teacher/login/**","/", "/swagger-ui.html","/swagger-ui/**", "/api-docs/**").permitAll()
-        .antMatchers("/exception/**").permitAll()
-        .antMatchers("api/teacher/home").hasRole("TEACHER")
+        .antMatchers("/api/teacher/login/**", "/", "/favicon.ico", "/swagger-ui.html", "/swagger-ui/**",
+            "/api-docs/**").permitAll()
+        .antMatchers( "/api/auth/reissue").permitAll()
+        .antMatchers("/api/teacher/**").hasRole("TEACHER")
         .anyRequest().authenticated()
 
         .and()
@@ -53,7 +53,6 @@ public class SecurityConfig {
 
     return http.build();
   }
-
 
   @Bean
   public AuthenticationManager authenticationManager(

@@ -1,8 +1,6 @@
 package com.noti.noti.error;
 
 import com.noti.noti.error.exception.BusinessException;
-import com.noti.noti.error.exception.CustomAccessDeniedException;
-import com.noti.noti.error.exception.CustomAuthenticationEntryPointException;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
 @RestControllerAdvice
@@ -62,35 +59,17 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
   }
 
-  /**
-   * Authentication 객체가 필요한 권한을 보유하지 않은 경우 발생합
-   */
-  @ExceptionHandler(CustomAccessDeniedException.class)
-  protected ResponseEntity<ErrorResponse> handleAccessDeniedException(CustomAccessDeniedException e) {
-    log.error("handleAccessDeniedException", e);
-    final ErrorResponse response = ErrorResponse.of(e.getErrorCode());
-    return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
-  }
-
-  @ExceptionHandler(CustomAuthenticationEntryPointException.class)
-  protected ResponseEntity<ErrorResponse> handleAuthenticationException(CustomAuthenticationEntryPointException e) {
-    log.error("AuthenticationException", e);
-    final ErrorResponse response = ErrorResponse.of(e.getErrorCode());
-    return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.AUTHENTICATION_ENTRY_POINT.getStatus()));
-  }
-
   @ExceptionHandler(BusinessException.class)
   protected ResponseEntity<ErrorResponse> handleBusinessException(final BusinessException e) {
-    log.error("Exception : {}, Massage : {}", e.getClass(), e.getMessage());
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
     final ErrorCode errorCode = e.getErrorCode();
     final ErrorResponse response = ErrorResponse.of(errorCode);
     return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
   }
 
-
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-    log.error("Exception : {}, Massage : {}", e.getClass(), e.getMessage());
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
     return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
   }

@@ -1,11 +1,12 @@
 package com.noti.noti.teacher.adpater.out.persistence;
 
+import com.noti.noti.teacher.application.exception.TeacherNotFoundException;
 import com.noti.noti.teacher.application.port.out.FindTeacherNicknamePort;
 import com.noti.noti.teacher.application.port.out.FindTeacherPort;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
 import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,26 +24,20 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
   @Override
   public Teacher findBySocialId(Long social) {
     TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialId(social)
-        .orElseThrow(NoSuchElementException::new);
+        .orElseThrow(TeacherNotFoundException::new);
     Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
     return teacher;
   }
 
   @Override
-  public Teacher findBySocialTypeAndSocialId(SocialType socialType, Long socialId) {
-    TeacherJpaEntity teacherJpaEntity = teacherRepository.findBySocialTypeAndSocialId(socialType,
-            socialId)
-        .orElseThrow(NoSuchElementException::new);
-    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
-    return teacher;
+  public Optional<Teacher> findBySocialTypeAndSocialId(SocialType socialType, String socialId) {
+    return teacherRepository.findBySocialTypeAndSocialId(socialType, socialId)
+        .map(teacherMapper::mapToDomainEntity);
   }
 
   @Override
-  public Teacher findById(Long id) {
-    TeacherJpaEntity teacherJpaEntity = teacherRepository.findById(id)
-        .orElseThrow(NoSuchElementException::new);
-    Teacher teacher = teacherMapper.mapToDomainEntity(teacherJpaEntity);
-    return teacher;
+  public Optional<Teacher> findById(Long id) {
+    return teacherRepository.findById(id).map(teacherMapper::mapToDomainEntity);
   }
 
 
@@ -53,14 +48,6 @@ public class TeacherPersistenceAdapter implements FindTeacherPort, SaveTeacherPo
     TeacherJpaEntity newTeacher = teacherRepository.save(teacherJpaEntity);
 
     return teacherMapper.mapToDomainEntity(newTeacher);
-  }
-
-  /* 회원 여부 확인 */
-  public boolean validate(String username, SocialType socialType) {// username=socialId
-
-    return teacherRepository
-        .findBySocialTypeAndSocialId(socialType, Long.parseLong(username)).isPresent();
-//    return teacherRepository.findBySocialId(Long.parseLong(username)).isPresent();
   }
 
   @Override

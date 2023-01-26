@@ -15,14 +15,14 @@ public class Teacher {
 
   // 권한
   private Role role;
-  private Long social;
+  private String socialId;
 
   private SocialType socialType;
 
   @Builder
-  public Teacher(Long id, Long social, String nickname, String email, String profile, Role role, SocialType socialType) {
+  public Teacher(Long id, String socialId, String nickname, String email, String profile, Role role, SocialType socialType) {
     this.id = id;
-    this.social = social;
+    this.socialId = socialId;
     this.nickname = nickname;
     this.email = email;
     this.profile = profile;
