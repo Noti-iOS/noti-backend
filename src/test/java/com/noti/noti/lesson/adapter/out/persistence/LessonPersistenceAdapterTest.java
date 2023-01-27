@@ -124,11 +124,6 @@ class LessonPersistenceAdapterTest {
             yearMonth, teacherId3);
 
 
-        for (FrequencyOfLessonsDto dto : frequencyOfLessons3) {
-          System.out.println(dto.dateOfLesson);
-          System.out.println(dto.frequencyOfLesson);
-        }
-
         assertThat(frequencyOfLessons1).size().isEqualTo(2);
         assertThat(frequencyOfLessons2).size().isEqualTo(2);
         assertThat(frequencyOfLessons3).size().isEqualTo(0);
