@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,7 +43,7 @@ public class GetFrequencyOfLessonsController {
   @Parameter(name = "userDetails", hidden = true)
   @GetMapping("/api/teacher/calendar/{year}/{month}")
   public ResponseEntity<List<FrequencyOfLessonsDto>> getFrequencyOfLessons(
-      @PathVariable int year, @PathVariable int month,
+      @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month,
       @AuthenticationPrincipal UserDetails userDetails) {
 
     long teacherId = Long.parseLong(userDetails.getUsername());

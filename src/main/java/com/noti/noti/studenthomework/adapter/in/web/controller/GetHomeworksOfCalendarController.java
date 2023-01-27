@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
 import java.util.List;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,7 @@ public class GetHomeworksOfCalendarController {
   @GetMapping("/api/teacher/calendar/{year}/{month}/{day}")
   @Parameter(name = "userDetails", hidden = true)
   ResponseEntity<List<HomeworkOfGivenDateDto>> getHomeworksOfCalendar(
-      @PathVariable int year, @PathVariable int month, @PathVariable int day,
+      @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month, @PathVariable int day,
       @AuthenticationPrincipal UserDetails userDetails
   ) {
     long teacherId = Long.parseLong(userDetails.getUsername());
