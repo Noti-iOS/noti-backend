@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto;
-import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto.HomeworkDto;
 import com.noti.noti.studenthomework.application.port.in.GetHomeworksOfCalendarQuery;
+import com.noti.noti.studenthomework.application.port.in.InHomeworkOfGivenDate;
+import com.noti.noti.studenthomework.application.port.out.OutHomeworkOfGivenDate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -39,29 +39,29 @@ class GetHomeworksOfCalendarControllerTest {
   @MockBean
   JwtTokenProvider provider;
 
-  List<HomeworkOfGivenDateDto> createHomeworkOfCalendar() {
+  List<InHomeworkOfGivenDate> createHomeworkOfCalendar() {
 
-    HomeworkDto homework1 = new HomeworkDto(1L, "content1", 20L, 10L);
-    HomeworkDto homework2 = new HomeworkDto(2L, "content2", 5L, 1L);
-    HomeworkDto homework3 = new HomeworkDto(3L, "content3", 14L, 14L);
-    HomeworkDto homework4 = new HomeworkDto(4L, "content4", 20L, 16L);
+    OutHomeworkOfGivenDate.HomeworkDto homework1 = new OutHomeworkOfGivenDate.HomeworkDto(1L, "content1", 20L, 10L);
+    OutHomeworkOfGivenDate.HomeworkDto homework2 = new OutHomeworkOfGivenDate.HomeworkDto(2L, "content2", 5L, 1L);
+    OutHomeworkOfGivenDate.HomeworkDto homework3 = new OutHomeworkOfGivenDate.HomeworkDto(3L, "content3", 14L, 14L);
+    OutHomeworkOfGivenDate.HomeworkDto homework4 = new OutHomeworkOfGivenDate.HomeworkDto(4L, "content4", 20L, 16L);
 
 
     final LocalTime startTime = LocalTime.now();
     final LocalTime endTime = LocalTime.now();
 
-    HomeworkOfGivenDateDto lesson1 = new HomeworkOfGivenDateDto(1L, "lesson1", startTime, endTime,
+    InHomeworkOfGivenDate lesson1 = new InHomeworkOfGivenDate(1L, "lesson1", startTime, endTime,
         List.of(homework1, homework2));
-    HomeworkOfGivenDateDto lesson2 = new HomeworkOfGivenDateDto(2L, "lesson2", startTime, endTime,
+    InHomeworkOfGivenDate lesson2 = new InHomeworkOfGivenDate(2L, "lesson2", startTime, endTime,
         List.of(homework3));
-    HomeworkOfGivenDateDto lesson3 = new HomeworkOfGivenDateDto(3L, "lesson3", startTime, endTime,
+    InHomeworkOfGivenDate lesson3 = new InHomeworkOfGivenDate(3L, "lesson3", startTime, endTime,
         List.of(homework4));
 
     return List.of(lesson3, lesson2, lesson1);
   }
 
 
-  List<HomeworkOfGivenDateDto> notCreateHomeworkOfCalendar() {
+  List<InHomeworkOfGivenDate> notCreateHomeworkOfCalendar() {
 
     return List.of();
   }

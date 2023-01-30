@@ -1,9 +1,9 @@
 package com.noti.noti.studenthomework.adapter.in.web.controller;
 
 import com.noti.noti.error.ErrorResponse;
-import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto;
-import com.noti.noti.studenthomework.adapter.out.persistence.StudentHomeworkAdapter;
+import com.noti.noti.studenthomework.adapter.in.web.dto.response.HomeworkOfGivenDateDto;
 import com.noti.noti.studenthomework.application.port.in.GetHomeworksOfCalendarQuery;
+import com.noti.noti.studenthomework.application.port.in.InHomeworkOfGivenDate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -54,7 +55,18 @@ public class GetHomeworksOfCalendarController {
   ) {
     long teacherId = Long.parseLong(userDetails.getUsername());
     LocalDate date = LocalDate.of(year, month, day);
-    List<HomeworkOfGivenDateDto> responseDto = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(date, teacherId);
+    List<InHomeworkOfGivenDate> inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(
+        date, teacherId);
+    List<HomeworkOfGivenDateDto> responseDto = new ArrayList<>();
+    inHomeworkOfGivenDate.forEach(
+        homeworkOfGivenDate -> responseDto.add(
+            new HomeworkOfGivenDateDto(homeworkOfGivenDate.getLessonId(),
+                homeworkOfGivenDate.getLessonName(),
+                homeworkOfGivenDate.getStartTimeOfLesson(),
+                homeworkOfGivenDate.getEndTimeOfLesson(),
+                homeworkOfGivenDate.getHomeworks())
+        )
+    );
 
     return ResponseEntity.ok(responseDto);
   }

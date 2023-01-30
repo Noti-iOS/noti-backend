@@ -6,7 +6,7 @@ import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QS
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto;
+import com.noti.noti.studenthomework.application.port.out.OutHomeworkOfGivenDate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +27,7 @@ public class StudentHomeworkQueryRepository {
    * @param teacherId 선생님 Id
    * @return 수업과 숙제목록, 숙제를 받은 학생의 수와 숙제를 완료한 학생의 수
    */
-  public List<HomeworkOfGivenDateDto> findHomeworkOfCalendar(LocalDateTime date, Long teacherId) {
+  public List<OutHomeworkOfGivenDate> findHomeworkOfCalendar(LocalDateTime date, Long teacherId) {
 
     return queryFactory
         .from(studentHomeworkJpaEntity)
@@ -38,12 +38,12 @@ public class StudentHomeworkQueryRepository {
         .groupBy(studentHomeworkJpaEntity.homeworkJpaEntity)
         .transform(
             groupBy(homeworkJpaEntity.lessonJpaEntity).list(
-                Projections.fields(HomeworkOfGivenDateDto.class,
+                Projections.fields(OutHomeworkOfGivenDate.class,
                     lessonJpaEntity.id.as("lessonId"),
                     lessonJpaEntity.lessonName,
                     lessonJpaEntity.startTime.as("startTimeOfLesson"),
                     lessonJpaEntity.endTime.as("endTimeOfLesson"),
-                    list(Projections.fields(HomeworkOfGivenDateDto.HomeworkDto.class,
+                    list(Projections.fields(OutHomeworkOfGivenDate.HomeworkDto.class,
                         homeworkJpaEntity.id.as("homeworkId"),
                         homeworkJpaEntity.content.as("homeworkContent"),
                         studentHomeworkJpaEntity.studentJpaEntity.id.count().as("studentCnt"),

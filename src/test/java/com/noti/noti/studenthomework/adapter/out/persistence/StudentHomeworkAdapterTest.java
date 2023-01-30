@@ -1,7 +1,8 @@
 package com.noti.noti.studenthomework.adapter.out.persistence;
 
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.studenthomework.adapter.in.web.dto.HomeworkOfGivenDateDto;
+import com.noti.noti.studenthomework.adapter.in.web.dto.response.HomeworkOfGivenDateDto;
+import com.noti.noti.studenthomework.application.port.out.OutHomeworkOfGivenDate;
 import java.time.LocalDate;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -39,7 +40,7 @@ class StudentHomeworkAdapterTest {
 
         @Test
         void 빈_리스트를_반환한다() {
-          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 7L);
+          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 7L);
           Assertions.assertThat(homeworks).isEmpty();
         }
 
@@ -50,7 +51,7 @@ class StudentHomeworkAdapterTest {
 
         @Test
         void 빈_리스트를_반환한다() {
-          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now().plusDays(2), 7L);
+          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now().plusDays(2), 7L);
           Assertions.assertThat(homeworks).isEmpty();
         }
 
@@ -61,7 +62,7 @@ class StudentHomeworkAdapterTest {
 
         @Test
         void 숙제_리스트를_반환한다() {
-          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 1L);
+          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 1L);
 
           Assertions.assertThat(homeworks.size()).isEqualTo(4);
         }
