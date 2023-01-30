@@ -28,43 +28,47 @@ class StudentHomeworkAdapterTest {
   StudentHomeworkAdapter studentHomeworkAdapter;
 
 
-  @Sql("/data/student-homework.sql")
   @Nested
-  class 년_월_일이_주어지면 {
-
+  @Sql("/data/student-homework.sql")
+  class findHomeworksOfCalendar_메소드는 {
     @Nested
-    class 수업이_없는_선생님_Id가_주어지면{
+    class 년_월_일이_주어지면 {
 
-      @Test
-      void 빈_리스트를_반환한다() {
-        List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 7L);
-        Assertions.assertThat(homeworks).isEmpty();
+      @Nested
+      class 수업이_없는_선생님_Id가_주어지면{
+
+        @Test
+        void 빈_리스트를_반환한다() {
+          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 7L);
+          Assertions.assertThat(homeworks).isEmpty();
+        }
+
       }
 
-    }
+      @Nested
+      class 수업이_없는_날짜를_반환하면{
 
-    @Nested
-    class 수업이_없는_날짜를_반환하면{
+        @Test
+        void 빈_리스트를_반환한다() {
+          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now().plusDays(2), 7L);
+          Assertions.assertThat(homeworks).isEmpty();
+        }
 
-      @Test
-      void 빈_리스트를_반환한다() {
-        List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now().plusDays(2), 7L);
-        Assertions.assertThat(homeworks).isEmpty();
       }
 
-    }
+      @Nested
+      class 모든_조건이_유효하면{
 
-    @Nested
-    class 모든_조건이_유효하면{
+        @Test
+        void 숙제_리스트를_반환한다() {
+          List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 1L);
 
-      @Test
-      void 숙제_리스트를_반환한다() {
-        List<HomeworkOfGivenDateDto> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(LocalDate.now(), 1L);
+          Assertions.assertThat(homeworks.size()).isEqualTo(4);
+        }
 
-        Assertions.assertThat(homeworks.size()).isEqualTo(4);
       }
-
     }
+
   }
 
 

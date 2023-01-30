@@ -100,48 +100,53 @@ class LessonPersistenceAdapterTest {
 
 
   @Nested
-  class 년_월이_주어지고 {
-
-    final String yearMonth = YearMonth.now().toString();
-
-    Long teacherId1 = 1L;
-    Long teacherId2 = 2L;
-    Long teacherId3 = 3L;
-    @Sql("/data/homework-lesson.sql")
+  class findFrequencyOfLessons_메소드는 {
     @Nested
-    class 주어진_월에_숙제가_있다면 {
+    class 년_월이_주어지고 {
 
-      @Test
-      void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
+      final String yearMonth = YearMonth.now().toString();
 
-        List<FrequencyOfLessonsDto> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId1);
+      Long teacherId1 = 1L;
+      Long teacherId2 = 2L;
+      Long teacherId3 = 3L;
 
-        List<FrequencyOfLessonsDto> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId2);
+      @Sql("/data/homework-lesson.sql")
+      @Nested
+      class 주어진_월에_숙제가_있다면 {
 
-        List<FrequencyOfLessonsDto> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
-            yearMonth, teacherId3);
+        @Test
+        void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
+
+          List<FrequencyOfLessonsDto> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId1);
+
+          List<FrequencyOfLessonsDto> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId2);
+
+          List<FrequencyOfLessonsDto> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId3);
 
 
-        assertThat(frequencyOfLessons1).size().isEqualTo(2);
-        assertThat(frequencyOfLessons2).size().isEqualTo(2);
-        assertThat(frequencyOfLessons3).size().isEqualTo(0);
+          assertThat(frequencyOfLessons1).size().isEqualTo(2);
+          assertThat(frequencyOfLessons2).size().isEqualTo(2);
+          assertThat(frequencyOfLessons3).size().isEqualTo(0);
 
-      }
-    }
-
-    @Sql("/data/no-homework-lesson.sql")
-    @Nested
-    class 주어진_월에_숙제가_없다면 {
-      @Test
-      void 비어있는_list를_반환한다() {
-        List<FrequencyOfLessonsDto> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
-
-        assertThat(frequencyOfLessons).isEmpty();
+        }
       }
 
-    }
+      @Sql("/data/no-homework-lesson.sql")
+      @Nested
+      class 주어진_월에_숙제가_없다면 {
+        @Test
+        void 비어있는_list를_반환한다() {
+          List<FrequencyOfLessonsDto> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
 
+          assertThat(frequencyOfLessons).isEmpty();
+        }
+
+      }
+
+    }
   }
+
 }
