@@ -1,7 +1,8 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
 import com.noti.noti.error.ErrorResponse;
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.adapter.in.web.dto.response.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -48,7 +50,14 @@ public class GetFrequencyOfLessonsController {
 
     long teacherId = Long.parseLong(userDetails.getUsername());
     String yearMonth = new StringBuilder().append(year).append("-").append(month).toString();
-    List<FrequencyOfLessonsDto> responseDto = getFrequencyOfLessonsQuery.findFrequencyOfLessons(yearMonth, teacherId);
+
+    List<DateFrequencyOfLessons> frequencyOfLessons = getFrequencyOfLessonsQuery.findFrequencyOfLessons(yearMonth, teacherId);
+    List<FrequencyOfLessonsDto> responseDto = new ArrayList<>();
+    frequencyOfLessons.forEach(
+        dateFrequencyOfLessons -> responseDto.add(
+            new FrequencyOfLessonsDto(dateFrequencyOfLessons.getDateOfLesson(), dateFrequencyOfLessons.getFrequencyOfLesson())
+        )
+    );
 
     return ResponseEntity.ok(responseDto);
   }

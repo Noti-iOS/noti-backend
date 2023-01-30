@@ -4,9 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
-import com.noti.noti.lesson.application.port.out.TodaysLesson.LessonOfStudent;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
@@ -117,13 +116,13 @@ class LessonPersistenceAdapterTest {
         @Test
         void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
 
-          List<FrequencyOfLessonsDto> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
+          List<FrequencyOfLessons> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
               yearMonth, teacherId1);
 
-          List<FrequencyOfLessonsDto> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
+          List<FrequencyOfLessons> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
               yearMonth, teacherId2);
 
-          List<FrequencyOfLessonsDto> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
+          List<FrequencyOfLessons> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
               yearMonth, teacherId3);
 
 
@@ -139,7 +138,7 @@ class LessonPersistenceAdapterTest {
       class 주어진_월에_숙제가_없다면 {
         @Test
         void 비어있는_list를_반환한다() {
-          List<FrequencyOfLessonsDto> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
+          List<FrequencyOfLessons> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
 
           assertThat(frequencyOfLessons).isEmpty();
         }

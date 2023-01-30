@@ -7,7 +7,7 @@ import static com.noti.noti.studentlesson.adapter.out.persistence.jpa.model.QStu
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.querydsl.core.types.Projections;
@@ -66,11 +66,11 @@ public class LessonQueryRepository {
    * @param end   끝 날짜
    * @return 시작 ~ 끝 날짜에서 숙제가 있는 날의 날짜와 그 날짜의 분반 개수목록
    */
-  public List<FrequencyOfLessonsDto> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end,
+  public List<FrequencyOfLessons> findFrequencyOfLesson(LocalDateTime start, LocalDateTime end,
       Long teacherId) {
 
     return queryFactory
-        .select(Projections.constructor(FrequencyOfLessonsDto.class,
+        .select(Projections.constructor(FrequencyOfLessons.class,
             homeworkJpaEntity.endTime.as("dateOfLesson"),
             homeworkJpaEntity.lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
         .from(homeworkJpaEntity)

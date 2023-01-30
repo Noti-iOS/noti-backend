@@ -1,8 +1,7 @@
-package com.noti.noti.lesson.adapter.in.web.dto;
+package com.noti.noti.lesson.adapter.in.web.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,8 +14,8 @@ public class FrequencyOfLessonsDto {
   @Schema(description = "dateOfLesson 날짜에 해당하는 수업 수", example = "3")
   private Long frequencyOfLesson;
 
-  public FrequencyOfLessonsDto(LocalDateTime dateOfLesson, Long frequencyOfLesson) {
-    this.dateOfLesson = dateOfLesson.toLocalDate();
+  public FrequencyOfLessonsDto(LocalDate dateOfLesson, Long frequencyOfLesson) {
+    this.dateOfLesson = dateOfLesson;
     this.frequencyOfLesson = frequencyOfLesson;
   }
 }

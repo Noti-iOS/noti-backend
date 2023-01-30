@@ -6,10 +6,10 @@ import static org.mockito.Mockito.when;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.adapter.in.web.dto.response.FrequencyOfLessonsDto;
+import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -41,17 +41,17 @@ class GetFrequencyOfLessonsControllerTest {
   private GetFrequencyOfLessonsQuery getFrequencyOfLessonsQuery;
 
 
-  List<FrequencyOfLessonsDto> createLessons() {
+  List<DateFrequencyOfLessons> createLessons() {
 
-    FrequencyOfLessonsDto dto1 = new FrequencyOfLessonsDto(LocalDateTime.now().plusDays(1), 2L);
-    FrequencyOfLessonsDto dto2 = new FrequencyOfLessonsDto(LocalDateTime.now().plusDays(2), 3L);
-    FrequencyOfLessonsDto dto3 = new FrequencyOfLessonsDto(LocalDateTime.now().plusDays(3), 4L);
-    FrequencyOfLessonsDto dto4 = new FrequencyOfLessonsDto(LocalDateTime.now().plusDays(4), 5L);
+    DateFrequencyOfLessons dateFrequencyOfLessons1 = new DateFrequencyOfLessons(LocalDate.now().plusDays(1), 2L);
+    DateFrequencyOfLessons dateFrequencyOfLessons2 = new DateFrequencyOfLessons(LocalDate.now().plusDays(2), 3L);
+    DateFrequencyOfLessons dateFrequencyOfLessons3 = new DateFrequencyOfLessons(LocalDate.now().plusDays(3), 4L);
+    DateFrequencyOfLessons dateFrequencyOfLessons4 = new DateFrequencyOfLessons(LocalDate.now().plusDays(4), 5L);
 
-    return List.of(dto1, dto2, dto3, dto4);
+    return List.of(dateFrequencyOfLessons1, dateFrequencyOfLessons2, dateFrequencyOfLessons3, dateFrequencyOfLessons4);
   }
 
-  List<FrequencyOfLessonsDto> notCreateLessons() {
+  List<DateFrequencyOfLessons> notCreateLessons() {
     return List.of();
   }
 

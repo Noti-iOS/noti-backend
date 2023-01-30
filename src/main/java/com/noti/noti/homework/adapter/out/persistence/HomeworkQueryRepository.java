@@ -6,7 +6,6 @@ import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QS
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.Ops;

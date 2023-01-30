@@ -1,9 +1,9 @@
 package com.noti.noti.lesson.adapter.out.persistence;
 
-import com.noti.noti.lesson.adapter.in.web.dto.FrequencyOfLessonsDto;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
 import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
+import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
@@ -37,7 +37,7 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
 
 
   @Override
-  public List<FrequencyOfLessonsDto> findFrequencyOfLessons(String yearMonth, Long teacherId) {
+  public List<FrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
     LocalDateTime startTime = stringToLocalDateTime(yearMonth);
     LocalDateTime endTime = startTime.plusMonths(1);
 
