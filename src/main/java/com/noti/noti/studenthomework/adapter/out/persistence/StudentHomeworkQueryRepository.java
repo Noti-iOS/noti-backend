@@ -45,7 +45,7 @@ public class StudentHomeworkQueryRepository {
                     lessonJpaEntity.endTime.as("endTimeOfLesson"),
                     list(Projections.fields(OutHomeworkOfGivenDate.HomeworkDto.class,
                         homeworkJpaEntity.id.as("homeworkId"),
-                        homeworkJpaEntity.content.as("homeworkContent"),
+                        homeworkJpaEntity.homeworkName.as("homeworkName"),
                         studentHomeworkJpaEntity.studentJpaEntity.id.count().as("studentCnt"),
                         studentHomeworkJpaEntity.homeworkStatus.when(true).then(1L).otherwise(0L)
                             .sum().as("completeCnt")

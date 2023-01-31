@@ -20,14 +20,14 @@ public class OutHomeworkOfGivenDate {
   public static class HomeworkDto {
 
     private Long homeworkId;
-    private String homeworkContent;
+    private String homeworkName;
     private Long studentCnt;
     private Long completeCnt;
 
-    public HomeworkDto(Long homeworkId, String homeworkContent, Long studentCnt,
+    public HomeworkDto(Long homeworkId, String homeworkName, Long studentCnt,
         Long completeCnt) {
       this.homeworkId = homeworkId;
-      this.homeworkContent = homeworkContent;
+      this.homeworkName = homeworkName;
       this.studentCnt = studentCnt;
       this.completeCnt = completeCnt;
     }

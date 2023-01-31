@@ -34,7 +34,7 @@ public class HomeworkOfGivenDateDto {
         homeworkDto -> homeworks.add(
             new HomeworkDto(
               homeworkDto.getHomeworkId(),
-              homeworkDto.getHomeworkContent(),
+              homeworkDto.getHomeworkName(),
               homeworkDto.getStudentCnt(),
               homeworkDto.getCompleteCnt())
         )
@@ -47,16 +47,16 @@ public class HomeworkOfGivenDateDto {
     @Schema(description = "숙제 id", example = "2")
     private Long homeworkId;
     @Schema(description = "숙제 내용", example = "프린트물(기출문제) 풀기")
-    private String homeworkContent;
+    private String homeworkName;
     @Schema(description = "숙제를 제공받은 학생 수", example = "7")
     private Long studentCnt;
     @Schema(description = "숙제를 완료한 학생 수", example = "6")
     private Long completeCnt;
 
-    public HomeworkDto(Long homeworkId, String homeworkContent, Long studentCnt,
+    public HomeworkDto(Long homeworkId, String homeworkName, Long studentCnt,
         Long completeCnt) {
       this.homeworkId = homeworkId;
-      this.homeworkContent = homeworkContent;
+      this.homeworkName = homeworkName;
       this.studentCnt = studentCnt;
       this.completeCnt = completeCnt;
     }
