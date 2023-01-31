@@ -1,6 +1,5 @@
 package com.noti.noti.lesson.domain.model;
 
-import com.noti.noti.common.domain.model.Day;
 import com.noti.noti.teacher.domain.Teacher;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

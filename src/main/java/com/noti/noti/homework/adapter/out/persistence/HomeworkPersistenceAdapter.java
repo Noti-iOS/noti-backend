@@ -20,4 +20,5 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort {
   public List<TodaysHomework> findTodaysHomeworks(TodayHomeworkCondition condition) {
     return homeworkQueryRepository.findTodayHomeworks(condition);
   }
+
 }

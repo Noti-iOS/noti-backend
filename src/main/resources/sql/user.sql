@@ -1,0 +1,1 @@
+INSERT INTO TEACHER VALUES(1, '2482444700', '황윤경', 'hyk0425@nate.com', '');

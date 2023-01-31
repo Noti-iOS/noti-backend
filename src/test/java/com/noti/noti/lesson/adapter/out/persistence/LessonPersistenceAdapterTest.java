@@ -4,13 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
+import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
-import com.noti.noti.lesson.application.port.out.TodaysLesson.LessonOfStudent;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import com.noti.noti.teacher.domain.Teacher;
 import java.time.DayOfWeek;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -95,4 +96,56 @@ class LessonPersistenceAdapterTest {
       }
     }
   }
+
+
+  @Nested
+  class findFrequencyOfLessons_메소드는 {
+    @Nested
+    class 년_월이_주어지고 {
+
+      final String yearMonth = YearMonth.now().toString();
+
+      Long teacherId1 = 1L;
+      Long teacherId2 = 2L;
+      Long teacherId3 = 3L;
+
+      @Sql("/data/homework-lesson.sql")
+      @Nested
+      class 주어진_월에_숙제가_있다면 {
+
+        @Test
+        void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
+
+          List<FrequencyOfLessons> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId1);
+
+          List<FrequencyOfLessons> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId2);
+
+          List<FrequencyOfLessons> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId3);
+
+
+          assertThat(frequencyOfLessons1).size().isEqualTo(2);
+          assertThat(frequencyOfLessons2).size().isEqualTo(2);
+          assertThat(frequencyOfLessons3).size().isEqualTo(0);
+
+        }
+      }
+
+      @Sql("/data/no-homework-lesson.sql")
+      @Nested
+      class 주어진_월에_숙제가_없다면 {
+        @Test
+        void 비어있는_list를_반환한다() {
+          List<FrequencyOfLessons> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
+
+          assertThat(frequencyOfLessons).isEmpty();
+        }
+
+      }
+
+    }
+  }
+
 }
