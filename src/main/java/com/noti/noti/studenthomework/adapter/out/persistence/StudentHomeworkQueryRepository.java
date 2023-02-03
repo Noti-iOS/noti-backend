@@ -36,7 +36,8 @@ public class StudentHomeworkQueryRepository {
         .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
         .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(eqTeacherId(teacherId),
-            homeworkJpaEntity.endTime.between(date, date.plusDays(1).minusSeconds(1)))
+            eqYearAndMonthOfStartTime(date)
+        )
         .groupBy(studentHomeworkJpaEntity.homeworkJpaEntity)
         .transform(
             groupBy(homeworkJpaEntity.lessonJpaEntity).list(
@@ -61,6 +62,10 @@ public class StudentHomeworkQueryRepository {
   private BooleanExpression eqTeacherId(Long teacherId) {
     log.info("teacher Id: {} ", teacherId);
     return teacherId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(teacherId) : null;
+  }
+
+  private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
   }
 
 }
