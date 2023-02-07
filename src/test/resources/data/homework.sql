@@ -26,13 +26,13 @@ insert into lesson
 values (5, now(), now(), 'FRIDAY', '12:00:00', '과학2', '11:00:00', 2);
 
 insert into book
-values (1, now(), now(), '수학의 정석');
+values (1, now(), now(), '수학의 정석',1);
 insert into book
-values (2, now(), now(), '수학의 정석2');
+values (2, now(), now(), '수학의 정석2',1);
 insert into book
-values (3, now(), now(), '물리1');
+values (3, now(), now(), '물리1',1);
 insert into book
-values (4, now(), now(), '물리2');
+values (4, now(), now(), '물리2',1);
 
 insert into lesson_book (lesson_book_id, created_at, modified_at, book_id, lesson_id)
 values (1, now(), now(), 1, 1);

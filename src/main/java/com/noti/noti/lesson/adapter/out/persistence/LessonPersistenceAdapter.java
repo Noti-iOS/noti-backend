@@ -12,6 +12,7 @@ import com.noti.noti.lesson.domain.model.Lesson;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -35,13 +36,16 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
     return lessonQueryRepository.findTodayLesson(condition);
   }
 
-
   @Override
   public List<FrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
     LocalDateTime startTime = stringToLocalDateTime(yearMonth);
     LocalDateTime endTime = startTime.plusMonths(1);
 
     return lessonQueryRepository.findFrequencyOfLesson(startTime, endTime, teacherId);
+  }
+
+  public Optional<Lesson> findById(Long id) {
+    return lessonJpaRepository.findById(id).map(lessonMapper::mapToDomainEntity);
   }
 
   /**
@@ -57,5 +61,4 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
 
     return LocalDateTime.parse(stringBuilder, formatter);
   }
-
 }
