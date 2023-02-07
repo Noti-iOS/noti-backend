@@ -8,9 +8,9 @@ import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 @Component
 @RequiredArgsConstructor
@@ -29,5 +29,9 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
   @Override
   public List<TodaysLesson> findTodaysLessons(TodaysLessonSearchConditon condition) {
     return lessonQueryRepository.findTodayLesson(condition);
+  }
+
+  public Optional<Lesson> findById(Long id) {
+    return lessonJpaRepository.findById(id).map(lessonMapper::mapToDomainEntity);
   }
 }
