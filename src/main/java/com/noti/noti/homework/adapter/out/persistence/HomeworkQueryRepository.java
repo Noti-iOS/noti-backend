@@ -29,6 +29,7 @@ public class HomeworkQueryRepository {
 
   /**
    * 오늘의 숙제 목록과 숙제에 해당하는 학생목록을 조회하는 메서드.
+   *
    * @param condition 조건을 위한 파라미터.
    * @return 오늘의 숙제 목록과 숙제에 해당하는 학생목록.
    */
@@ -69,4 +70,9 @@ public class HomeworkQueryRepository {
     log.info("day: {}", dayOfWeek);
     return dayOfWeek != null ? lessonJpaEntity.days.contains(dayOfWeek.toString()) : null;
   }
+
+
+
+
+
 }
