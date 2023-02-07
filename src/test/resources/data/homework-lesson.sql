@@ -16,13 +16,13 @@ insert into lesson values (7, now(), now(), 'FRIDAY', '12:00:00', '과학2', '11
 
 
 insert into book
-values (1, now(), now(), '수학의 정석');
+values (1, now(), now(), '수학의 정석',1);
 insert into book
-values (2, now(), now(), '수학의 정석2');
+values (2, now(), now(), '수학의 정석2',1);
 insert into book
-values (3, now(), now(), '물리1');
+values (3, now(), now(), '물리1',2);
 insert into book
-values (4, now(), now(), '물리2');
+values (4, now(), now(), '물리2',2);
 
 
 insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
