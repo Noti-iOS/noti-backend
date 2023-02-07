@@ -8,6 +8,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
+import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.querydsl.core.types.Projections;
@@ -81,7 +82,18 @@ public class LessonQueryRepository {
             eqTeacherId(teacherId))
         .groupBy(homeworkJpaEntity.endTime)
         .fetch();
+  }
+
+  public List<OutCreatedLesson> findCreatedLessons(Long teacherId) {
+
+    return queryFactory
+        .select(Projections.constructor(OutCreatedLesson.class,
+            lessonJpaEntity.lessonName))
+        .from(lessonJpaEntity)
+        .where(eqTeacherId(teacherId))
+        .fetch();
 
 
   }
+
 }
