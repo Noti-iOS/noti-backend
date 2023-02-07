@@ -34,13 +34,13 @@ insert into lesson
 values (5, now(), now(), 'FRIDAY', '12:00:00', '과학2', '11:00:00', 2);
 
 insert into book
-values (1, now(), now(), '수학의 정석');
+values (1, now(), now(), '수학의 정석', 1);
 insert into book
-values (2, now(), now(), '수학의 정석2');
+values (2, now(), now(), '수학의 정석2', 1);
 insert into book
-values (3, now(), now(), '물리1');
+values (3, now(), now(), '물리1', 1);
 insert into book
-values (4, now(), now(), '물리2');
+values (4, now(), now(), '물리2', 2);
 
 insert into lesson_book (lesson_book_id, created_at, modified_at, book_id, lesson_id)
 values (1, now(), now(), 1, 1);
@@ -53,51 +53,74 @@ values (4, now(), now(), 3, 4);
 insert into lesson_book (lesson_book_id, created_at, modified_at, book_id, lesson_id)
 values (5, now(), now(), 4, 5);
 
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (1, now(), now(), 'p 0 ~ 10', now(), '수학 정석1', now(), 1, 1);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (2, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1, 1);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (3, now(), now(), 'p 0 ~ 10', now(), '수학 정석2', now(), 2, 1);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (4, now(), now(), 'p 100 ~ 110', now(), '수학 정석2', now(), 2, 2);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (5, now(), now(), 'p 0 ~ 10', now(), '물리 숙제', now(), 3, 2);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (6, now(), now(), 'p 0 ~ 10', now(), '물리2 숙제', now(), 4, 3);
-insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, book_id, lesson_id)
-values (7, now(), now(), 'p 0 ~ 10', now(), '물리2 숙제', now(), 4, 4);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (1, now(), now(), 'p 0 ~ 10', now(), '수학 정석1', now(), 1);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (2, now(), now(), 'p 100 ~ 110', now(), '수학 정석1', now(), 1);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (3, now(), now(), 'p 0 ~ 10', now(), '수학 정석2', now(), 1);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (4, now(), now(), 'p 100 ~ 110', now(), '수학 정석2', now(), 2);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (5, now(), now(), 'p 0 ~ 10', now(), '물리 숙제', now(), 2);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (6, now(), now(), 'p 0 ~ 10', now(), '물리2 숙제', now(), 3);
+insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name,
+                      start_time, lesson_id)
+values (7, now(), now(), 'p 0 ~ 10', now(), '물리2 숙제', now(), 4);
 
 
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (1, now(), now(), true, 1, 1);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (2, now(), now(), true, 1, 2);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (3, now(), now(), true, 1, 3);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (4, now(), now(), true, 1, 4);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (5, now(), now(), true, 2, 1);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (6, now(), now(), true, 2, 2);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (7, now(), now(), false, 2, 3);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (8, now(), now(), false, 2, 4);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (9, now(), now(), true, 3, 2);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (10, now(), now(), false, 3, 5);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (11, now(), now(), true, 4, 5);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (12, now(), now(), false, 4, 6);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (13, now(), now(), false, 4, 7);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (14, now(), now(), false, 5, 1);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (15, now(), now(), false, 6, 1);
-insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id)
+insert into student_homework (student_homework_id, created_at, modified_at, homework_status,
+                              homework_id, student_id)
 values (16, now(), now(), false, 7, 1);
