@@ -146,16 +146,17 @@ class AddLessonServiceTest {
       void BookNotFoundException_예외가_발생한다() {
         AddLessonCommand command = createCommand();
         Teacher teacher = createTeacher();
-        Lesson lesson = createLesson(command, teacher);
 
         when(findTeacherPort.findById(command.getTeacherId())).thenReturn(Optional.of(teacher));
-        when(saveLessonPort.saveLesson(any(Lesson.class))).thenReturn(lesson);
         when(findBookPort.findBookById(anyLong())).thenThrow(new BookNotFoundException(1L));
 
         assertAll(
             () -> assertThatThrownBy(() -> addLessonService.apply(command))
                 .isInstanceOf(BookNotFoundException.class),
-            () -> verify(saveLessonBookPort, never()).saveAllLessonBooks(anyList())
+            () -> verify(saveLessonBookPort, never()).saveAllLessonBooks(anyList()),
+            () -> verify(saveStudentLessonPort, never()).saveAllStudentLessons(anyList()),
+            () -> verify(findStudentPort, never()).findStudentById(anyLong()),
+            () -> verify(saveLessonPort, never()).saveLesson(any(Lesson.class))
         );
       }
     }
@@ -170,7 +171,6 @@ class AddLessonServiceTest {
         Lesson lesson = createLesson(command, teacher);
 
         when(findTeacherPort.findById(command.getTeacherId())).thenReturn(Optional.of(teacher));
-        when(saveLessonPort.saveLesson(any(Lesson.class))).thenReturn(lesson);
         when(findBookPort.findBookById(anyLong())).thenReturn(Optional.of(Book.builder().build()));
         when(findStudentPort.findStudentById(anyLong())).thenThrow(
             new StudentNotFoundException(1L));
@@ -178,7 +178,9 @@ class AddLessonServiceTest {
         assertAll(
             () -> assertThatThrownBy(() -> addLessonService.apply(command))
                 .isInstanceOf(StudentNotFoundException.class),
-            () -> verify(saveStudentLessonPort, never()).saveAllStudentLessons(anyList())
+            () -> verify(saveStudentLessonPort, never()).saveAllStudentLessons(anyList()),
+            () -> verify(saveLessonBookPort, never()).saveAllLessonBooks(anyList()),
+            () -> verify(saveLessonPort, never()).saveLesson(any(Lesson.class))
         );
       }
     }
