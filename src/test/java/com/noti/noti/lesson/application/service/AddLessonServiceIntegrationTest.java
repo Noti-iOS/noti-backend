@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("test")
 @DisplayName("AddServiceIntegrationTest 클래스")
@@ -45,6 +46,7 @@ public class AddLessonServiceIntegrationTest {
   }
 
   @Nested
+  @Transactional
   class 교재_ID가_유효하지_않으면 {
 
     @Sql("/data/teacher.sql")
@@ -60,6 +62,7 @@ public class AddLessonServiceIntegrationTest {
   }
 
   @Nested
+  @Transactional
   class 학생_ID가_유효하지_않으면 {
 
     @Sql("/data/book.sql")
