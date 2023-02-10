@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.noti.noti.book.exception.BookNotFoundException;
 import com.noti.noti.common.WithAuthUser;
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.lesson.application.port.in.AddLessonCommand;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,14 +37,12 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @WebMvcTest(AddLessonController.class)
 @DisplayName("AddLessonControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@Import({JacksonConfiguration.class, ObjectMapper.class})
+@Import({JacksonConfiguration.class, ObjectMapper.class, JwtTokenProvider.class})
 class AddLessonControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
-  @MockBean
-  private JwtTokenProvider jwtTokenProvider;
   @MockBean
   private AddLessonUsecase addLessonUsecase;
 
@@ -79,7 +77,7 @@ class AddLessonControllerTest {
                 .content(createRequest())
                 .with(csrf()))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.status").value(true))
+            .andExpect(jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
             .andExpect((result) -> header().string("Location",
                 result.getRequest().getRequestURL().toString() + 1L));
       }
@@ -119,6 +117,7 @@ class AddLessonControllerTest {
 
     @Nested
     class 요청에_해당하는_선생님이_존재하지_않으면 {
+
       String createRequest() {
 
         return "{"
