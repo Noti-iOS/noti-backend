@@ -37,17 +37,22 @@ public class AddLessonService implements AddLessonUsecase {
   @Transactional
   @Override
   public Lesson apply(AddLessonCommand addLessonCommand) {
+    Teacher teacher = findTeacher(addLessonCommand);
 
-    Teacher teacher = findTeacherPort.findById(addLessonCommand.getTeacherId())
-        .orElseThrow(TeacherNotFoundException::new);
+    List<Book> books = findBooks(addLessonCommand.getBookIds());
+    List<Student> students = findStudents(addLessonCommand.getStudentIds());
 
     Lesson savedLesson = saveLesson(addLessonCommand, teacher);
 
-    saveLessonBooks(addLessonCommand.getBookIds(), savedLesson);
-
-    saveStudentLesson(addLessonCommand.getStudentIds(), savedLesson);
+    saveLessonBook(books, savedLesson);
+    saveStudentLesson(students, savedLesson);
 
     return savedLesson;
+  }
+
+  private Teacher findTeacher(AddLessonCommand addLessonCommand) {
+    return findTeacherPort.findById(addLessonCommand.getTeacherId())
+        .orElseThrow(TeacherNotFoundException::new);
   }
 
   private Lesson saveLesson(AddLessonCommand addLessonCommand, Teacher teacher) {
@@ -64,27 +69,50 @@ public class AddLessonService implements AddLessonUsecase {
     return savedLesson;
   }
 
-  private void saveLessonBooks(List<Long> bookIds, Lesson lesson) {
-    List<LessonBook> lessonBooks = new ArrayList<>();
+  private List<Book> findBooks(List<Long> bookIds) {
+    List<Book> books = new ArrayList<>();
 
     for (Long bookId : bookIds) {
       Book book = findBookPort.findBookById(bookId)
           .orElseThrow(() -> new BookNotFoundException(bookId));
-      lessonBooks.add(LessonBook.builder().lesson(lesson).book(book).build());
+      books.add(book);
     }
-
-    saveLessonBookPort.saveAllLessonBooks(lessonBooks);
+    return books;
   }
 
-  private void saveStudentLesson(List<Long> studentIds, Lesson lesson) {
-    List<StudentLesson> studentLessons = new ArrayList<>();
+  private List<Student> findStudents(List<Long> studentIds) {
+    List<Student> students = new ArrayList<>();
 
     for (Long studentId : studentIds) {
       Student student = findStudentPort.findStudentById(studentId)
           .orElseThrow(() -> new StudentNotFoundException(studentId));
-      studentLessons.add(StudentLesson.builder().lesson(lesson).student(student).build());
+      students.add(student);
     }
 
+    return students;
+  }
+
+  private void saveLessonBook(List<Book> books, Lesson lesson) {
+    List<LessonBook> lessonBooks = new ArrayList<>();
+    books.forEach(book ->
+        lessonBooks.add(
+            LessonBook.builder()
+                .lesson(lesson)
+                .book(book)
+                .build()
+        ));
+    saveLessonBookPort.saveAllLessonBooks(lessonBooks);
+  }
+
+  private void saveStudentLesson(List<Student> students, Lesson lesson) {
+    List<StudentLesson> studentLessons = new ArrayList<>();
+    students.forEach(student ->
+        studentLessons.add(
+            StudentLesson.builder()
+                .lesson(lesson)
+                .student(student)
+                .build()
+        ));
     saveStudentLessonPort.saveAllStudentLessons(studentLessons);
   }
 }
