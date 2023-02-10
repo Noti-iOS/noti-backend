@@ -1,5 +1,6 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
 import com.noti.noti.lesson.adapter.in.web.dto.response.TodaysLessonHomeworkDto;
 import com.noti.noti.lesson.application.port.in.GetTodaysLessonQuery;
@@ -29,7 +30,7 @@ public class GetTodaysLessonInfoController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "성공",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = TodaysLessonHomeworkDto.class))}),
+              schema = @Schema(implementation = SuccessResponse.class))}),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
@@ -42,7 +43,7 @@ public class GetTodaysLessonInfoController {
   })
   @Parameter(name = "userDetails", hidden = true)
   @GetMapping("/api/teacher/home")
-  public ResponseEntity<TodaysLessonHomeworkDto> todaysLessonInfo(
+  public ResponseEntity todaysLessonInfo(
       @AuthenticationPrincipal UserDetails userDetails) {
     long teacherId = Long.parseLong((userDetails.getUsername()));
 
@@ -51,6 +52,6 @@ public class GetTodaysLessonInfoController {
     TodaysLessonHomeworkDto todaysLessonHomeworkDto = TodaysLessonHomeworkDto.from(
         todaysLessonHomework);
 
-    return ResponseEntity.ok(todaysLessonHomeworkDto);
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(todaysLessonHomeworkDto));
   }
 }

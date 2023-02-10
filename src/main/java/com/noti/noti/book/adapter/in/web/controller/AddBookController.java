@@ -1,10 +1,10 @@
-package com.noti.noti.lesson.adapter.in.web.controller;
+package com.noti.noti.book.adapter.in.web.controller;
 
+import com.noti.noti.book.adapter.in.web.request.AddBookRequest;
+import com.noti.noti.book.application.port.in.AddBookUsecase;
+import com.noti.noti.book.domain.model.Book;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
-import com.noti.noti.lesson.adapter.in.web.dto.request.AddLessonRequest;
-import com.noti.noti.lesson.application.port.in.AddLessonUsecase;
-import com.noti.noti.lesson.domain.model.Lesson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RestController
 @RequiredArgsConstructor
-public class AddLessonController {
+@RestController
+public class AddBookController {
 
-  private final AddLessonUsecase addLessonUsecase;
+  private final AddBookUsecase addBookUsecase;
 
-  @Operation(tags = "수업 추가 API ", summary = "addLesson", description = "수업 추가")
+  @Operation(tags = "교재 추가 API ", summary = "addBook", description = "교재 추가")
   @ApiResponses({
       @ApiResponse(responseCode = "201", description = "성공",
           content = {@Content(mediaType = "application/json",
@@ -46,17 +46,17 @@ public class AddLessonController {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))})
   })
-
   @Parameter(name = "userDetails", hidden = true)
-  @PostMapping("/api/teacher/lessons")
-  public ResponseEntity addLesson(@AuthenticationPrincipal UserDetails userDetails,
-      @Valid @RequestBody AddLessonRequest addLessonRequest) {
-    long teacherId = Long.parseLong(userDetails.getUsername());
-    Lesson savedLesson = addLessonUsecase.apply(addLessonRequest.toCommand(teacherId));
+  @PostMapping("/api/teacher/books")
+  public ResponseEntity addBook(@Valid @RequestBody AddBookRequest addBookRequest,
+      @AuthenticationPrincipal UserDetails userDetails) {
+    Long teacherId = Long.parseLong(userDetails.getUsername());
+
+    Book savedBook = addBookUsecase.apply(addBookRequest.toCommand(teacherId));
 
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
-        .buildAndExpand(savedLesson.getId())
+        .buildAndExpand(savedBook.getId())
         .toUri();
 
     return ResponseEntity.created(location).body(SuccessResponse.create201SuccessResponse());
