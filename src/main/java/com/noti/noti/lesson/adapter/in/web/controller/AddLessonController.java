@@ -1,8 +1,8 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
 import com.noti.noti.lesson.adapter.in.web.dto.request.AddLessonRequest;
-import com.noti.noti.lesson.adapter.in.web.dto.response.AddLessonResponse;
 import com.noti.noti.lesson.application.port.in.AddLessonUsecase;
 import com.noti.noti.lesson.domain.model.Lesson;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class AddLessonController {
   @ApiResponses({
       @ApiResponse(responseCode = "201", description = "성공",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = AddLessonResponse.class))}),
+              schema = @Schema(implementation = SuccessResponse.class))}),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
@@ -51,8 +51,6 @@ public class AddLessonController {
   @PostMapping("/api/teacher/lessons")
   public ResponseEntity addLesson(@AuthenticationPrincipal UserDetails userDetails,
       @Valid @RequestBody AddLessonRequest addLessonRequest) {
-    System.out.println(userDetails);
-
     long teacherId = Long.parseLong(userDetails.getUsername());
     Lesson savedLesson = addLessonUsecase.apply(addLessonRequest.toCommand(teacherId));
 
@@ -61,6 +59,6 @@ public class AddLessonController {
         .buildAndExpand(savedLesson.getId())
         .toUri();
 
-    return ResponseEntity.created(location).body(new AddLessonResponse(true));
+    return ResponseEntity.created(location).body(SuccessResponse.create201SuccessResponse());
   }
 }
