@@ -5,4 +5,4 @@ insert into book (book_id, created_at, modified_at, title, teacher_id)
 values (1, now(), now(), '수학의정석', 1);
 
 insert into book (book_id, created_at, modified_at, title, teacher_id)
-values (2, now(), now(), '수학의정석', 1);
+values (2, now(), now(), '수학의정석2', 1);
