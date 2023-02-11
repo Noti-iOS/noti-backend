@@ -20,3 +20,4 @@ spring:
               descriptor:
                 sql:
                   BasicBinder: TRACE
+    open-in-view: false
