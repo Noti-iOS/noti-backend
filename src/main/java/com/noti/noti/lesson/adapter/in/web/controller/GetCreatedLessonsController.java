@@ -1,5 +1,6 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
 import com.noti.noti.lesson.adapter.in.web.dto.response.CreatedLessonsDto;
 import com.noti.noti.lesson.adapter.in.web.dto.response.FrequencyOfLessonsDto;
@@ -32,7 +33,7 @@ public class GetCreatedLessonsController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "성공",
           content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = CreatedLessonsDto.class)))}),
+              array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)))}),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
@@ -42,14 +43,14 @@ public class GetCreatedLessonsController {
   })
   @GetMapping("/api/teacher/calendar/createdLessons")
   @Parameter(name = "UserDetails", hidden = true)
-  public ResponseEntity<List<CreatedLessonsDto>> getLessonsByTeacherId(@AuthenticationPrincipal
+  public ResponseEntity getLessonsByTeacherId(@AuthenticationPrincipal
       UserDetails userDetails) {
     Long teacherId = Long.parseLong(userDetails.getUsername());
 
     List<InCreatedLesson> inCreatedLessons = getCreatedLessonsQuery.createdLessons(new CreatedLessonCommand(teacherId));
-    List<CreatedLessonsDto> dto = inCreatedLessons.stream().map(CreatedLessonsDto::new).collect(Collectors.toList());
+    List<CreatedLessonsDto> createdLessonsDto = inCreatedLessons.stream().map(CreatedLessonsDto::new).collect(Collectors.toList());
 
-    return ResponseEntity.ok(dto);
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(createdLessonsDto));
   }
 
 

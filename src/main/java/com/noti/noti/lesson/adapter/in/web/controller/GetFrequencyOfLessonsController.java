@@ -1,5 +1,6 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
 import com.noti.noti.lesson.adapter.in.web.dto.response.FrequencyOfLessonsDto;
 import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
@@ -34,7 +35,7 @@ public class GetFrequencyOfLessonsController {
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "성공",
           content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = FrequencyOfLessonsDto.class)))}),
+              array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)))}),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
@@ -44,7 +45,7 @@ public class GetFrequencyOfLessonsController {
   })
   @Parameter(name = "userDetails", hidden = true)
   @GetMapping("/api/teacher/calendar/{year}/{month}")
-  public ResponseEntity<List<FrequencyOfLessonsDto>> getFrequencyOfLessons(
+  public ResponseEntity getFrequencyOfLessons(
       @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month,
       @AuthenticationPrincipal UserDetails userDetails) {
 
@@ -52,14 +53,14 @@ public class GetFrequencyOfLessonsController {
     String yearMonth = new StringBuilder().append(year).append("-").append(month).toString();
 
     List<DateFrequencyOfLessons> frequencyOfLessons = getFrequencyOfLessonsQuery.findFrequencyOfLessons(yearMonth, teacherId);
-    List<FrequencyOfLessonsDto> responseDto = new ArrayList<>();
+    List<FrequencyOfLessonsDto> frequencyOfLessonsDto = new ArrayList<>();
     frequencyOfLessons.forEach(
-        dateFrequencyOfLessons -> responseDto.add(
+        dateFrequencyOfLessons -> frequencyOfLessonsDto.add(
             new FrequencyOfLessonsDto(dateFrequencyOfLessons.getDateOfLesson(), dateFrequencyOfLessons.getFrequencyOfLesson())
         )
     );
 
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(frequencyOfLessonsDto));
   }
 
 
