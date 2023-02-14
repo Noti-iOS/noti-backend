@@ -12,13 +12,10 @@ import org.springframework.stereotype.Component;
 public class HomeworkMapper {
 
   private final LessonMapper lessonMapper;
-  private final BookMapper bookMapper;
-
   public Homework mapToDomainEntity(HomeworkJpaEntity homeworkJpaEntity){
     return Homework.builder()
         .id(homeworkJpaEntity.getId())
         .lesson(lessonMapper.mapToDomainEntity(homeworkJpaEntity.getLessonJpaEntity()))
-        .book(bookMapper.mapToDomainEntity(homeworkJpaEntity.getBookJpaEntity()))
         .startTime(homeworkJpaEntity.getStartTime())
         .endTime(homeworkJpaEntity.getEndTime())
         .build();
@@ -29,7 +26,6 @@ public class HomeworkMapper {
         .id(homework.getId())
         .content(homework.getContent())
         .lessonJpaEntity(lessonMapper.mapToJpaEntity(homework.getLesson()))
-        .bookJpaEntity(bookMapper.mapToJpaEntity(homework.getBook()))
         .startTime(homework.getStartTime())
         .endTime(homework.getEndTime())
         .build();

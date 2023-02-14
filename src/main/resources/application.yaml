@@ -12,4 +12,7 @@ spring:
         - swagger
         - socialid
         - security
+      test:
+        - socialid
+        - security
     active: local
