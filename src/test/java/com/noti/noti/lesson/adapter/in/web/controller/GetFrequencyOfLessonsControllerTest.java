@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.noti.noti.common.WithAuthUser;
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.lesson.adapter.in.web.dto.response.FrequencyOfLessonsDto;
@@ -71,7 +72,9 @@ class GetFrequencyOfLessonsControllerTest {
       String month = Integer.toString(now.getMonth().getValue());
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month)) // ex. /api/teacher/calendar/2023/1
           .andExpect(MockMvcResultMatchers.status().isOk())
-          .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(4));
+          .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(4));
 
 
     }
@@ -88,7 +91,9 @@ class GetFrequencyOfLessonsControllerTest {
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month))
           .andExpect(MockMvcResultMatchers.status().isOk())
-          .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(0));
+          .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(0));
 
     }
 
