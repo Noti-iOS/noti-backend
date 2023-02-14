@@ -92,8 +92,8 @@ class GetTodaysLessonInfoControllerTest {
 
         mockMvc.perform(get("/api/teacher/home"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.teacherNickName").value(TEACHER_NAME))
-            .andExpect(jsonPath("$.isLessonCreated").value(false));
+            .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
+            .andExpect(jsonPath("$.data.isLessonCreated").value(false));
       }
     }
 
@@ -111,9 +111,9 @@ class GetTodaysLessonInfoControllerTest {
 
         mockMvc.perform(get("/api/teacher/home"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.teacherNickName").value(TEACHER_NAME))
-            .andExpect(jsonPath("$.isLessonCreated").value(true))
-            .andExpect(jsonPath("$.lessons").isEmpty());
+            .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
+            .andExpect(jsonPath("$.data.isLessonCreated").value(true))
+            .andExpect(jsonPath("$.data.lessons").isEmpty());
       }
     }
 
@@ -149,9 +149,9 @@ class GetTodaysLessonInfoControllerTest {
 
         mockMvc.perform(get("/api/teacher/home"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.teacherNickName").value(TEACHER_NAME))
-            .andExpect(jsonPath("$.isLessonCreated").value(true))
-            .andExpect(jsonPath("$.lessons.length()").value(3))
+            .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
+            .andExpect(jsonPath("$.data.isLessonCreated").value(true))
+            .andExpect(jsonPath("$.data.lessons.length()").value(3))
             .andDo(print());
       }
     }
@@ -198,10 +198,10 @@ class GetTodaysLessonInfoControllerTest {
 
         mockMvc.perform(get("/api/teacher/home"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.teacherNickName").value(TEACHER_NAME))
-            .andExpect(jsonPath("$.isLessonCreated").value(true))
-            .andExpect(jsonPath("$.lessons.length()").value(3))
-            .andExpect(jsonPath("$.lessons[0].students.length()").value(3))
+            .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
+            .andExpect(jsonPath("$.data.isLessonCreated").value(true))
+            .andExpect(jsonPath("$.data.lessons.length()").value(3))
+            .andExpect(jsonPath("$.data.lessons[0].students.length()").value(3))
             .andDo(print());
       }
     }
@@ -252,10 +252,10 @@ class GetTodaysLessonInfoControllerTest {
 
         mockMvc.perform(get("/api/teacher/home"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.teacherNickName").value(TEACHER_NAME))
-            .andExpect(jsonPath("$.isLessonCreated").value(true))
-            .andExpect(jsonPath("$.lessons.length()").value(3))
-            .andExpect(jsonPath("$.lessons[0].homeworkCompletionRate").value(33))
+            .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
+            .andExpect(jsonPath("$.data.isLessonCreated").value(true))
+            .andExpect(jsonPath("$.data.lessons.length()").value(3))
+            .andExpect(jsonPath("$.data.lessons[0].homeworkCompletionRate").value(33))
             .andDo(print());
       }
     }

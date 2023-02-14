@@ -5,6 +5,7 @@ import com.noti.noti.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +36,13 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
     log.error("handleBindException", e);
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    log.error("handleHttpMessageNotReadableException", e);
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
