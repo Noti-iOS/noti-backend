@@ -3,6 +3,7 @@ package com.noti.noti.lesson.adapter.in.web.controller;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.noti.noti.common.WithAuthUser;
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.lesson.application.port.in.CreatedLessonCommand;
@@ -81,7 +82,9 @@ class GetCreatedLessonsControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/createdLessons"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(0));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.size()").value(0));
       }
 
     }
