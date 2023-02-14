@@ -2,9 +2,11 @@ package com.noti.noti.lesson.adapter.out.persistence;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
+import com.noti.noti.lesson.application.port.out.FindCreatedLessonsPort;
 import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
+import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -12,13 +14,14 @@ import com.noti.noti.lesson.domain.model.Lesson;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLessonPort,
-    FrequencyOfLessonsPort {
+    FrequencyOfLessonsPort, FindCreatedLessonsPort {
 
   private final LessonJpaRepository lessonJpaRepository;
   private final LessonMapper lessonMapper;
