@@ -14,16 +14,14 @@ public class Homework {
   private LocalDateTime startTime;
   private LocalDateTime endTime;
   private Lesson lesson;
-  private Book book;
 
   @Builder
   public Homework(Long id, String content, LocalDateTime startTime, LocalDateTime endTime,
-      Lesson lesson, Book book) {
+      Lesson lesson) {
     this.id = id;
     this.content = content;
     this.startTime = startTime;
     this.endTime = endTime;
     this.lesson = lesson;
-    this.book = book;
   }
 }

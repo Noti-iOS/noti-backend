@@ -9,6 +9,7 @@ import static com.noti.noti.error.ErrorCode.UNSUPPORTED_JWT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,7 +76,7 @@ class ReissueTokenControllerTest {
         when(reissueTokenUsecace.reissueToken(TOKEN)).thenReturn(jwtToken);
 
         mockMvc.perform(
-                get("/api/auth/reissue").header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
+                post("/api/auth/reissue").header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isOk(),
                 jsonPath("$.accessToken").value(ACCESS_TOKEN),
@@ -92,7 +93,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new CustomExpiredJwtException("만료된 토큰입니다"));
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isUnauthorized(),
@@ -115,7 +116,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new CustomUnsupportedJwtException("지원하지 않는 토큰입니다"));
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isUnauthorized(),
@@ -138,7 +139,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new CustomMalformedJwtException("잘못된 토큰입니다"));
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isUnauthorized(),
@@ -161,7 +162,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new CustomSignatureException("잘못된 토큰입니다"));
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isUnauthorized(),
@@ -184,7 +185,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new CustomIllegalArgumentException("잘못된 값 입니다"));
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isUnauthorized(),
@@ -207,7 +208,7 @@ class ReissueTokenControllerTest {
             .thenThrow(new TeacherNotFoundException());
 
         mockMvc.perform(
-                get("/api/auth/reissue")
+                post("/api/auth/reissue")
                     .header(AUTHORIZATION_HEADER, BEARER_PREFIX + TOKEN))
             .andExpectAll(
                 status().isNotFound(),
