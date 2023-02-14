@@ -2,11 +2,11 @@ package com.noti.noti.lesson.adapter.out.persistence;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
+import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.FindCreatedLessonsPort;
 import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
-import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -27,6 +27,7 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
   private final LessonMapper lessonMapper;
   private final LessonQueryRepository lessonQueryRepository;
 
+
   @Override
   public Lesson saveLesson(Lesson lesson) {
     LessonJpaEntity lessonJpaEntity = lessonJpaRepository.save(lessonMapper.mapToJpaEntity(lesson));
@@ -37,7 +38,6 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
   public List<TodaysLesson> findTodaysLessons(TodaysLessonSearchConditon condition) {
     return lessonQueryRepository.findTodayLesson(condition);
   }
-
 
   @Override
   public List<FrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
@@ -66,8 +66,10 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
   }
 
 
+
   @Override
   public List<OutCreatedLesson> findCreatedLessons(Long teacherId) {
     return lessonQueryRepository.findCreatedLessons(teacherId);
   }
+
 }
