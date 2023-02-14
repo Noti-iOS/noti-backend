@@ -45,19 +45,14 @@ public class HomeworkJpaEntity extends BaseTimeEntity {
   @JoinColumn(name = "lesson_id")
   private LessonJpaEntity lessonJpaEntity;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "book_id")
-  private BookJpaEntity bookJpaEntity;
-
   @Builder
   public HomeworkJpaEntity(Long id, String homeworkName, String content, LocalDateTime startTime,
-      LocalDateTime endTime, LessonJpaEntity lessonJpaEntity, BookJpaEntity bookJpaEntity) {
+      LocalDateTime endTime, LessonJpaEntity lessonJpaEntity) {
     this.id = id;
     this.homeworkName = homeworkName;
     this.content = content;
     this.startTime = startTime;
     this.endTime = endTime;
     this.lessonJpaEntity = lessonJpaEntity;
-    this.bookJpaEntity = bookJpaEntity;
   }
 }

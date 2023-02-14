@@ -2,8 +2,6 @@ package com.noti.noti.lesson.adapter.out.persistence;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
-import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
-import com.noti.noti.lesson.application.port.out.FindCreatedLessonsPort;
 import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
@@ -20,12 +18,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLessonPort,
-    FrequencyOfLessonsPort, FindCreatedLessonsPort {
+    FrequencyOfLessonsPort {
 
   private final LessonJpaRepository lessonJpaRepository;
   private final LessonMapper lessonMapper;
   private final LessonQueryRepository lessonQueryRepository;
-
 
   @Override
   public Lesson saveLesson(Lesson lesson) {
@@ -45,6 +42,10 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
     LocalDateTime endTime = startTime.plusMonths(1);
 
     return lessonQueryRepository.findFrequencyOfLesson(startTime, endTime, teacherId);
+  }
+
+  public Optional<Lesson> findById(Long id) {
+    return lessonJpaRepository.findById(id).map(lessonMapper::mapToDomainEntity);
   }
 
   /**
