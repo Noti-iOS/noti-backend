@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
+import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
@@ -145,6 +146,39 @@ class LessonPersistenceAdapterTest {
 
       }
 
+    }
+  }
+
+  @Sql("/data/lesson.sql")
+  @Nested
+  class findCreatedLessons_메소드는 {
+
+    @Nested
+    class 선생님이_생성한_분반이_있다면 {
+
+      Long teacherId = 1L;
+
+      @Test
+      void 생성한_분반의_리스트를_반환한다() {
+        List<OutCreatedLesson> createdLessons = lessonPersistenceAdapter.findCreatedLessons(
+            teacherId);
+
+        assertThat(createdLessons).isNotEmpty();
+      }
+    }
+
+    @Nested
+    class 선생님이_생성한_분반이_없다면 {
+
+      Long teacherId = 3L;
+
+      @Test
+      void 비어있는_리스트를_반환한다() {
+        List<OutCreatedLesson> createdLessons = lessonPersistenceAdapter.findCreatedLessons(
+            teacherId);
+
+        assertThat(createdLessons).isEmpty();
+      }
     }
   }
 
