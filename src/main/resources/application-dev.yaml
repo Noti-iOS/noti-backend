@@ -1,6 +1,6 @@
 spring:
   redis:
-    host: noti-ro.qh6ksj.ng.0001.apn2.cache.amazonaws.com
+    host: noti.qh6ksj.ng.0001.apn2.cache.amazonaws.com
     port: 6379
   datasource:
     url: jdbc:mysql://noti.cpwm4hbvoflk.ap-northeast-2.rds.amazonaws.com:3306/noti
