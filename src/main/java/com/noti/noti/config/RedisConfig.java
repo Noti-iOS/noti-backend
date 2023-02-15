@@ -12,14 +12,4 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @EnableRedisRepositories(enableKeyspaceEvents = EnableKeyspaceEvents.ON_STARTUP)
 public class RedisConfig {
 
-  @Bean
-  public RedisConnectionFactory redisConnectionFactory() {
-    return new LettuceConnectionFactory();
-  }
-  @Bean
-  public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-    RedisTemplate<byte[], byte[]> template = new RedisTemplate<byte[], byte[]>();
-    template.setConnectionFactory(redisConnectionFactory);
-    return template;
-  }
 }
