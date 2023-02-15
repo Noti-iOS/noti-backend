@@ -16,13 +16,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-#        use_sql_comments: true
 
 jwt:
   secret: secretKey-test-jwt-for-noti-project-update
 externalUrl: https://github.com/Noti-iOS/noti-backend/wiki
-#logging:
-#  level:
-#    com:
-#      zaxxer:
-#        hikari: debug
