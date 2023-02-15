@@ -37,6 +37,6 @@ out/
 
 ### VS Code ###
 .vscode/
-
+src/main/resources/application-localdb.yaml
 noti-config
 ## src/main/resources/**.yaml
