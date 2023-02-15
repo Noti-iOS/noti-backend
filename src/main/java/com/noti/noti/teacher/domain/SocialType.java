@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 public enum SocialType {
 
   KAKAO(
-      "101",
       "kakao",
       "kakaoOAuthUtil",
       "https://kapi.kakao.com/v2/user/me",
@@ -18,7 +17,6 @@ public enum SocialType {
   ),
 
   APPLE(
-      "111",
       "apple",
       "appleOAuthUtil",
       "https://appleid.apple.com/auth/keys",
@@ -26,7 +24,6 @@ public enum SocialType {
 
   );
 
-  private final String code;
   private final String socialName;
   private final String utilName;
   private final String userInfoUrl;
