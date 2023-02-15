@@ -24,16 +24,13 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-    // username = id = socialType.code + socialId
-    String socialCode = username.substring(0, 3);
-    String socialId = username.substring(3);
+    String[] splitUsername = username.split(",");
 
-    SocialType socialType = Arrays.stream(SocialType.values())
-        .filter(type -> type.getCode().equals(socialCode))
-        .findFirst()
-        .orElseThrow(() -> new UsernameNotFoundException("회원 정보가 없습니다"));
+    String socialType = splitUsername[0];
+    String socialId = splitUsername[1];
 
-    Teacher teacher = findTeacherPort.findBySocialTypeAndSocialId(socialType, socialId)
+    Teacher teacher = findTeacherPort.findBySocialTypeAndSocialId(SocialType.valueOf(socialType),
+            socialId)
         .orElseThrow(() -> new UsernameNotFoundException("회원 정보가 없습니다"));
 
     return createUserDetails(teacher);
@@ -41,6 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   private UserDetails createUserDetails(Teacher teacher) {
     GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(teacher.getRole().name());
+    System.out.println(teacher.getId());
     UserDetails userDetails = new User(teacher.getId().toString(),
         new BCryptPasswordEncoder().encode(""), Collections.singleton(grantedAuthority));
     return userDetails;

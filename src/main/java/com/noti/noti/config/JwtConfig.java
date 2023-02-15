@@ -1,6 +1,7 @@
 package com.noti.noti.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.noti.noti.auth.application.port.out.SaveRefreshTokenPort;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.config.security.jwt.filter.CustomAuthenticationFilter;
 import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
@@ -22,6 +23,7 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
   private final CustomJwtFilter customJwtFilter;
   private final OAuthManager oAuthManager;
   private final SaveTeacherPort saveTeacherPort;
+  private final SaveRefreshTokenPort saveRefreshTokenPort;
   private final ObjectMapper objectMapper;
 
   @Override
@@ -35,9 +37,11 @@ public class JwtConfig extends AbstractHttpConfigurer<JwtConfig, HttpSecurity> {
   public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter(
       AuthenticationManager authenticationManager) {
     CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(
-        authenticationManager, jwtTokenProvider, oAuthManager,objectMapper,saveTeacherPort);
-    customAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/teacher/login/**",
-        "POST"));
+        authenticationManager, jwtTokenProvider, oAuthManager, objectMapper, saveTeacherPort,
+        saveRefreshTokenPort);
+    customAuthenticationFilter.setRequiresAuthenticationRequestMatcher(
+        new AntPathRequestMatcher("/api/teacher/login/**",
+            "POST"));
     return customAuthenticationFilter;
   }
 
