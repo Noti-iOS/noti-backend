@@ -1,5 +1,8 @@
 package com.noti.noti.config.security.jwt;
 
+import static com.noti.noti.config.security.jwt.TokenExpiration.ACCESS_TOKEN;
+import static com.noti.noti.config.security.jwt.TokenExpiration.REFRESH_TOKEN;
+
 import com.noti.noti.common.application.port.out.JwtPort;
 import com.noti.noti.error.exception.CustomExpiredJwtException;
 import com.noti.noti.error.exception.CustomIllegalArgumentException;
@@ -21,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,19 +36,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider implements JwtPort {
 
-  private final UserDetailsService userDetailsService;
   @Value("${jwt.secret}")
   private String SECRET_KEY;
-
-  private final Long ACCESS_EXPIRATION_TIME = 1000L * 60 * 60 * 6;
-  private final Long REFRESH_EXPIRATION_TIME = 1000L * 60 * 60 * 24 * 14;
-
 
   /* String 타입의 SECRET_KEY Key타입으로 변환*/
   public Key getSigningKey(String secretKey) {
     return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
   }
-
 
   /* accessToken 발급 */
   public String createAccessToken(String name, String authorities) {
@@ -56,7 +53,8 @@ public class JwtTokenProvider implements JwtPort {
         .setHeaderParam("typ", "ACCESS_TOKEN").setHeaderParam("alg", "HS256")
         // payload
         .setSubject(name).setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + ACCESS_EXPIRATION_TIME)).claim("role", authorities)
+        .setExpiration(new Date(now.getTime() + ACCESS_TOKEN.getExpiration()))
+        .claim("role", authorities)
         // signature
         .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256).compact();
 
@@ -70,8 +68,7 @@ public class JwtTokenProvider implements JwtPort {
         // header
         .setHeaderParam("typ", "REFRESH_TOKEN").setHeaderParam("alg", "HS256")
         // payload
-        .setSubject(name).setIssuedAt(now)
-        .setExpiration(new Date(now.getTime() + REFRESH_EXPIRATION_TIME)).claim("role", authorities)
+        .setExpiration(new Date(now.getTime() + REFRESH_TOKEN.getExpiration()))
         // signature
         .signWith(getSigningKey(SECRET_KEY)).compact();
   }
@@ -97,13 +94,12 @@ public class JwtTokenProvider implements JwtPort {
     }
   }
 
-  /* 토큰 갱신 */
-  public String updateAccessToken() {
-    return null;
-  }
 
   public Authentication getAuthentication(String token) {
-    UserDetails userDetails = userDetailsService.loadUserByUsername(this.getSubject(token));
+    String subject = getSubject(token);
+    String role = getClaimsFromToken(token).get("role", String.class);
+    UserDetails userDetails = User.builder().username(subject).password("").authorities(role)
+        .build();
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 
@@ -115,5 +111,4 @@ public class JwtTokenProvider implements JwtPort {
     return Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build()
         .parseClaimsJws(token).getBody();
   }
-
 }
