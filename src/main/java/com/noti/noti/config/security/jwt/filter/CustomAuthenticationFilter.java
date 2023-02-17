@@ -32,7 +32,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -61,6 +60,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletResponse response) throws AuthenticationException {
 
     String accessToken = request.getHeader("access-token");
+    String nickname = request.getHeader("nickname");
 
     SocialType socialType = extractSocialType(request);
 
@@ -72,16 +72,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       request.setAttribute("exception", e.getErrorCode());
       throw e;
     }
-
-    Teacher teacher = Teacher.builder()
-        .profile(oAuthInfo.getThumbnailImageUrl())
-        .nickname(oAuthInfo.getNickname())
-        .email(oAuthInfo.getEmail())
-        .socialId(oAuthInfo.getSocialId())
-        .socialType(socialType)
-        .role(Role.ROLE_TEACHER).build();
-
-    request.setAttribute("teacherInfo", teacher);
+    oAuthInfo.changeNickname(nickname);
+    request.setAttribute("oAuthInfo", oAuthInfo);
 
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
@@ -122,9 +114,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletResponse response, AuthenticationException failed)
       throws IOException, ServletException {
 
-    Teacher teacherInfo = (Teacher) request.getAttribute("teacherInfo");
+    OAuthInfo oAuthInfo = (OAuthInfo) request.getAttribute("oAuthInfo");
 
-    Teacher savedTeacher = saveTeacherPort.saveTeacher(teacherInfo);
+    Teacher teacher = Teacher.builder()
+        .profile(oAuthInfo.getThumbnailImageUrl())
+        .nickname(oAuthInfo.getNickname())
+        .email(oAuthInfo.getEmail())
+        .socialId(oAuthInfo.getSocialId())
+        .socialType(oAuthInfo.getSocialType())
+        .role(Role.ROLE_TEACHER).build();
+
+    Teacher savedTeacher = saveTeacherPort.saveTeacher(teacher);
 
     JwtToken jwtToken = generateToken(savedTeacher.getId().toString(),
         savedTeacher.getRole().name());
