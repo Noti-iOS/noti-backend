@@ -4,6 +4,7 @@ import com.noti.noti.aop.ExecutionTimeChecker;
 import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.adpater.in.web.dto.KakaoOAuthInfo;
 import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
+import com.noti.noti.teacher.domain.SocialType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -31,6 +32,7 @@ public class KakaoOAuthUtil implements OAuthUtil {
         .socialId(kakaoOAuthInfo.getId())
         .nickname(kakaoOAuthInfo.getKakaoAccount().getProfile().getNickname())
         .email(kakaoOAuthInfo.getKakaoAccount().getEmail())
+        .socialType(SocialType.KAKAO)
         .thumbnailImageUrl(kakaoOAuthInfo.getKakaoAccount().getProfile().getThumbnailImageUrl())
         .build();
   }
