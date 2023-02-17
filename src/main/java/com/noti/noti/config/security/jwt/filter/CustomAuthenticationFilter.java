@@ -77,15 +77,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     String nickname = null;
 
     try {
+      oAuthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
       Map<String, String> map = objectMapper.readValue(request.getInputStream(), Map.class);
       nickname = map.get("nickname");
-      oAuthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
     } catch (OauthAuthenticationException e) {
       request.setAttribute("exception", e.getErrorCode());
       throw e;
     } catch (Exception e) {
-      request.setAttribute("exception", AUTHENTICATION_FAILED);
-      throw new BusinessException(e.getMessage(), AUTHENTICATION_FAILED);
+      log.info("exception: {}", e.getMessage());
     }
 
     oAuthInfo.changeNickname(nickname);
