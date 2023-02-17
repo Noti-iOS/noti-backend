@@ -38,7 +38,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   private UserDetails createUserDetails(Teacher teacher) {
     GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(teacher.getRole().name());
-    System.out.println(teacher.getId());
     UserDetails userDetails = new User(teacher.getId().toString(),
         new BCryptPasswordEncoder().encode(""), Collections.singleton(grantedAuthority));
     return userDetails;
