@@ -1,13 +1,17 @@
 package com.noti.noti.config.security.jwt.filter;
 
 import static com.noti.noti.config.security.jwt.TokenExpiration.REFRESH_TOKEN;
+import static com.noti.noti.error.ErrorCode.AUTHENTICATION_FAILED;
 import static com.noti.noti.error.ErrorCode.INVALID_REQUEST;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.auth.application.port.out.SaveRefreshTokenPort;
 import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.auth.domain.RefreshToken;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.error.exception.BusinessException;
 import com.noti.noti.error.exception.InvalidRequestException;
 import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
@@ -16,13 +20,19 @@ import com.noti.noti.teacher.domain.Role;
 import com.noti.noti.teacher.domain.SocialType;
 import com.noti.noti.teacher.domain.Teacher;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,19 +70,26 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletResponse response) throws AuthenticationException {
 
     String accessToken = request.getHeader("access-token");
-    String nickname = request.getHeader("nickname");
 
     SocialType socialType = extractSocialType(request);
 
     OAuthInfo oAuthInfo = null;
+    String nickname = null;
 
     try {
+      Map<String, String> map = objectMapper.readValue(request.getInputStream(), Map.class);
+      nickname = map.get("nickname");
       oAuthInfo = oAuthManager.getOAuthInfo(socialType, accessToken);
     } catch (OauthAuthenticationException e) {
       request.setAttribute("exception", e.getErrorCode());
       throw e;
+    } catch (Exception e) {
+      request.setAttribute("exception", AUTHENTICATION_FAILED);
+      throw new BusinessException(e.getMessage(), AUTHENTICATION_FAILED);
     }
+
     oAuthInfo.changeNickname(nickname);
+
     request.setAttribute("oAuthInfo", oAuthInfo);
 
     UsernamePasswordAuthenticationToken authenticationToken =

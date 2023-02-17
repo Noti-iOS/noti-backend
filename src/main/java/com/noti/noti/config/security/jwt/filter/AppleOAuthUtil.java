@@ -83,7 +83,7 @@ public class AppleOAuthUtil implements OAuthUtil {
           .parseClaimsJws(identityToken).getBody();
 
       oAuthInfo = OAuthInfo.builder()
-          .nickname("Noti-Teahcer")
+          .nickname("Noti")
           .socialType(SocialType.APPLE)
           .socialId(body.get("sub", String.class))
           .email(body.get("email", String.class))
