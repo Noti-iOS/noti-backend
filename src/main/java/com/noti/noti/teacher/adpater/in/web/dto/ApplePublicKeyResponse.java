@@ -17,6 +17,7 @@ public class ApplePublicKeyResponse {
   @Getter
   @Setter
   public static class Key {
+
     private String kty;
     private String kid;
     private String use;
@@ -30,7 +31,4 @@ public class ApplePublicKeyResponse {
         .filter(key -> key.getKid().equals(kid) && key.getAlg().equals(alg))
         .findFirst();
   }
-
-
-
 }
