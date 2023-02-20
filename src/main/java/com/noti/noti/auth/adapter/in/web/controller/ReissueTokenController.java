@@ -12,8 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReissueTokenController {
 
   private static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final String BEARER_PREFIX = "Bearer ";
 
   private final ReissueTokenUsecace reissueTokenUsecace;
 
@@ -51,9 +48,6 @@ public class ReissueTokenController {
   }
 
   private String resolveToken(String token) {
-    if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
-      return token.substring(7);
-    }
-    return null;
+    return token.substring(7);
   }
 }
