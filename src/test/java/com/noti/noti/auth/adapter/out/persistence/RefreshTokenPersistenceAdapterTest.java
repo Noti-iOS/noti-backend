@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.auth.domain.RefreshToken;
 import com.noti.noti.common.RedisTestContainerConfig;
 
+import com.noti.noti.config.security.jwt.JwtType;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -49,8 +50,61 @@ class RefreshTokenPersistenceAdapterTest extends RedisTestContainerConfig {
 
         Thread.sleep(1500L);
 
-        Optional<RefreshTokenRedisEntity> deletedRefreshToken =
-            refreshTokenRedisRepository.findById(REFRESH_TOKEN);
+        Optional<RefreshToken> deletedRefreshToken =
+            refreshTokenPersistenceAdapter.findRefreshTokenById(REFRESH_TOKEN);
+
+        assertThat(deletedRefreshToken).isNotPresent();
+      }
+    }
+  }
+
+  @Nested
+  class findRefreshTokenById_메서드는 {
+
+    @Nested
+    class refresh_token에_해당하는_값이_존재하면 {
+
+      @Test
+      void 해당_Optional_객체를_반환한다() {
+        refreshTokenPersistenceAdapter.saveRefreshToken(
+            createRefreshToken(JwtType.REFRESH_TOKEN.getExpiration()));
+
+        Optional<RefreshToken> foundRefreshToken =
+            refreshTokenPersistenceAdapter.findRefreshTokenById(REFRESH_TOKEN);
+
+        assertThat(foundRefreshToken).isPresent();
+      }
+    }
+
+    @Nested
+    class refresh_token에_해당하는_값이_존재하지_않으면 {
+
+      @Test
+      void 비어있는_Optional_객체를_반환한다() {
+        Optional<RefreshToken> foundRefreshToken =
+            refreshTokenPersistenceAdapter.findRefreshTokenById(REFRESH_TOKEN);
+
+        assertThat(foundRefreshToken).isNotPresent();
+      }
+    }
+  }
+
+  @Nested
+  class _메서드는 {
+
+    @Nested
+    class refresh_token에_해당하는_값이_존재하면 {
+
+      @Test
+      void 성공적으로_해당_객체를_삭제한다() {
+        refreshTokenPersistenceAdapter.saveRefreshToken(
+            createRefreshToken(JwtType.REFRESH_TOKEN.getExpiration()));
+
+        refreshTokenPersistenceAdapter.deleteRefreshToken(
+            createRefreshToken(JwtType.REFRESH_TOKEN.getExpiration()));
+
+        Optional<RefreshToken> deletedRefreshToken =
+            refreshTokenPersistenceAdapter.findRefreshTokenById(REFRESH_TOKEN);
 
         assertThat(deletedRefreshToken).isNotPresent();
       }

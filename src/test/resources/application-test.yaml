@@ -1,5 +1,4 @@
 spring:
-  security.
   test:
     database:
       replace: none
