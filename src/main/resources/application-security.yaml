@@ -1,1 +1,1 @@
-excludeUrls: /api/teacher/login/**, /api/auth/reissue
+excludeUrls: /api/teacher/login/**
