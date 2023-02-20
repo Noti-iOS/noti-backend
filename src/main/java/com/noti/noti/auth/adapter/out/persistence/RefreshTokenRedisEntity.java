@@ -1,7 +1,5 @@
 package com.noti.noti.auth.adapter.out.persistence;
 
-import static com.noti.noti.config.security.jwt.TokenExpiration.REFRESH_TOKEN;
-
 import java.util.concurrent.TimeUnit;
 import lombok.Builder;
 import lombok.Getter;
