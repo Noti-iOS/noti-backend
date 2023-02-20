@@ -1,4 +1,5 @@
 spring:
+  security.
   test:
     database:
       replace: none
@@ -20,3 +21,11 @@ spring:
 jwt:
   secret: secretKey-test-jwt-for-noti-project-update
 externalUrl: https://github.com/Noti-iOS/noti-backend/wiki
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+           sql: trace
