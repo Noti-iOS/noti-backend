@@ -13,7 +13,9 @@ public class RefreshTokenPersistenceAdapter implements SaveRefreshTokenPort {
   private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
   @Override
-  public void saveRefreshToken(RefreshToken refreshToken) {
-    refreshTokenRedisRepository.save(refreshTokenMapper.toRedisEntity(refreshToken));
+  public RefreshToken saveRefreshToken(RefreshToken refreshToken) {
+    return refreshTokenMapper.toDomainEntity(
+        refreshTokenRedisRepository.save(refreshTokenMapper.toRedisEntity(refreshToken))
+    );
   }
 }
