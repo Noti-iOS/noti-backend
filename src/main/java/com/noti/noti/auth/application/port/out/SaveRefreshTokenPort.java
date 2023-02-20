@@ -4,5 +4,5 @@ import com.noti.noti.auth.domain.RefreshToken;
 
 public interface SaveRefreshTokenPort {
 
-  void saveRefreshToken(RefreshToken refreshToken);
+  RefreshToken saveRefreshToken(RefreshToken refreshToken);
 }
