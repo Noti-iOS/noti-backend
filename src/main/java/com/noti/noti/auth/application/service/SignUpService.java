@@ -6,7 +6,7 @@ import com.noti.noti.auth.application.port.out.SaveRefreshTokenPort;
 import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.auth.domain.RefreshToken;
 import com.noti.noti.common.application.port.out.JwtPort;
-import com.noti.noti.config.security.jwt.TokenExpiration;
+import com.noti.noti.config.security.jwt.JwtType;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
 import com.noti.noti.teacher.domain.Role;
 import com.noti.noti.teacher.domain.Teacher;
@@ -51,7 +51,7 @@ public class SignUpService implements SignUpUsecase {
             .refreshToken(refreshToken)
             .id(savedTeacher.getId())
             .role(savedTeacher.getRole().name())
-            .expiration(TokenExpiration.REFRESH_TOKEN.getExpiration())
+            .expiration(JwtType.REFRESH_TOKEN.getExpiration())
             .build()
     );
 
