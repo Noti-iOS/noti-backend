@@ -1,38 +1,27 @@
 package com.noti.noti.config.security.jwt.filter;
 
-import static com.noti.noti.config.security.jwt.TokenExpiration.REFRESH_TOKEN;
-import static com.noti.noti.error.ErrorCode.AUTHENTICATION_FAILED;
+import static com.noti.noti.config.security.jwt.JwtType.REFRESH_TOKEN;
 import static com.noti.noti.error.ErrorCode.INVALID_REQUEST;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.noti.noti.auth.application.port.out.SaveRefreshTokenPort;
 import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.auth.domain.RefreshToken;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
-import com.noti.noti.error.exception.BusinessException;
 import com.noti.noti.error.exception.InvalidRequestException;
 import com.noti.noti.error.exception.OauthAuthenticationException;
 import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
 import com.noti.noti.teacher.application.port.out.SaveTeacherPort;
-import com.noti.noti.teacher.domain.Role;
 import com.noti.noti.teacher.domain.SocialType;
-import com.noti.noti.teacher.domain.Teacher;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -130,34 +119,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
       HttpServletResponse response, AuthenticationException failed)
       throws IOException, ServletException {
 
-    OAuthInfo oAuthInfo = (OAuthInfo) request.getAttribute("oAuthInfo");
-
-    Teacher teacher = Teacher.builder()
-        .profile(oAuthInfo.getThumbnailImageUrl())
-        .nickname(oAuthInfo.getNickname())
-        .email(oAuthInfo.getEmail())
-        .socialId(oAuthInfo.getSocialId())
-        .socialType(oAuthInfo.getSocialType())
-        .role(Role.ROLE_TEACHER).build();
-
-    Teacher savedTeacher = saveTeacherPort.saveTeacher(teacher);
-
-    JwtToken jwtToken = generateToken(savedTeacher.getId().toString(),
-        savedTeacher.getRole().name());
-
-    saveRefreshTokenPort.saveRefreshToken(
-        RefreshToken.builder()
-            .refreshToken(jwtToken.getRefreshToken())
-            .id(savedTeacher.getId())
-            .role(savedTeacher.getRole().name())
-            .expiration(REFRESH_TOKEN.getExpiration())
-            .build()
-    );
-
-    response.setStatus(HttpStatus.CREATED.value());
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-    objectMapper.writeValue(response.getOutputStream(), jwtToken);
+    request.getRequestDispatcher("/api/signup").forward(request, response);
   }
 
   /* 소셜로그인 구분 */
