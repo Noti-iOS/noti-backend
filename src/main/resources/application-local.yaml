@@ -19,3 +19,8 @@ spring:
                 sql:
                   BasicBinder: TRACE
     open-in-view: false
+
+logging:
+  level:
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
