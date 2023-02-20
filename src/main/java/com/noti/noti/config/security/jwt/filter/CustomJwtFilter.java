@@ -1,6 +1,7 @@
 package com.noti.noti.config.security.jwt.filter;
 
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.config.security.jwt.JwtType;
 import com.noti.noti.error.exception.BusinessException;
 import java.util.List;
 import javax.servlet.*;
@@ -39,8 +40,11 @@ public class CustomJwtFilter extends OncePerRequestFilter {
     String jwt = resolveToken(request);
 
     try {
-      if (StringUtils.hasText(jwt)) {
-        jwtTokenProvider.validateToken(jwt);
+      // 토큰 검증
+      jwtTokenProvider.validateToken(jwt);
+
+      //토큰 타입이 Access Token 일 경우에만 인증토큰객체 저장
+      if (jwtTokenProvider.getTokenType(jwt).equals(JwtType.ACCESS_TOKEN.name())) {
         Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
