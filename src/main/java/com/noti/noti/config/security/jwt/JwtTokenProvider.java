@@ -1,7 +1,7 @@
 package com.noti.noti.config.security.jwt;
 
-import static com.noti.noti.config.security.jwt.TokenExpiration.ACCESS_TOKEN;
-import static com.noti.noti.config.security.jwt.TokenExpiration.REFRESH_TOKEN;
+import static com.noti.noti.config.security.jwt.JwtType.ACCESS_TOKEN;
+import static com.noti.noti.config.security.jwt.JwtType.REFRESH_TOKEN;
 
 import com.noti.noti.common.application.port.out.JwtPort;
 import com.noti.noti.error.exception.CustomExpiredJwtException;
@@ -50,7 +50,7 @@ public class JwtTokenProvider implements JwtPort {
     Date now = new Date();
     return Jwts.builder()
         // header
-        .setHeaderParam("typ", "ACCESS_TOKEN").setHeaderParam("alg", "HS256")
+        .setHeaderParam("typ", ACCESS_TOKEN).setHeaderParam("alg", "HS256")
         // payload
         .setSubject(name).setIssuedAt(now)
         .setExpiration(new Date(now.getTime() + ACCESS_TOKEN.getExpiration()))
@@ -62,21 +62,21 @@ public class JwtTokenProvider implements JwtPort {
 
   /* refreshToken 발급 */
   public String createRefreshToken(String name, String authorities) {
-
     Date now = new Date();
     return Jwts.builder()
         // header
-        .setHeaderParam("typ", "REFRESH_TOKEN").setHeaderParam("alg", "HS256")
+        .setHeaderParam("typ", REFRESH_TOKEN).setHeaderParam("alg", "HS256")
         // payload
+        .setSubject(name).setIssuedAt(now)
         .setExpiration(new Date(now.getTime() + REFRESH_TOKEN.getExpiration()))
+        .claim("role", authorities)
         // signature
         .signWith(getSigningKey(SECRET_KEY)).compact();
   }
 
 
   /* 토큰 검증 */
-  public void validateToken(String token)
-      throws CustomMalformedJwtException, CustomUnsupportedJwtException, CustomExpiredJwtException, CustomSignatureException, IllegalArgumentException {
+  public void validateToken(String token) {
     try {
       Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(token);
     } catch (ExpiredJwtException e) {
@@ -105,6 +105,11 @@ public class JwtTokenProvider implements JwtPort {
 
   public String getSubject(String token) {
     return getClaimsFromToken(token).getSubject();
+  }
+
+  public String getTokenType(String token) {
+    return Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build()
+        .parse(token).getHeader().getType();
   }
 
   private Claims getClaimsFromToken(String token) {
