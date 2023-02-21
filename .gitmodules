@@ -1,4 +1,0 @@
-[submodule "noti-config"]
-	path = noti-config
-	url = git@github.com:Noti-iOS/noti-config.git
-	branch = main
