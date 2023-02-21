@@ -9,7 +9,6 @@ public class Book {
 
   private Long id;
   private String title;
-
   private Teacher teacher;
 
   @Builder
