@@ -2,11 +2,13 @@ package com.noti.noti.book.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.noti.noti.book.application.port.out.BookDto;
 import com.noti.noti.book.application.port.out.FindBookCondition;
 import com.noti.noti.book.domain.model.Book;
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import com.noti.noti.teacher.domain.Teacher;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,6 +31,8 @@ class BookPersistenceAdapterTest {
 
   @Autowired
   BookPersistenceAdapter bookPersistenceAdapter;
+
+  final Long TEACHER_ID = 1L;
 
   @Nested
   class FindBookById_메서드는 {
@@ -60,6 +64,7 @@ class BookPersistenceAdapterTest {
     }
   }
 
+  @Sql("/data/teacher.sql")
   @Nested
   class saveBook_메서드는 {
 
@@ -98,6 +103,33 @@ class BookPersistenceAdapterTest {
         boolean result = bookPersistenceAdapter.isExistedBook(createCondition("수학의정석", 2L));
 
         assertThat(result).isFalse();
+      }
+    }
+  }
+
+  @Nested
+  class findBooksByTeacherId_메서드는 {
+
+    @Nested
+    class 선생님_ID에_해당하는_교재가_있다면 {
+
+      @Sql("/data/book.sql")
+      @Test
+      void 해당_BookDto_List_를_반환한다() {
+        List<BookDto> books = bookPersistenceAdapter.findBooksByTeacherId(TEACHER_ID);
+
+        assertThat(books).isNotEmpty();
+      }
+    }
+
+    @Nested
+    class 선생님_ID에_해당하는_교재가_없다면 {
+
+      @Test
+      void 해당_비어있는_List_를_반환한다() {
+        List<BookDto> books = bookPersistenceAdapter.findBooksByTeacherId(TEACHER_ID);
+
+        assertThat(books).isEmpty();
       }
     }
   }
