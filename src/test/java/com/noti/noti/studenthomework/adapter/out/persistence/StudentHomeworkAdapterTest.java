@@ -1,7 +1,6 @@
 package com.noti.noti.studenthomework.adapter.out.persistence;
 
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.studenthomework.adapter.in.web.dto.response.HomeworkOfGivenDateDto;
 import com.noti.noti.studenthomework.application.port.out.OutHomeworkOfGivenDate;
 import java.time.LocalDate;
 import java.util.List;

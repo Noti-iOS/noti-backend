@@ -17,6 +17,7 @@ import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.teacher.application.exception.TeacherNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,15 +27,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(AddBookController.class)
+@WebMvcTest(controllers = AddBookController.class,
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 @DisplayName("AddBookController 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@Import({JacksonConfiguration.class, ObjectMapper.class, JwtTokenProvider.class})
+@Import(JacksonConfiguration.class)
 class AddBookControllerTest {
 
   @Autowired
