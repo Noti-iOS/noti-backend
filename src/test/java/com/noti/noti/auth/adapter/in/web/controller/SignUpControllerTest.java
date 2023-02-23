@@ -10,7 +10,6 @@ import com.noti.noti.auth.application.port.in.SignUpCommand;
 import com.noti.noti.auth.application.port.in.SignUpUsecase;
 import com.noti.noti.auth.domain.JwtToken;
 import com.noti.noti.config.JacksonConfiguration;
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.teacher.adpater.in.web.dto.OAuthInfo;
 import com.noti.noti.teacher.domain.SocialType;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +26,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("SignUpControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
-@Import({JacksonConfiguration.class, ObjectMapper.class, JwtTokenProvider.class})
+@Import(JacksonConfiguration.class)
 class SignUpControllerTest {
 
   private MockMvc mockMvc;

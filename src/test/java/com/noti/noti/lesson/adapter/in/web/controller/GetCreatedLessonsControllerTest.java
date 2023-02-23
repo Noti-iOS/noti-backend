@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.lesson.application.port.in.CreatedLessonCommand;
 import com.noti.noti.lesson.application.port.in.GetCreatedLessonsQuery;
 import com.noti.noti.lesson.application.port.in.InCreatedLesson;
@@ -20,6 +20,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,14 +30,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @DisplayName("GetCreatedLessonsControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Import(JacksonConfiguration.class)
-@WebMvcTest(GetCreatedLessonsController.class)
+@WebMvcTest(controllers = GetCreatedLessonsController.class,
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 class GetCreatedLessonsControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @MockBean
-  private JwtTokenProvider jwtTokenProvider;
 
   @MockBean
   private GetCreatedLessonsQuery getCreatedLessonsQuery;

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.studenthomework.application.port.in.GetHomeworksOfCalendarQuery;
 import com.noti.noti.studenthomework.application.port.in.InHomeworkOfGivenDate;
 import com.noti.noti.studenthomework.application.port.out.OutHomeworkOfGivenDate;
@@ -20,12 +20,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(GetHomeworksOfCalendarController.class)
+@WebMvcTest(controllers = GetHomeworksOfCalendarController.class,
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 @Import(JacksonConfiguration.class)
 @DisplayNameGeneration(ReplaceUnderscores.class)
 class GetHomeworksOfCalendarControllerTest {
@@ -35,9 +39,6 @@ class GetHomeworksOfCalendarControllerTest {
 
   @MockBean
   GetHomeworksOfCalendarQuery getHomeworksOfCalendarQuery;
-
-  @MockBean
-  JwtTokenProvider provider;
 
   List<InHomeworkOfGivenDate> createHomeworkOfCalendar() {
 

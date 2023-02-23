@@ -3,13 +3,14 @@ package com.noti.noti.book.domain.model;
 import com.noti.noti.teacher.domain.Teacher;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Book {
 
   private Long id;
   private String title;
-
   private Teacher teacher;
 
   @Builder

@@ -3,13 +3,12 @@ package com.noti.noti.lesson.adapter.in.web.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
+import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.application.port.out.TodaysHomework.HomeworkOfStudent;
 import com.noti.noti.lesson.application.port.in.GetTodaysLessonQuery;
@@ -30,11 +29,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-@WebMvcTest(GetTodaysLessonInfoController.class)
+@WebMvcTest(controllers = GetTodaysLessonInfoController.class,
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 @DisplayName("GetTodaysLessonInfoControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Import(JacksonConfiguration.class)
@@ -42,9 +45,6 @@ class GetTodaysLessonInfoControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
-
-  @MockBean
-  private JwtTokenProvider jwtTokenProvider;
 
   @MockBean
   private GetTodaysLessonQuery getTodaysLessonQuery;
@@ -151,8 +151,7 @@ class GetTodaysLessonInfoControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
             .andExpect(jsonPath("$.data.isLessonCreated").value(true))
-            .andExpect(jsonPath("$.data.lessons.length()").value(3))
-            .andDo(print());
+            .andExpect(jsonPath("$.data.lessons.length()").value(3));
       }
     }
 
@@ -201,8 +200,7 @@ class GetTodaysLessonInfoControllerTest {
             .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
             .andExpect(jsonPath("$.data.isLessonCreated").value(true))
             .andExpect(jsonPath("$.data.lessons.length()").value(3))
-            .andExpect(jsonPath("$.data.lessons[0].students.length()").value(3))
-            .andDo(print());
+            .andExpect(jsonPath("$.data.lessons[0].students.length()").value(3));
       }
     }
 
@@ -255,8 +253,7 @@ class GetTodaysLessonInfoControllerTest {
             .andExpect(jsonPath("$.data.teacherNickName").value(TEACHER_NAME))
             .andExpect(jsonPath("$.data.isLessonCreated").value(true))
             .andExpect(jsonPath("$.data.lessons.length()").value(3))
-            .andExpect(jsonPath("$.data.lessons[0].homeworkCompletionRate").value(33))
-            .andDo(print());
+            .andExpect(jsonPath("$.data.lessons[0].homeworkCompletionRate").value(33));
       }
     }
   }
