@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
+import com.noti.noti.lesson.application.port.out.LessonDto;
 import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -38,6 +39,33 @@ class LessonPersistenceAdapterTest {
 
   @Autowired
   LessonPersistenceAdapter lessonPersistenceAdapter;
+
+  @Nested
+  class findAllLessonsByTeacherId_메서드는 {
+
+    @Nested
+    class 조건에_해당하는_수업이_존재하지_않으면 {
+
+      @Test
+      void 비어있는_리스트를_반환한다() {
+        List<LessonDto> lessons = lessonPersistenceAdapter.findAllLessonsByTeacherId(1L);
+
+        assertThat(lessons).isEmpty();
+      }
+    }
+
+    @Sql("/data/lesson.sql")
+    @Nested
+    class 조건에_해당하는_수업이_존재하면 {
+
+      @Test
+      void 해당_LessonDto_리스트를_반환한다() {
+        List<LessonDto> lessons = lessonPersistenceAdapter.findAllLessonsByTeacherId(1L);
+
+        assertThat(lessons).isNotEmpty();
+      }
+    }
+  }
 
   @Nested
   class save_메소드는 {
@@ -87,10 +115,11 @@ class LessonPersistenceAdapterTest {
 
     @Nested
     class 수업이_있는_선생님의_ID가_주어지면 {
+
       final TodaysLessonSearchConditon condition = new TodaysLessonSearchConditon(1L);
 
       @Test
-      void 선생님_ID에_해당하는_수업목록_List를_반환한다(){
+      void 선생님_ID에_해당하는_수업목록_List를_반환한다() {
         List<TodaysLesson> todaysLessons = lessonPersistenceAdapter.findTodaysLessons(condition);
 
         assertThat(todaysLessons).isNotEmpty();
@@ -101,6 +130,7 @@ class LessonPersistenceAdapterTest {
 
   @Nested
   class findFrequencyOfLessons_메소드는 {
+
     @Nested
     class 년_월이_주어지고 {
 
@@ -126,7 +156,6 @@ class LessonPersistenceAdapterTest {
           List<FrequencyOfLessons> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
               yearMonth, teacherId3);
 
-
           assertThat(frequencyOfLessons1).size().isEqualTo(2);
           assertThat(frequencyOfLessons2).size().isEqualTo(2);
           assertThat(frequencyOfLessons3).size().isEqualTo(0);
@@ -137,9 +166,11 @@ class LessonPersistenceAdapterTest {
       @Sql("/data/no-homework-lesson.sql")
       @Nested
       class 주어진_월에_숙제가_없다면 {
+
         @Test
         void 비어있는_list를_반환한다() {
-          List<FrequencyOfLessons> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(yearMonth, teacherId1);
+          List<FrequencyOfLessons> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(
+              yearMonth, teacherId1);
 
           assertThat(frequencyOfLessons).isEmpty();
         }
