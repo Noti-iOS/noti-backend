@@ -5,7 +5,7 @@ import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.lesson.application.port.in.GetTodaysLessonQuery;
 import com.noti.noti.lesson.application.port.in.TodaysLessonHomework;
-import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
+import com.noti.noti.lesson.application.port.out.FindLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.teacher.application.port.out.FindTeacherNicknamePort;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class GetTodaysLessonService implements GetTodaysLessonQuery {
 
-  private final FindTodaysLessonPort findTodaysLessonPort;
+  private final FindLessonPort findLessonPort;
   private final FindTodaysHomeworkPort findTodaysHomeworkPort;
   private final FindTeacherNicknamePort findTeacherNicknamePort;
 
@@ -31,7 +31,7 @@ public class GetTodaysLessonService implements GetTodaysLessonQuery {
     String teacherNickname = findTeacherNicknamePort.findTeacherNickname(teacherId);
     TodaysLessonHomework todaysLessonHomework = new TodaysLessonHomework(teacherNickname, now);
 
-    List<TodaysLesson> todaysLessons = findTodaysLessonPort.findTodaysLessons(
+    List<TodaysLesson> todaysLessons = findLessonPort.findTodaysLessons(
         new TodaysLessonSearchConditon(teacherId));
 
     addLesson(todaysLessonHomework, todaysLessons);

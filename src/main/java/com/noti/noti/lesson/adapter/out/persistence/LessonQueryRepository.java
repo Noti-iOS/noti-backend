@@ -9,6 +9,7 @@ import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
+import com.noti.noti.lesson.application.port.out.LessonDto;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.querydsl.core.types.Projections;
@@ -23,16 +24,15 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @RequiredArgsConstructor
 @Repository
-public class LessonQueryRepository {
+class LessonQueryRepository {
 
   private final JPAQueryFactory queryFactory;
 
   /**
    * 선생님의 수업목록을 조회하는 메서드
-   * @param todaysLessonSearchConditon
-   * 선생님의 ID 조건
-   * @return
-   * 선생님의 수업목록과 수업에 해당하는 학생 목록
+   *
+   * @param todaysLessonSearchConditon 선생님의 ID 조건
+   * @return 선생님의 수업목록과 수업에 해당하는 학생 목록
    */
   public List<TodaysLesson> findTodayLesson(TodaysLessonSearchConditon todaysLessonSearchConditon) {
     return queryFactory
@@ -55,6 +55,22 @@ public class LessonQueryRepository {
                     studentJpaEntity.profileImage,
                     studentLessonJpaEntity.focusStatus).skipNulls()).as("students"))));
   }
+
+  /**
+   * 선생님에 해당하는 모든 수업 조회
+   *
+   * @param teacherId
+   * @return
+   */
+  List<LessonDto> findAllLessonsByTeacherId(Long teacherId) {
+    return queryFactory.select(Projections.fields(LessonDto.class,
+            lessonJpaEntity.id,
+            lessonJpaEntity.lessonName))
+        .from(lessonJpaEntity)
+        .where(eqTeacherId(teacherId))
+        .fetch();
+  }
+
 
   private BooleanExpression eqTeacherId(Long teacherId) {
     log.info("teacher Id: {} ", teacherId);
@@ -92,8 +108,6 @@ public class LessonQueryRepository {
         .from(lessonJpaEntity)
         .where(eqTeacherId(teacherId))
         .fetch();
-
-
   }
 
 }

@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.noti.noti.book.exception.BookNotFoundException;
-import com.noti.noti.lesson.adapter.out.persistence.LessonPersistenceAdapter;
 import com.noti.noti.lesson.application.port.in.AddLessonCommand;
 import com.noti.noti.lesson.application.port.in.AddLessonUsecase;
+import com.noti.noti.lesson.application.port.out.FindLessonPort;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.student.exception.StudentNotFoundException;
 import java.time.LocalTime;
@@ -36,7 +36,7 @@ public class AddLessonServiceIntegrationTest {
   AddLessonUsecase addLessonUsecase;
 
   @Autowired
-  LessonPersistenceAdapter lessonPersistenceAdapter;
+  FindLessonPort findLessonPort;
 
   final String LESSON_NAME = "MATH";
 
@@ -55,7 +55,7 @@ public class AddLessonServiceIntegrationTest {
       assertThatThrownBy(() -> addLessonUsecase.apply(createCommand())).isInstanceOf(
           BookNotFoundException.class);
 
-      Optional<Lesson> lesson = lessonPersistenceAdapter.findById(1L);
+      Optional<Lesson> lesson = findLessonPort.findById(1L);
 
       assertThat(lesson).isNotPresent();
     }
@@ -72,7 +72,7 @@ public class AddLessonServiceIntegrationTest {
       assertThatThrownBy(() -> addLessonUsecase.apply(createCommand())).isInstanceOf(
           StudentNotFoundException.class);
 
-      Optional<Lesson> lessonJpaEntity = lessonPersistenceAdapter.findById(1L);
+      Optional<Lesson> lessonJpaEntity = findLessonPort.findById(1L);
 
       assertThat(lessonJpaEntity).isNotPresent();
     }

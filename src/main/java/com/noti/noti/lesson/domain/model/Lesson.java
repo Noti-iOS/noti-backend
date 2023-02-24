@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 public class Lesson {
   private Long id;
-
   private Teacher teacher;
   private String lessonName;
   private Set<DayOfWeek> days;
