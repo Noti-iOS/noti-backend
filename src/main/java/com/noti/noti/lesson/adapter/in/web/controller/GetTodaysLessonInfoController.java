@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,24 +25,26 @@ public class GetTodaysLessonInfoController {
 
   private final GetTodaysLessonQuery getTodaysLessonQuery;
 
-  @Operation(tags = "오늘의 수업목록 조회 API ", summary = "todaysLessonInfo", description = "요청 선생님의 오늘에 해당하는 수업목록을 조회한다.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "성공",
-          content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = SuccessResponse.class))}),
-      @ApiResponse(responseCode = "500", description = "서버에러", content = {
-          @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ErrorResponse.class))}),
-      @ApiResponse(responseCode = "401", description = "인증되지 않은 유저입니다", content = {
-          @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ErrorResponse.class))}),
-      @ApiResponse(responseCode = "403", description = "권한이 없습니다", content = {
-          @Content(mediaType = "application/json",
-              schema = @Schema(implementation = ErrorResponse.class))})
-  })
+  @Operation(tags = "오늘의 수업목록 조회 API ", summary = "todaysLessonInfo",
+      description = "요청 선생님의 오늘에 해당하는 수업목록을 조회한다.",
+      responses = {
+          @ApiResponse(responseCode = "200", description = "성공", useReturnTypeSchema = true),
+          @ApiResponse(responseCode = "500", description = "서버에러", content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))}),
+          @ApiResponse(responseCode = "401", description = "인증되지 않은 유저입니다", content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))}),
+          @ApiResponse(responseCode = "403", description = "권한이 없습니다", content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))}),
+          @ApiResponse(responseCode = "404", description = "존재하지 않는 리소스입니댜", content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))})
+      })
   @Parameter(name = "userDetails", hidden = true)
   @GetMapping("/api/teacher/home")
-  public ResponseEntity todaysLessonInfo(
+  public ResponseEntity<SuccessResponse<TodaysLessonHomeworkDto>> todaysLessonInfo(
       @AuthenticationPrincipal UserDetails userDetails) {
     long teacherId = Long.parseLong((userDetails.getUsername()));
 
