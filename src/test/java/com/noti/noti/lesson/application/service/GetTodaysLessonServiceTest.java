@@ -13,7 +13,7 @@ import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.application.port.out.TodaysHomework.HomeworkOfStudent;
 import com.noti.noti.lesson.application.port.in.TodaysLessonHomework;
-import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
+import com.noti.noti.lesson.application.port.out.FindLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson.LessonOfStudent;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -41,7 +41,7 @@ class GetTodaysLessonServiceTest {
   private GetTodaysLessonService getTodaysLessonService;
 
   @Mock
-  private FindTodaysLessonPort findTodaysLessonPort;
+  private FindLessonPort findLessonPort;
 
   @Mock
   private FindTodaysHomeworkPort findTodaysHomeworkPort;
@@ -79,7 +79,7 @@ class GetTodaysLessonServiceTest {
       @Test
       void isLessonCreated_변수가_false인_TodaysLessonHomework_객체를_반환한다() {
         when(findTeacherNicknamePort.findTeacherNickname(TEACHER_ID)).thenReturn(TEACHER_NICKNAME);
-        when(findTodaysLessonPort.findTodaysLessons(
+        when(findLessonPort.findTodaysLessons(
             any(TodaysLessonSearchConditon.class))).thenReturn(
             Collections.emptyList());
 
@@ -109,7 +109,7 @@ class GetTodaysLessonServiceTest {
       @Test
       void isLessonCreated_변수가_true고_수업_목록이_비어있는_TodaysLessonHomework_객체를_반환한다() {
         when(findTeacherNicknamePort.findTeacherNickname(TEACHER_ID)).thenReturn(TEACHER_NICKNAME);
-        when(findTodaysLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
+        when(findLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
             .thenReturn(createEmptyStudentsTodaysLesson());
 
         TodaysLessonHomework todaysLessonHomework = getTodaysLessonService.getTodaysLessons(
@@ -128,7 +128,7 @@ class GetTodaysLessonServiceTest {
       @Test
       void isLessonCreated_변수가_true고_숙제_목록이_비어있는_TodaysLessonHomework_객체를_반환한다() {
         when(findTeacherNicknamePort.findTeacherNickname(TEACHER_ID)).thenReturn(TEACHER_NICKNAME);
-        when(findTodaysLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
+        when(findLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
             .thenReturn(createTodaysLesson());
         when(findTodaysHomeworkPort.findTodaysHomeworks(any(TodayHomeworkCondition.class)))
             .thenReturn(Collections.emptyList());
@@ -173,7 +173,7 @@ class GetTodaysLessonServiceTest {
       @Test
       void isLessonCreated_변수가_true고_숙제_수업_학생_목록이_있는_TodaysLessonHomework_객체를_반환한다() {
         when(findTeacherNicknamePort.findTeacherNickname(TEACHER_ID)).thenReturn(TEACHER_NICKNAME);
-        when(findTodaysLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
+        when(findLessonPort.findTodaysLessons(any(TodaysLessonSearchConditon.class)))
             .thenReturn(createTodaysLesson());
         when(findTodaysHomeworkPort.findTodaysHomeworks(any(TodayHomeworkCondition.class)))
             .thenReturn(createTodaysHomework());
