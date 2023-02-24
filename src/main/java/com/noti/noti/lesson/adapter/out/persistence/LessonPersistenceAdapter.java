@@ -4,9 +4,10 @@ import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
 import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.FindCreatedLessonsPort;
-import com.noti.noti.lesson.application.port.out.FindTodaysLessonPort;
+import com.noti.noti.lesson.application.port.out.FindLessonPort;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
+import com.noti.noti.lesson.application.port.out.LessonDto;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLessonPort,
+class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
     FrequencyOfLessonsPort, FindCreatedLessonsPort {
 
   private final LessonJpaRepository lessonJpaRepository;
@@ -40,6 +41,11 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
   }
 
   @Override
+  public List<LessonDto> findAllLessonsByTeacherId(Long teacherId) {
+    return lessonQueryRepository.findAllLessonsByTeacherId(teacherId);
+  }
+
+  @Override
   public List<FrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
     LocalDateTime startTime = stringToLocalDateTime(yearMonth);
     LocalDateTime endTime = startTime.plusMonths(1);
@@ -53,6 +59,7 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
 
   /**
    * 문자열을 LocalDateTime으로 변환
+   *
    * @param yearMonth '년-월' 형식의 문자열
    * @return 해당 '년-월'에서 1일의 LocalDateTime
    */
@@ -64,7 +71,6 @@ public class LessonPersistenceAdapter implements SaveLessonPort, FindTodaysLesso
 
     return LocalDateTime.parse(stringBuilder, formatter);
   }
-
 
 
   @Override
