@@ -9,6 +9,7 @@ import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
 import com.noti.noti.lesson.application.port.out.LessonDto;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
+import com.noti.noti.lesson.application.port.out.StudentsInLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
@@ -43,6 +44,11 @@ class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
   @Override
   public List<LessonDto> findAllLessonsByTeacherId(Long teacherId) {
     return lessonQueryRepository.findAllLessonsByTeacherId(teacherId);
+  }
+
+  @Override
+  public Optional<StudentsInLesson> findLessonAndStudentsById(Long lessonId) {
+    return lessonQueryRepository.findLessonAndStudentsById(lessonId);
   }
 
   @Override
