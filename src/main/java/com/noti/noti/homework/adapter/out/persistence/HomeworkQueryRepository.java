@@ -6,6 +6,7 @@ import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QS
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
+import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.Ops;
@@ -14,6 +15,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +73,43 @@ public class HomeworkQueryRepository {
     return dayOfWeek != null ? lessonJpaEntity.days.contains(dayOfWeek.toString()) : null;
   }
 
+
+  /**
+   * 파라미터로 보낸 수업의 숙제를 확인하는 것
+   * @param teacherId 선생님 id
+   * @param lessonId 조회할 수업 id
+   * @return 해당 수업의 숙제가 있는 날짜와 해당 날짜에 있는 숙제 수를 반환
+   */
+  public List<OutFilteredHomeworkFrequency> findFilteredHomeworkFrequency(Long teacherId, Long lessonId, LocalDateTime startDateOfMonth, LocalDateTime endDateOfMonth) {
+    return queryFactory
+        .select(Projections.constructor(OutFilteredHomeworkFrequency.class,
+            homeworkJpaEntity.startTime.as("date"),
+            homeworkJpaEntity.id.count().as("homeworkCnt")
+        ))
+        .from(homeworkJpaEntity)
+        .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
+        .where(
+            eqTeacherId(teacherId),
+            eqLessonId(lessonId),
+            betweenYearMonth(startDateOfMonth, endDateOfMonth)
+        )
+        .groupBy(lessonJpaEntity.startTime)
+        .fetch();
+  }
+
+  private BooleanExpression eqLessonId(Long lessonId) {
+    log.info("lesson Id: {} ", lessonId);
+    return lessonId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(lessonId) : null;
+  }
+
+  private BooleanExpression betweenYearMonth(LocalDateTime start, LocalDateTime end) {
+    log.info("startTime endTime: {}, {} ", start, end);
+    if (start != null && end != null) {
+      return homeworkJpaEntity.startTime.between(start, end);
+    } else {
+      return null;
+    }
+  }
 
 
 

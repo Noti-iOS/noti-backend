@@ -9,6 +9,7 @@ import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
+import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.querydsl.core.types.Projections;
