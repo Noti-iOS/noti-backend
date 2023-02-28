@@ -2,16 +2,15 @@ package com.noti.noti.homework.adapter.in.web;
 
 import static org.mockito.ArgumentMatchers.any;
 
+import com.noti.noti.common.MonkeyUtils;
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
-import com.noti.noti.config.security.jwt.JwtTokenProvider;
 import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.homework.application.port.in.FilteredHomeworkCommand;
 import com.noti.noti.homework.application.port.in.GetFilteredHomeworkQuery;
 import com.noti.noti.homework.application.port.in.InFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
-import com.noti.noti.lesson.adapter.in.web.controller.GetCreatedLessonsController;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -52,10 +51,10 @@ class GetFilteredHomeworkControllerTest {
     OutFilteredHomeworkFrequency out2 = new OutFilteredHomeworkFrequency(LocalDate.of(2022, 2, 7), 3);
     OutFilteredHomeworkFrequency out3 = new OutFilteredHomeworkFrequency(LocalDate.of(2022, 2, 10), 4);
 
+
     InFilteredHomeworkFrequency in1 = new InFilteredHomeworkFrequency(out1);
     InFilteredHomeworkFrequency in2 = new InFilteredHomeworkFrequency(out2);
     InFilteredHomeworkFrequency in3 = new InFilteredHomeworkFrequency(out3);
-
 
     return List.of(in1, in2, in3);
   }
