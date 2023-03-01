@@ -5,8 +5,10 @@ import com.noti.noti.lesson.domain.model.Lesson;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Homework {
 
   private Long id;
