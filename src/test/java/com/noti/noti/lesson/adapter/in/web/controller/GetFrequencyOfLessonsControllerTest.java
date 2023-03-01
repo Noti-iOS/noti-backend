@@ -121,6 +121,16 @@ class GetFrequencyOfLessonsControllerTest {
 
     }
 
+    @Test
+    @WithAuthUser(id = "1", role = "TEACHER")
+    void 타입을_잘못_전달_시_예외코드_400발생() throws Exception {
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+          .thenReturn(notCreateLessons());
+
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "JULY")))
+          .andExpect(MockMvcResultMatchers.status().is(400));
+
+    }
   }
 
   @Nested
