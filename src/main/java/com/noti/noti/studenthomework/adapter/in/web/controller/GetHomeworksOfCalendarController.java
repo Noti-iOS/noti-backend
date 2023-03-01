@@ -1,16 +1,15 @@
 package com.noti.noti.studenthomework.adapter.in.web.controller;
 
+import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.error.ErrorResponse;
 import com.noti.noti.studenthomework.adapter.in.web.dto.response.HomeworkOfGivenDateDto;
 import com.noti.noti.studenthomework.application.port.in.GetHomeworksOfCalendarQuery;
 import com.noti.noti.studenthomework.application.port.in.InHomeworkOfGivenDate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +31,9 @@ public class GetHomeworksOfCalendarController {
 
   private final GetHomeworksOfCalendarQuery getHomeworksOfCalendarQuery;
 
-  @Operation(summary = "HomeworksOfCalendarInfo", description = "요청 선생님의 날짜에 해당하는 수업목록 및 숙제목록을 조회한다.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "성공",
-          content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = HomeworkOfGivenDateDto.class)))}),
+  @Operation(tags = "날짜에 해당하는 숙업, 숙제 목록 조회 API", summary = "HomeworksOfCalendarInfo", description = "요청 선생님의 날짜에 해당하는 수업목록 및 숙제목록을 조회한다.",
+  responses = {
+      @ApiResponse(responseCode = "200", description = "성공", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
@@ -49,7 +46,7 @@ public class GetHomeworksOfCalendarController {
   })
   @GetMapping("/api/teacher/calendar/{year}/{month}/{day}")
   @Parameter(name = "userDetails", hidden = true)
-  ResponseEntity<List<HomeworkOfGivenDateDto>> getHomeworksOfCalendar(
+  ResponseEntity<SuccessResponse<List<HomeworkOfGivenDateDto>>> getHomeworksOfCalendar(
       @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month, @PathVariable int day,
       @AuthenticationPrincipal UserDetails userDetails
   ) {
@@ -68,7 +65,7 @@ public class GetHomeworksOfCalendarController {
         )
     );
 
-    return ResponseEntity.ok(responseDto);
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(responseDto));
   }
 
 }
