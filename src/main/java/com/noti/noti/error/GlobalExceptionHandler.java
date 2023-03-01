@@ -2,6 +2,7 @@ package com.noti.noti.error;
 
 import com.noti.noti.error.exception.BusinessException;
 
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,17 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
     log.error("handleMethodArgumentTypeMismatchException", e);
     final ErrorResponse response = ErrorResponse.of(e);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * javax.validation.ConstraintViolationException 으로 제약조건을 위반할 때 발생한다.
+   * 주로 @Min, @Max 등 제약을 두는 어노테이션에서 발생
+   */
+  @ExceptionHandler(ConstraintViolationException.class)
+  protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
