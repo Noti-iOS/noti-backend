@@ -1,6 +1,5 @@
 package com.noti.noti.homework.adapter.out.persistence;
 
-import com.noti.noti.book.adapter.out.persistence.BookMapper;
 import com.noti.noti.homework.adapter.out.persistence.jpa.model.HomeworkJpaEntity;
 import com.noti.noti.homework.domain.model.Homework;
 import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
@@ -15,6 +14,7 @@ public class HomeworkMapper {
   public Homework mapToDomainEntity(HomeworkJpaEntity homeworkJpaEntity){
     return Homework.builder()
         .id(homeworkJpaEntity.getId())
+        .homeworkName(homeworkJpaEntity.getHomeworkName())
         .lesson(lessonMapper.mapToDomainEntity(homeworkJpaEntity.getLessonJpaEntity()))
         .startTime(homeworkJpaEntity.getStartTime())
         .endTime(homeworkJpaEntity.getEndTime())
@@ -24,7 +24,7 @@ public class HomeworkMapper {
   public HomeworkJpaEntity mapToJpaEntity(Homework homework) {
     return HomeworkJpaEntity.builder()
         .id(homework.getId())
-        .content(homework.getContent())
+        .homeworkName(homework.getHomeworkName())
         .lessonJpaEntity(lessonMapper.mapToJpaEntity(homework.getLesson()))
         .startTime(homework.getStartTime())
         .endTime(homework.getEndTime())
