@@ -7,11 +7,9 @@ import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Max;
@@ -20,23 +18,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class GetFrequencyOfLessonsController {
 
   private final GetFrequencyOfLessonsQuery getFrequencyOfLessonsQuery;
 
-
-  @Operation(summary = "FrequencyOfLessonsInfo", description = "요청 선생님의 월에 해당하는 수업 수와 날짜를 조회한다.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "성공",
-          content = {@Content(mediaType = "application/json",
-              array = @ArraySchema(schema = @Schema(implementation = SuccessResponse.class)))}),
+  @Operation(tags = "날짜 별 수업 수 조회 API", summary = "FrequencyOfLessonsInfo", description = "요청 선생님의 월에 해당하는 수업 수와 날짜를 조회한다.",
+  responses = {
+      @ApiResponse(responseCode = "200", description = "성공", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
+          @Content(mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class))}),
+      @ApiResponse(responseCode = "401", description = "안증되지 않은 유저입니다", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
       @ApiResponse(responseCode = "400", description = "올바르지 않은 값입니다.", content = {
@@ -44,9 +44,9 @@ public class GetFrequencyOfLessonsController {
               schema = @Schema(implementation = ErrorResponse.class))})
   })
   @Parameter(name = "userDetails", hidden = true)
-  @GetMapping("/api/teacher/calendar/{year}/{month}")
-  public ResponseEntity getFrequencyOfLessons(
-      @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month,
+  @GetMapping("/api/teacher/calendar/all")
+  public ResponseEntity<SuccessResponse<List<FrequencyOfLessonsDto>>> getFrequencyOfLessons(
+      @RequestParam @Min(1) int year, @Min(1) @Max(12) @RequestParam int month,
       @AuthenticationPrincipal UserDetails userDetails) {
 
     long teacherId = Long.parseLong(userDetails.getUsername());

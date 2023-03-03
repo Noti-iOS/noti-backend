@@ -25,6 +25,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 
 @DisplayName("GetFrequencyOfLessonsControllerTest 클래스")
@@ -67,10 +69,7 @@ class GetFrequencyOfLessonsControllerTest {
       when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
           .thenReturn(createLessons());
 
-      LocalDate now = LocalDate.now();
-      String year = Integer.toString(now.getYear());
-      String month = Integer.toString(now.getMonth().getValue());
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month)) // ex. /api/teacher/calendar/2023/1
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "12"))) // ex. /api/teacher/calendar/2023/1
           .andExpect(MockMvcResultMatchers.status().isOk())
           .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
           .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
@@ -85,11 +84,7 @@ class GetFrequencyOfLessonsControllerTest {
       when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
-      LocalDate now = LocalDate.now();
-      String year = Integer.toString(now.getYear());
-      String month = Integer.toString(now.getMonth().getValue());
-
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month))
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "2")))
           .andExpect(MockMvcResultMatchers.status().isOk())
           .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
           .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
@@ -104,19 +99,38 @@ class GetFrequencyOfLessonsControllerTest {
 
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
-    void 예외코드_400발생() throws Exception {
+    void 월을_잘못_전달_시_예외코드_400발생() throws Exception {
       when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
-      LocalDate now = LocalDate.now();
-      String year = Integer.toString(now.getYear());
-      String month = now.getMonth().toString(); // 1이 아닌, JANUARY
-
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month))
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "0")))
+          .andExpect(MockMvcResultMatchers.status().is(400));
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "13")))
           .andExpect(MockMvcResultMatchers.status().is(400));
 
     }
 
+    @Test
+    @WithAuthUser(id = "1", role = "TEACHER")
+    void 년을_잘못_전달_시_예외코드_400발생() throws Exception {
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+          .thenReturn(notCreateLessons());
+
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("-1", "2")))
+          .andExpect(MockMvcResultMatchers.status().is(400));
+
+    }
+
+    @Test
+    @WithAuthUser(id = "1", role = "TEACHER")
+    void 타입을_잘못_전달_시_예외코드_400발생() throws Exception {
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+          .thenReturn(notCreateLessons());
+
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "JULY")))
+          .andExpect(MockMvcResultMatchers.status().is(400));
+
+    }
   }
 
   @Nested
@@ -126,16 +140,18 @@ class GetFrequencyOfLessonsControllerTest {
     void 예외코드_401발생() throws Exception {
       when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
           .thenReturn(createLessons());
-
-      LocalDate now = LocalDate.now();
-      String year = Integer.toString(now.getYear());
-      String month = Integer.toString(now.getMonth().getValue());
-
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}", year, month))
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "2")))
           .andExpect(MockMvcResultMatchers.status().is(401));
 
     }
 
+  }
+
+  private MultiValueMap<String, String> createInfo(String year, String month) {
+    MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+    info.add("year", String.valueOf(year));
+    info.add("month", String.valueOf(month));
+    return info;
   }
 
 }
