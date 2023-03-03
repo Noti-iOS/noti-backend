@@ -29,11 +29,11 @@ public class AddHomeworksRequest {
   private Long lessonId;
 
   @NotNull
-  @Min(1)
+  @Min(0)
   private Long deadlineAlarmSettingTime;
 
   public AddHomeworksCommand toCommand() {
-    return new AddHomeworksCommand(homeworkNames, startTime, endTime,
-        endTime.minusHours(deadlineAlarmSettingTime), lessonId);
+    return new AddHomeworksCommand(homeworkNames, startTime, endTime, deadlineAlarmSettingTime,
+        lessonId);
   }
 }
