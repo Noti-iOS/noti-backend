@@ -3,10 +3,10 @@ package com.noti.noti.homework.application.port.in;
 
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@NoArgsConstructor
 public class InHomeworkContent {
 
 
