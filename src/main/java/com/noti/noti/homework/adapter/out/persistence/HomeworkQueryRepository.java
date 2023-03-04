@@ -7,6 +7,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.Ops;
@@ -110,9 +111,24 @@ public class HomeworkQueryRepository {
     }
   }
 
+  public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime date) {
+    return queryFactory
+        .select(Projections.constructor(OutHomeworkContent.class,
+            homeworkJpaEntity.homeworkName,
+            studentHomeworkJpaEntity.studentJpaEntity.id.count().as("studentCnt"),
+            studentHomeworkJpaEntity.homeworkStatus.when(true).then(1L).otherwise(0L)
+                .sum().as("completeCnt")))
+        .from(studentHomeworkJpaEntity)
+        .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
+        .where(
+            eqLessonId(lessonId),
+            eqYearAndMonthOfStartTime(date)
+        )
+        .fetch();
+  }
 
-
-
-
+  private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
+  }
 
 }

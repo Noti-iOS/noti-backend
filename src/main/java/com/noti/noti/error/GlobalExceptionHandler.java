@@ -2,6 +2,7 @@ package com.noti.noti.error;
 
 import com.noti.noti.error.exception.BusinessException;
 
+import java.time.DateTimeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,13 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(HttpMessageNotReadableException.class)
   protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
     log.error("handleHttpMessageNotReadableException", e);
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(DateTimeException.class)
+  protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(DateTimeException e) {
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }

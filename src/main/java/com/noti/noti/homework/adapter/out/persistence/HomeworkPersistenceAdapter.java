@@ -2,8 +2,10 @@ package com.noti.noti.homework.adapter.out.persistence;
 
 import com.noti.noti.homework.adapter.out.persistence.jpa.HomeworkJpaRepository;
 import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
+import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
 import com.noti.noti.homework.application.port.out.FindTodaysHomeworkPort;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import java.time.LocalDateTime;
@@ -14,11 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort,
-    FindFilteredHomeworkPort {
+    FindFilteredHomeworkPort, FindHomeworkContentPort {
 
   private final HomeworkMapper homeworkMapper;
   private final HomeworkJpaRepository homeworkJpaRepository;
   private final HomeworkQueryRepository homeworkQueryRepository;
+
 
   @Override
   public List<TodaysHomework> findTodaysHomeworks(TodayHomeworkCondition condition) {
@@ -32,4 +35,9 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort,
         teacherId, lessonId, startOfMonth, startOfMonth.plusMonths(1).minusSeconds(1));
   }
 
+  @Override
+  public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime startOfMonth) {
+
+    return homeworkQueryRepository.findHomeworkContents(lessonId, startOfMonth);
+  }
 }
