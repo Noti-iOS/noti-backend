@@ -3,7 +3,7 @@ package com.noti.noti.error;
 public enum ErrorCode {
 
   // Common
-  INVALID_INPUT_VALUE(400, "C001", " 올바르지 않은 입력 값입니다"),
+  INVALID_INPUT_VALUE(400, "C001", "올바르지 않은 입력 값입니다"),
   METHOD_NOT_ALLOWED(405, "C002", " 올바르지 않은 호출입니다"),
   ENTITY_NOT_FOUND(400, "C003", " 정보가 존재하지 않습니다"),
   INTERNAL_SERVER_ERROR(500, "C004", "서버 에러"),
@@ -26,6 +26,11 @@ public enum ErrorCode {
   MALFORMED_JWT(401, "J003", "잘못된 토큰입니다"),
   INVALID_SIGNATURE_JWT(401, "J004", "잘못된 토큰입니다"),
   ILLEGAL_ARGUMENT_JWT(401, "J005", "토큰이 비어있거나 잘못되었습니다"),
+
+  /*
+  날짜 관련 error code
+   */
+  INVALID_DATE(400, "D001", "입력한 날짜가 존재하지 않습니다"),
 
   // Student
   STUDENT_NOT_FOUND(404, "S001", "해당 학생 정보가 존재하지 않습니다"),

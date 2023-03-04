@@ -10,6 +10,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -47,12 +48,22 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
+
   @ExceptionHandler(DateTimeException.class)
-  protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(DateTimeException e) {
+  protected ResponseEntity<ErrorResponse> handleDateTimeException(DateTimeException e) {
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_DATE);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
     log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
+
+
 
   /**
    * enum type 일치하지 않아 binding 못할 경우 발생
