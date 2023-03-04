@@ -1,12 +1,13 @@
 package com.noti.noti.studenthomework.domain.model;
 
 import com.noti.noti.homework.domain.model.Homework;
-import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.student.domain.model.Student;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class StudentHomework {
   private Long id;
   private boolean homeworkStatus;
