@@ -11,6 +11,7 @@ import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
 import com.noti.noti.homework.application.port.in.GetHomeworkContentQuery;
 import com.noti.noti.homework.application.port.in.HomeworkContentCommand;
 import com.noti.noti.homework.application.port.in.InHomeworkContent;
+import com.noti.noti.lesson.exception.LessonNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -118,6 +119,25 @@ class GetHomeworkContentsControllerTest {
             .andExpect(jsonPath("$.status").value(400))
             .andExpect(jsonPath("$.message").value("입력한 날짜가 존재하지 않습니다"))
             .andExpect(jsonPath("$.code").value("D001"));
+      }
+
+      @Test
+      @WithAuthUser(id = "1", role = "TEACHER")
+      public void 존재하지_않는_수업일_때_응답코드_404() throws Exception {
+        //given
+        Mockito.when(
+                getHomeworkContentQuery.getHomeworkContents(Mockito.any(HomeworkContentCommand.class)))
+            .thenThrow(new LessonNotFoundException(MONKEY.giveMeOne(Long.class)));
+
+        //when
+        //then
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/teacher/calendar/filtered/content")
+                    .params(createInfo(integers().greaterOrEqual(1).sample().toString(), "2023-02-22")))
+            .andExpect(status().is(404))
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.message").value("해당 수업 정보가 존재하지 않습니다"))
+            .andExpect(jsonPath("$.code").value("L001"));
       }
 
       @Test
