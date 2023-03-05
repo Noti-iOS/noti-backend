@@ -1,14 +1,13 @@
 package com.noti.noti.homework.application.port.in;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Slf4j
+@NoArgsConstructor
 public class HomeworkContentCommand {
 
   private Long lessonId;
