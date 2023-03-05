@@ -44,7 +44,13 @@ public enum ErrorCode {
   Book 관련 예외
    */
   BOOK_NOT_FOUND(404,"B001","해당 책정보가 존재하지 않습니다"),
-  DUPLICATED_TITLE_BOOK(400, "B002", "중복된 교재입니다");
+  DUPLICATED_TITLE_BOOK(400, "B002", "중복된 교재입니다"),
+
+  /*
+  Lesson 관련 예외
+   */
+  LESSON_NOT_FOUND(404, "L001", "해당 수업 정보가 존재하지 않습니다");
+
   private int status;
   private final String code;
   private final String message;

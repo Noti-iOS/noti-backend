@@ -2,12 +2,13 @@ package com.noti.noti.lesson.adapter.out.persistence;
 
 import com.noti.noti.lesson.adapter.out.persistence.jpa.LessonJpaRepository;
 import com.noti.noti.lesson.adapter.out.persistence.jpa.model.LessonJpaEntity;
-import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
+import com.noti.noti.lesson.application.port.out.CheckLessonExistencePort;
 import com.noti.noti.lesson.application.port.out.FindCreatedLessonsPort;
 import com.noti.noti.lesson.application.port.out.FindLessonPort;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
 import com.noti.noti.lesson.application.port.out.LessonDto;
+import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
 import com.noti.noti.lesson.application.port.out.SaveLessonPort;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
-    FrequencyOfLessonsPort, FindCreatedLessonsPort {
+    FrequencyOfLessonsPort, FindCreatedLessonsPort, CheckLessonExistencePort {
 
   private final LessonJpaRepository lessonJpaRepository;
   private final LessonMapper lessonMapper;
@@ -55,6 +56,11 @@ class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
 
   public Optional<Lesson> findById(Long id) {
     return lessonJpaRepository.findById(id).map(lessonMapper::mapToDomainEntity);
+  }
+
+  @Override
+  public boolean existsById(Long lessonId) {
+    return lessonJpaRepository.existsById(lessonId);
   }
 
   /**
