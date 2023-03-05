@@ -10,6 +10,8 @@ import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
 import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
+import com.noti.noti.lesson.application.port.out.CheckLessonExistencePort;
+import com.noti.noti.lesson.exception.LessonNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery,
 
   private final FindFilteredHomeworkPort findFilteredHomeworkPort;
   private final FindHomeworkContentPort findHomeworkContentPort;
+  private final CheckLessonExistencePort checkLessonExistencePort;
 
   @Override
   public List<InFilteredHomeworkFrequency> getFilteredHomeworks(FilteredHomeworkCommand command) {
@@ -35,6 +38,9 @@ public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery,
 
   @Override
   public List<InHomeworkContent> getHomeworkContents(HomeworkContentCommand command) {
+
+    if (!checkLessonExistencePort.existsById(command.getLessonId()))
+      throw new LessonNotFoundException(command.getLessonId());
 
     List<OutHomeworkContent> homeworkContents = findHomeworkContentPort.findHomeworkContents(
         command.getLessonId(), command.getDate());
