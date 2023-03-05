@@ -90,14 +90,14 @@ public class HomeworkQueryRepository {
         .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(
             eqTeacherId(teacherId),
-            eqLessonId(lessonId),
+            eqLessonIdOfTeacher(lessonId),
             betweenYearMonth(startDateOfMonth, endDateOfMonth)
         )
         .groupBy(lessonJpaEntity.startTime)
         .fetch();
   }
 
-  private BooleanExpression eqLessonId(Long lessonId) {
+  private BooleanExpression eqLessonIdOfTeacher(Long lessonId) {
     log.info("lesson Id: {} ", lessonId);
     return lessonId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(lessonId) : null;
   }
@@ -121,14 +121,19 @@ public class HomeworkQueryRepository {
         .from(studentHomeworkJpaEntity)
         .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
         .where(
-            eqLessonId(lessonId),
+            eqLessonOfHomework(lessonId),
             eqYearAndMonthOfStartTime(date)
         )
+        .groupBy(homeworkJpaEntity)
         .fetch();
   }
 
   private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
     return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
+  }
+
+  private BooleanExpression eqLessonOfHomework(Long lessonId) {
+    return lessonId != null ? homeworkJpaEntity.lessonJpaEntity.id.eq(lessonId) : null;
   }
 
 }
