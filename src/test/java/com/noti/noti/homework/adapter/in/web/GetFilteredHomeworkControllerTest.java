@@ -76,7 +76,7 @@ class GetFilteredHomeworkControllerTest {
             .thenReturn(createInFilteredHomeworkFrequency());
         MultiValueMap<String, String> info = createParams(2022, 2, 1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filteredLesson").params(info))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filtered").params(info))
             .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(3))
             .andExpect(MockMvcResultMatchers.status().isOk());
       }
@@ -88,7 +88,7 @@ class GetFilteredHomeworkControllerTest {
             .thenReturn(createEmptyInFilteredHomeworkFrequency());
         MultiValueMap<String, String> info = createParams(2022, 2, 1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filteredLesson").params(info))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filtered").params(info))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
@@ -102,7 +102,7 @@ class GetFilteredHomeworkControllerTest {
       Mockito.when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
           .thenReturn(createEmptyInFilteredHomeworkFrequency());
 
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filteredLesson"))
+      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/filtered"))
           .andExpect(MockMvcResultMatchers.status().is(401));
     }
 
