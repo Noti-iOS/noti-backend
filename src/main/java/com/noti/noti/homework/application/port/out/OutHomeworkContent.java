@@ -1,8 +1,10 @@
 package com.noti.noti.homework.application.port.out;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class OutHomeworkContent {
 
   private String homeworkName;
