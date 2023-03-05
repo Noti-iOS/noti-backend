@@ -11,9 +11,9 @@ public class OutHomeworkContent {
   private int studentCnt;
   private int completeCnt;
 
-  public OutHomeworkContent(String homeworkName, int studentCnt, int completeCnt) {
+  public OutHomeworkContent(String homeworkName, Long studentCnt, Long completeCnt) {
     this.homeworkName = homeworkName;
-    this.studentCnt = studentCnt;
-    this.completeCnt = completeCnt;
+    this.studentCnt = studentCnt.intValue();
+    this.completeCnt = completeCnt.intValue();
   }
 }
