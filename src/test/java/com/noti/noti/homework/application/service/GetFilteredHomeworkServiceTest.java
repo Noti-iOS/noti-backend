@@ -4,12 +4,11 @@ package com.noti.noti.homework.application.service;
 import static com.noti.noti.common.MonkeyUtils.MONKEY;
 import static net.jqwik.api.Arbitraries.integers;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE_TIME;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import com.noti.noti.common.MonkeyUtils;
 import com.noti.noti.homework.application.port.in.FilteredHomeworkCommand;
 import com.noti.noti.homework.application.port.in.HomeworkContentCommand;
 import com.noti.noti.homework.application.port.in.InFilteredHomeworkFrequency;
@@ -18,12 +17,14 @@ import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
 import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
+import com.noti.noti.lesson.application.port.out.CheckLessonExistencePort;
+import com.noti.noti.lesson.exception.LessonNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.assertj.core.api.AbstractListAssert;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@DisplayName("GetFilteredHomeworkServiceTest 클래스")
 class GetFilteredHomeworkServiceTest {
 
   @InjectMocks
@@ -43,6 +46,9 @@ class GetFilteredHomeworkServiceTest {
 
   @Mock
   FindHomeworkContentPort findHomeworkContentPort;
+
+  @Mock
+  CheckLessonExistencePort checkLessonExistencePort;
 
   List<OutFilteredHomeworkFrequency> createOutList() {
     OutFilteredHomeworkFrequency out1 = new OutFilteredHomeworkFrequency(
@@ -102,40 +108,61 @@ class GetFilteredHomeworkServiceTest {
       @Test
       void Out_리스트와_같은_내용의_In_리스트_반환() {
         //given
-        List<OutHomeworkContent> outList = createListRandomSizeBetween(1, 10);
-        when(findHomeworkContentPort.findHomeworkContents(anyLong(), any(LocalDateTime.class)))
-            .thenReturn(outList);
-
-        //when
         HomeworkContentCommand command = MONKEY.giveMeBuilder(HomeworkContentCommand.class)
             .setNotNull("lessonId")
             .setNotNull("date")
             .sample();
+        List<OutHomeworkContent> outList = createListRandomSizeBetween(1, 10);
 
+        when(checkLessonExistencePort.existsById(anyLong())).thenReturn(true);
+        when(findHomeworkContentPort.findHomeworkContents(anyLong(), any(LocalDateTime.class)))
+            .thenReturn(outList);
+
+        //when
         List<InHomeworkContent> inList = getFilteredHomeworkService.getHomeworkContents(command);
 
         //then
         assertThat(inList).usingRecursiveComparison().isEqualTo(outList);
-
       }
 
       @Test
       void 비어있는_리스트_반환() {
         //given
+        HomeworkContentCommand command = MONKEY.giveMeBuilder(HomeworkContentCommand.class)
+            .setNotNull("lessonId")
+            .setNotNull("date")
+            .sample();
         List<OutHomeworkContent> outList = createListRandomSizeBetween(0, 0);
+
+        when(checkLessonExistencePort.existsById(anyLong())).thenReturn(true);
         when(findHomeworkContentPort.findHomeworkContents(anyLong(), any(LocalDateTime.class)))
             .thenReturn(outList);
 
         //when
+        List<InHomeworkContent> inList = getFilteredHomeworkService.getHomeworkContents(command);
+
+        //then
+        assertThat(inList).isEmpty();
+      }
+    }
+
+    @Nested
+    class 조건을_충족하지_않을_때 {
+      @Test
+      void lessonId에_해당하는_수업이_없다면_예외발생() {
+        //given
         HomeworkContentCommand command = MONKEY.giveMeBuilder(HomeworkContentCommand.class)
             .setNotNull("lessonId")
             .setNotNull("date")
             .sample();
 
-        List<InHomeworkContent> inList = getFilteredHomeworkService.getHomeworkContents(command);
+        when(checkLessonExistencePort.existsById(anyLong())).thenReturn(false);
 
+        //when
         //then
-        assertThat(inList).isEmpty();
+        assertThatThrownBy(
+            () -> getFilteredHomeworkService.getHomeworkContents(command)
+        ).isInstanceOf(LessonNotFoundException.class);
       }
     }
   }
