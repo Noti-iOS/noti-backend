@@ -13,8 +13,8 @@ public class HomeworkContentCommand {
   private Long lessonId;
   private LocalDateTime date;
 
-  public HomeworkContentCommand(Long lessonId, String date) {
+  public HomeworkContentCommand(Long lessonId, LocalDate date) {
     this.lessonId = lessonId;
-    this.date = LocalDate.parse(date, DateTimeFormatter.ISO_DATE).atStartOfDay();
+    this.date = date.atStartOfDay();
   }
 }
