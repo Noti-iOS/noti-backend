@@ -2,17 +2,9 @@ package com.noti.noti.homework.application.service;
 
 import com.noti.noti.homework.application.port.in.FilteredHomeworkCommand;
 import com.noti.noti.homework.application.port.in.GetFilteredHomeworkQuery;
-import com.noti.noti.homework.application.port.in.GetHomeworkContentQuery;
-import com.noti.noti.homework.application.port.in.HomeworkContentCommand;
 import com.noti.noti.homework.application.port.in.InFilteredHomeworkFrequency;
-import com.noti.noti.homework.application.port.in.InHomeworkContent;
 import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
-import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
-import com.noti.noti.homework.application.port.out.OutHomeworkContent;
-import com.noti.noti.lesson.application.port.out.CheckLessonExistencePort;
-import com.noti.noti.lesson.exception.LessonNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +12,9 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery,
-    GetHomeworkContentQuery {
+public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery {
 
   private final FindFilteredHomeworkPort findFilteredHomeworkPort;
-  private final FindHomeworkContentPort findHomeworkContentPort;
-  private final CheckLessonExistencePort checkLessonExistencePort;
 
   @Override
   public List<InFilteredHomeworkFrequency> getFilteredHomeworks(FilteredHomeworkCommand command) {
@@ -36,18 +25,6 @@ public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery,
         .collect(Collectors.toList());
   }
 
-  @Override
-  public List<InHomeworkContent> getHomeworkContents(HomeworkContentCommand command) {
 
-    if (!checkLessonExistencePort.existsById(command.getLessonId()))
-      throw new LessonNotFoundException(command.getLessonId());
-
-    List<OutHomeworkContent> homeworkContents = findHomeworkContentPort.findHomeworkContents(
-        command.getLessonId(), command.getDate());
-    List<InHomeworkContent> in = new ArrayList<>();
-    homeworkContents.forEach(out -> in.add(new InHomeworkContent(out)));
-
-    return in;
-  }
 }
 
