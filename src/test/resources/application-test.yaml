@@ -7,6 +7,9 @@ spring:
     url: jdbc:tc:mysql:8:///noti
     username: noti
     password: noti
+    hikari:
+      data-source-properties:
+        rewriteBatchedStatements: true
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -14,8 +17,11 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
+        order_updates: true
+        order_inserts: true
         format_sql: true
         show_sql: true
+
 
 jwt:
   secret: secretKey-test-jwt-for-noti-project-update
