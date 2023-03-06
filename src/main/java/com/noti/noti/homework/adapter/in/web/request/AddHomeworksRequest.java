@@ -32,8 +32,8 @@ public class AddHomeworksRequest {
   @Min(0)
   private Long deadlineAlarmSettingTime;
 
-  public AddHomeworksCommand toCommand() {
+  public AddHomeworksCommand toCommand(Long teacherId) {
     return new AddHomeworksCommand(homeworkNames, startTime, endTime, deadlineAlarmSettingTime,
-        lessonId);
+        lessonId, teacherId);
   }
 }
