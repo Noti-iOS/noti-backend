@@ -12,13 +12,15 @@ public class AddHomeworksCommand {
   private LocalDateTime endTime;
   private Long deadlineAlarmSettingTime;
   private Long lessonId;
+  private Long teacherId;
 
   public AddHomeworksCommand(List<String> homeworkNames, LocalDateTime startTime,
-      LocalDateTime endTime, Long deadlineAlarmSettingTime, Long lessonId) {
+      LocalDateTime endTime, Long deadlineAlarmSettingTime, Long lessonId, Long teacherId) {
     this.homeworkNames = homeworkNames;
     this.startTime = startTime;
     this.endTime = endTime;
     this.deadlineAlarmSettingTime = deadlineAlarmSettingTime;
     this.lessonId = lessonId;
+    this.teacherId = teacherId;
   }
 }
