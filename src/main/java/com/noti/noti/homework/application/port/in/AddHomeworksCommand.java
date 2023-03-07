@@ -3,8 +3,10 @@ package com.noti.noti.homework.application.port.in;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class AddHomeworksCommand {
 
   private List<String> homeworkNames;
