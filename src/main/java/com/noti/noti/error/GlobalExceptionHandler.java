@@ -50,13 +50,6 @@ public class GlobalExceptionHandler {
   }
 
 
-  @ExceptionHandler(DateTimeException.class)
-  protected ResponseEntity<ErrorResponse> handleDateTimeException(DateTimeException e) {
-    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
-    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_DATE);
-    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-  }
-
   @ExceptionHandler(MissingServletRequestParameterException.class)
   protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
     log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());

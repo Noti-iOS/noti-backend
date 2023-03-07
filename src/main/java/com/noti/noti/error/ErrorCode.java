@@ -27,11 +27,6 @@ public enum ErrorCode {
   INVALID_SIGNATURE_JWT(401, "J004", "잘못된 토큰입니다"),
   ILLEGAL_ARGUMENT_JWT(401, "J005", "토큰이 비어있거나 잘못되었습니다"),
 
-  /*
-  날짜 관련 error code
-   */
-  INVALID_DATE(400, "D001", "입력한 날짜가 존재하지 않습니다"),
-
   // Student
   STUDENT_NOT_FOUND(404, "S001", "해당 학생 정보가 존재하지 않습니다"),
 
