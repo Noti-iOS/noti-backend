@@ -117,8 +117,29 @@ class GetHomeworkContentsControllerTest {
                     .params(createInfo(integers().greaterOrEqual(1).sample().toString(), "2023-02-30")))
             .andExpect(status().is(400))
             .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.message").value("입력한 날짜가 존재하지 않습니다"))
-            .andExpect(jsonPath("$.code").value("D001"));
+            .andExpect(jsonPath("$.message").value("올바르지 않은 입력 값입니다"))
+            .andExpect(jsonPath("$.code").value("C001"));
+      }
+
+      @Test
+      @WithAuthUser(id = "1", role = "TEACHER")
+      public void 날짜_형식이_다를_때_응답코드_400() throws Exception {
+        //given
+        List<InHomeworkContent> inHomeworkContents = createListRandomSizeBetween(1, 10);
+
+        //when
+        Mockito.when(
+                getHomeworkContentQuery.getHomeworkContents(Mockito.any(HomeworkContentCommand.class)))
+            .thenReturn(inHomeworkContents);
+
+        //then
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/teacher/calendar/filtered/content")
+                    .params(createInfo(integers().greaterOrEqual(1).sample().toString(), "2023:02:10")))
+            .andExpect(status().is(400))
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value("올바르지 않은 입력 값입니다"))
+            .andExpect(jsonPath("$.code").value("C001"));
       }
 
       @Test

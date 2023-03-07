@@ -25,7 +25,7 @@ class HomeworkContentCommandTest {
       LocalDate localDate = MONKEY.giveMeBuilder(LocalDate.class).sample();
 
       HomeworkContentCommand command = new HomeworkContentCommand(Mockito.anyLong(),
-          localDate.toString());
+          localDate);
 
       assertThat(command.getDate()).isInstanceOf(LocalDateTime.class);
     }
@@ -35,19 +35,9 @@ class HomeworkContentCommandTest {
       LocalDateTime localDateTime = localDate.atStartOfDay();
 
       HomeworkContentCommand command = new HomeworkContentCommand(Mockito.anyLong(),
-          localDate.toString());
+          localDate);
 
       assertThat(command.getDate()).isEqualTo(localDateTime);
-    }
-  }
-
-
-  @Nested
-  class 파라미터에_잘못된_값이_들어간다면 {
-    @Test
-    void date에_존재하지_않는_날짜가_들어간다면_DateTimeException() {
-      assertThatThrownBy(() -> new HomeworkContentCommand(Mockito.anyLong(), "2022-02-35"))
-          .isInstanceOf(DateTimeException.class);
     }
   }
 
