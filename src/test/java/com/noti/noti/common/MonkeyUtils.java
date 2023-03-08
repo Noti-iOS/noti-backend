@@ -1,8 +1,8 @@
 package com.noti.noti.common;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.LabMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
+import com.navercorp.fixturemonkey.javax.validation.plugin.JavaxValidationPlugin;
 import com.noti.noti.teacher.domain.Role;
 import com.noti.noti.teacher.domain.Teacher;
 
@@ -18,7 +18,8 @@ public class MonkeyUtils {
 
   private MonkeyUtils() {}
   private static FixtureMonkey monkey() {
-    return LabMonkey.labMonkeyBuilder()
+    return FixtureMonkey.builder()
+        .plugin(new JavaxValidationPlugin())
         .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
         .build();
   }
