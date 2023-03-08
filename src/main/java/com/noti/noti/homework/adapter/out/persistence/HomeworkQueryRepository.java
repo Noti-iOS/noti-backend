@@ -6,6 +6,8 @@ import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QS
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
+import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.Ops;
@@ -72,7 +74,66 @@ public class HomeworkQueryRepository {
   }
 
 
+  /**
+   * 파라미터로 보낸 수업의 숙제를 확인하는 것
+   * @param teacherId 선생님 id
+   * @param lessonId 조회할 수업 id
+   * @return 해당 수업의 숙제가 있는 날짜와 해당 날짜에 있는 숙제 수를 반환
+   */
+  public List<OutFilteredHomeworkFrequency> findFilteredHomeworkFrequency(Long teacherId, Long lessonId, LocalDateTime startDateOfMonth, LocalDateTime endDateOfMonth) {
+    return queryFactory
+        .select(Projections.constructor(OutFilteredHomeworkFrequency.class,
+            homeworkJpaEntity.startTime.as("date"),
+            homeworkJpaEntity.id.count().as("homeworkCnt")
+        ))
+        .from(homeworkJpaEntity)
+        .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
+        .where(
+            eqTeacherId(teacherId),
+            eqLessonIdOfTeacher(lessonId),
+            betweenYearMonth(startDateOfMonth, endDateOfMonth)
+        )
+        .groupBy(lessonJpaEntity.startTime)
+        .fetch();
+  }
 
+  private BooleanExpression eqLessonIdOfTeacher(Long lessonId) {
+    log.info("lesson Id: {} ", lessonId);
+    return lessonId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(lessonId) : null;
+  }
 
+  private BooleanExpression betweenYearMonth(LocalDateTime start, LocalDateTime end) {
+    log.info("startTime endTime: {}, {} ", start, end);
+    if (start != null && end != null) {
+      return homeworkJpaEntity.startTime.between(start, end);
+    } else {
+      return null;
+    }
+  }
+
+  public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime date) {
+    return queryFactory
+        .select(Projections.constructor(OutHomeworkContent.class,
+            homeworkJpaEntity.homeworkName,
+            studentHomeworkJpaEntity.studentJpaEntity.id.count().as("studentCnt"),
+            studentHomeworkJpaEntity.homeworkStatus.when(true).then(1L).otherwise(0L)
+                .sum().as("completeCnt")))
+        .from(studentHomeworkJpaEntity)
+        .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
+        .where(
+            eqLessonOfHomework(lessonId),
+            eqYearAndMonthOfStartTime(date)
+        )
+        .groupBy(homeworkJpaEntity)
+        .fetch();
+  }
+
+  private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
+  }
+
+  private BooleanExpression eqLessonOfHomework(Long lessonId) {
+    return lessonId != null ? homeworkJpaEntity.lessonJpaEntity.id.eq(lessonId) : null;
+  }
 
 }

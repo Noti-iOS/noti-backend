@@ -3,7 +3,7 @@ package com.noti.noti.error;
 public enum ErrorCode {
 
   // Common
-  INVALID_INPUT_VALUE(400, "C001", " 올바르지 않은 입력 값입니다"),
+  INVALID_INPUT_VALUE(400, "C001", "올바르지 않은 입력 값입니다"),
   METHOD_NOT_ALLOWED(405, "C002", " 올바르지 않은 호출입니다"),
   ENTITY_NOT_FOUND(400, "C003", " 정보가 존재하지 않습니다"),
   INTERNAL_SERVER_ERROR(500, "C004", "서버 에러"),
@@ -38,11 +38,14 @@ public enum ErrorCode {
   /*
   Book 관련 예외
    */
-  BOOK_NOT_FOUND(404, "B001", "해당 책정보가 존재하지 않습니다"),
+  BOOK_NOT_FOUND(404,"B001","해당 책정보가 존재하지 않습니다"),
   DUPLICATED_TITLE_BOOK(400, "B002", "중복된 교재입니다"),
 
-  // Lesson 예외
-  LESSON_NOT_FOUND(404, "L001", "해당 수업이 존재하지 않습니다");
+  /*
+  Lesson 관련 예외
+   */
+  LESSON_NOT_FOUND(404, "L001", "해당 수업 정보가 존재하지 않습니다");
+
   private int status;
   private final String code;
   private final String message;

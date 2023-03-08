@@ -9,6 +9,7 @@ import com.noti.noti.common.RedisTestContainerConfig;
 import com.noti.noti.common.adapter.out.persistance.DaySetConvertor;
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.config.RedisTemplateTestConfig;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.domain.model.Homework;
@@ -16,8 +17,10 @@ import com.noti.noti.lesson.adapter.out.persistence.LessonMapper;
 import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import com.noti.noti.teacher.domain.Teacher;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -154,6 +157,39 @@ class HomeworkPersistenceAdapterTest extends RedisTestContainerConfig {
         assertThat(todaysHomeworks).isNotEmpty();
       }
     }
+  }
+
+  @Nested
+  class findHomeworkContents_메소드는{
+
+    @Nested
+    class 수업_id와_날짜에_해당하는_숙제리스트가_있다면 {
+
+      Long lessonId = 1L;
+      LocalDateTime date = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ISO_DATE).atStartOfDay();
+
+      @Sql("/data/student-homework.sql")
+      @Test
+      void 해당_숙제내용_리스트를_반환한다() {
+        List<OutHomeworkContent> homeworkContents = homeworkPersistenceAdapter.findHomeworkContents(lessonId, date);
+        assertThat(homeworkContents.size()).isEqualTo(3);
+      }
+    }
+
+    @Nested
+    class 수업_id와_날짜에_해당하는_숙제리스트가_없다면 {
+
+      Long lessonId = 5L;
+      LocalDateTime date = LocalDate.parse(LocalDate.now().toString(), DateTimeFormatter.ISO_DATE).atStartOfDay();
+
+      @Sql("/data/student-homework.sql")
+      @Test
+      void 빈_리스트를_반환한다() {
+        List<OutHomeworkContent> homeworkContents = homeworkPersistenceAdapter.findHomeworkContents(lessonId, date);
+        assertThat(homeworkContents.size()).isEqualTo(0);
+      }
+    }
+
   }
 
 

@@ -2,9 +2,13 @@ package com.noti.noti.homework.adapter.out.persistence;
 
 import com.noti.noti.homework.adapter.out.persistence.jpa.HomeworkJpaRepository;
 import com.noti.noti.homework.adapter.out.persistence.jpa.model.HomeworkJpaEntity;
+import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
+import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
 import com.noti.noti.homework.application.port.out.FindTodaysHomeworkPort;
 import com.noti.noti.homework.application.port.out.SaveDeadlineAlarmPort;
 import com.noti.noti.homework.application.port.out.SaveHomeworkPort;
+import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.domain.model.Homework;
@@ -22,12 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, SaveHomeworkPort,
-    SaveDeadlineAlarmPort {
+    SaveDeadlineAlarmPort, FindFilteredHomeworkPort, FindHomeworkContentPort {
 
   private final HomeworkMapper homeworkMapper;
   private final HomeworkJpaRepository homeworkJpaRepository;
   private final HomeworkQueryRepository homeworkQueryRepository;
   private final StringRedisTemplate redisTemplate;
+
 
   @Override
   public List<TodaysHomework> findTodaysHomeworks(TodayHomeworkCondition condition) {
@@ -68,4 +73,16 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, SaveH
 //        }
 //    );
 //  }
+  @Override
+  public List<OutFilteredHomeworkFrequency> findFilteredHomeworks(LocalDateTime startOfMonth,
+      Long lessonId, Long teacherId) {
+    return homeworkQueryRepository.findFilteredHomeworkFrequency(
+        teacherId, lessonId, startOfMonth, startOfMonth.plusMonths(1).minusSeconds(1));
+  }
+
+  @Override
+  public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime startOfMonth) {
+
+    return homeworkQueryRepository.findHomeworkContents(lessonId, startOfMonth);
+  }
 }

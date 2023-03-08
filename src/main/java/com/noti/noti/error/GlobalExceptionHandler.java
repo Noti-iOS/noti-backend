@@ -2,6 +2,8 @@ package com.noti.noti.error;
 
 import com.noti.noti.error.exception.BusinessException;
 
+import java.time.DateTimeException;
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -46,6 +49,16 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+
+
   /**
    * enum type 일치하지 않아 binding 못할 경우 발생
    * 주로 @RequestParam enum으로 binding 못했을 경우 발생
@@ -54,6 +67,17 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
     log.error("handleMethodArgumentTypeMismatchException", e);
     final ErrorResponse response = ErrorResponse.of(e);
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * javax.validation.ConstraintViolationException 으로 제약조건을 위반할 때 발생한다.
+   * 주로 @Min, @Max 등 제약을 두는 어노테이션에서 발생
+   */
+  @ExceptionHandler(ConstraintViolationException.class)
+  protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+    log.error("Exception : {}, Message : {}", e.getClass(), e.getMessage());
+    final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
