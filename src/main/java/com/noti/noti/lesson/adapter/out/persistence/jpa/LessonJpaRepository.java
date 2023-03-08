@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LessonJpaRepository extends JpaRepository<LessonJpaEntity, Long> {
 
+  @Override
+  boolean existsById(Long lessonId);
 }
