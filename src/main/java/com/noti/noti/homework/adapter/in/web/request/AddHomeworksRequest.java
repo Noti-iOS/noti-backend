@@ -4,8 +4,9 @@ import com.noti.noti.homework.application.port.in.AddHomeworksCommand;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddHomeworksRequest {
 
-  @Size(min = 1)
-  @NotNull
-  private List<String> homeworkNames;
+  @NotEmpty
+  private List<@NotBlank String> homeworkNames;
 
   @NotNull
   private LocalDateTime startTime;
