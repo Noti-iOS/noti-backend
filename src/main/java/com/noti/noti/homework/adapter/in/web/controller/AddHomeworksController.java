@@ -3,6 +3,7 @@ package com.noti.noti.homework.adapter.in.web.controller;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.homework.adapter.in.web.request.AddHomeworksRequest;
 import com.noti.noti.homework.application.port.in.AddHomeworksUsecase;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AddHomeworksController {
 
   @PostMapping("/api/teacher/homeworks")
   public ResponseEntity<SuccessResponse> addHomeworks(@AuthenticationPrincipal UserDetails userDetails,
-      @RequestBody AddHomeworksRequest addHomeworksRequest) {
+      @RequestBody @Valid AddHomeworksRequest addHomeworksRequest) {
     Long teacherId = Long.valueOf(userDetails.getUsername());
     addHomeworksUsecase.addHomeworks(addHomeworksRequest.toCommand(teacherId));
 
