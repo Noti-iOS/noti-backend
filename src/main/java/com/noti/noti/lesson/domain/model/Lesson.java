@@ -7,8 +7,10 @@ import java.time.LocalTime;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Lesson {
   private Long id;
   private Teacher teacher;

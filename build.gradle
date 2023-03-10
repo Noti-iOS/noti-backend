@@ -72,7 +72,8 @@ dependencies {
 	testImplementation 'org.testcontainers:mysql:1.17.5'
 
 	// 테스트 객체 생성을 위한 Fixture-monkey 추가
- 	testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.4.12'
+ 	testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.5.1'
+	testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-javax-validation:0.5.0'
 }
 
 tasks.named('test') {

@@ -9,4 +9,5 @@ public interface FindLessonPort {
   Optional<Lesson> findById(Long id);
   List<TodaysLesson> findTodaysLessons(TodaysLessonSearchConditon condition);
   List<LessonDto> findAllLessonsByTeacherId(Long teacherId);
+  Optional<StudentsInLesson> findLessonAndStudentsById(Long lessonId);
 }

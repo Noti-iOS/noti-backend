@@ -1,25 +1,19 @@
 package com.noti.noti.config;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisKeyValueAdapter.EnableKeyspaceEvents;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Configuration
-@RequiredArgsConstructor
-@EnableRedisRepositories(enableKeyspaceEvents = EnableKeyspaceEvents.ON_STARTUP, keyspaceNotificationsConfigParameter = "")
-public class RedisConfig {
-  private final RedisProperties redisProperties;
+@TestConfiguration
+public class RedisTemplateTestConfig {
 
   @Bean
   public RedisConnectionFactory redisConnectionFactory() {
-    return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+    return new LettuceConnectionFactory();
   }
 
   @Bean
@@ -28,5 +22,13 @@ public class RedisConfig {
     redisTemplate.setConnectionFactory(redisConnectionFactory());
     redisTemplate.setDefaultSerializer(new StringRedisSerializer());
     return redisTemplate;
+  }
+
+  @Bean
+  public StringRedisTemplate stringRedisTemplate(){
+    StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
+    stringRedisTemplate.setConnectionFactory(redisConnectionFactory());
+    stringRedisTemplate.setDefaultSerializer(new StringRedisSerializer());
+    return stringRedisTemplate;
   }
 }

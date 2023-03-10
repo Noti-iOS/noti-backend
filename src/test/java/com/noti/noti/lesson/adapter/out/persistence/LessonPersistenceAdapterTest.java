@@ -7,6 +7,7 @@ import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.LessonDto;
 import com.noti.noti.lesson.application.port.out.OutCreatedLesson;
+import com.noti.noti.lesson.application.port.out.StudentsInLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
@@ -15,6 +16,7 @@ import com.noti.noti.teacher.domain.Teacher;
 import java.time.DayOfWeek;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +41,53 @@ class LessonPersistenceAdapterTest {
 
   @Autowired
   LessonPersistenceAdapter lessonPersistenceAdapter;
+
+  @Sql("/data/lesson.sql")
+  @Nested
+  class findLessonAndStudentsById_메서드는 {
+
+    @Nested
+    class 조건에_해당하는_수업이_존재하지_않으면 {
+
+      @Test
+      void 비어있는_Optional_객체를_반환한다() {
+        Optional<StudentsInLesson> studentsInLesson = lessonPersistenceAdapter
+            .findLessonAndStudentsById(6L);
+
+        assertThat(studentsInLesson).isNotPresent();
+      }
+    }
+
+    @Nested
+    class 조건에_해당하는_수업은_존재하고_학생은_존재하지_않는다면 {
+
+      @Test
+      void studentIds_목록은_비어있는_StudentsInLesson_Optional_객체를_반환한다() {
+        Optional<StudentsInLesson> returnedStudentsInLesson = lessonPersistenceAdapter
+            .findLessonAndStudentsById(4L);
+
+        assertThat(returnedStudentsInLesson)
+            .isPresent()
+            .hasValueSatisfying(studentsInLesson ->
+                assertThat(studentsInLesson.getStudentIds()).isEmpty());
+      }
+    }
+
+    @Nested
+    class 조건에_해당하는_수업과_학생이_존재하면 {
+
+      @Test
+      void 정보가_모두_담긴_StudentsInLesson_Optional_객체를_반환한다() {
+        Optional<StudentsInLesson> returnedStudentsInLesson = lessonPersistenceAdapter
+            .findLessonAndStudentsById(1L);
+
+        assertThat(returnedStudentsInLesson)
+            .isPresent()
+            .hasValueSatisfying(studentsInLesson ->
+                assertThat(studentsInLesson.getStudentIds()).isNotEmpty());
+      }
+    }
+  }
 
   @Nested
   class findAllLessonsByTeacherId_메서드는 {
