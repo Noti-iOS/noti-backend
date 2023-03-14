@@ -30,7 +30,6 @@ class ExpirationListenerTest extends RedisTestContainerConfig {
   void test() throws InterruptedException {
     ValueOperations<String, String> stringStringValueOperations = stringRedisTemplate.opsForValue();
     stringStringValueOperations.set(KEY, "1");
-    stringStringValueOperations.set("4242", "1");
     stringRedisTemplate.expireAt(KEY, Timestamp.valueOf(LocalDateTime.now().plusSeconds(1L)));
     Thread.sleep(1100);
   }
