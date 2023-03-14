@@ -125,7 +125,7 @@ public class HomeworkQueryRepository {
    * @param cursorId 커서 아이디
    * @return homeworkName에 검색어를 포함한 size개의 숙제 목록
    */
-  public List<OutSearchedHomework.SearchedHomework> findSearchedHomework(Long teacherId, String keyword, int size, Long cursorId) {
+  public List<OutSearchedHomework.SearchedHomework> findSearchedHomework(Long teacherId, String keyword, int size, String cursorId) {
 
     return queryFactory
         .select(
@@ -142,7 +142,7 @@ public class HomeworkQueryRepository {
         .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(
             likeHomeworkName(keyword),
-            nextCursorId(cursorId.toString()),
+            gtNextCursorId(cursorId),
             eqTeacherId(teacherId)
         )
         .orderBy(homeworkJpaEntity.startTime.asc(), homeworkJpaEntity.id.asc())
@@ -154,13 +154,12 @@ public class HomeworkQueryRepository {
     return keyword != null ? homeworkJpaEntity.homeworkName.like("%" + keyword + "%") : null;
   }
 
-  private BooleanExpression nextCursorId(String cursorId) {
+  private BooleanExpression gtNextCursorId(String cursorId) {
     StringExpression cursorIdByDateAndId = generateCursorIdByTimeAndId(homeworkJpaEntity.startTime, homeworkJpaEntity.id);
     return cursorId.equals("0") ? null : cursorIdByDateAndId.gt(cursorId);
   }
 
   private StringExpression generateCursorIdByTimeAndId(DateTimePath<LocalDateTime> localDateTime, NumberPath<Long> homeworkId) {
-
     return lpadExpression(dateFormatExpression(localDateTime, "%Y%m%d%H%m%s"), 14, '0')
         .concat(lpadExpression(homeworkId.stringValue(), 10, '0'));
   }
