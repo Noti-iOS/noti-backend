@@ -160,7 +160,7 @@ public class HomeworkQueryRepository {
   }
 
   private StringExpression generateCursorIdByTimeAndId(DateTimePath<LocalDateTime> localDateTime, NumberPath<Long> homeworkId) {
-    return lpadExpression(dateFormatExpression(localDateTime, "%Y%m%d%H%m%s"), 14, '0')
+    return lpadExpression(dateFormatExpression(localDateTime, "%Y%m%d%H%i%s"), 14, '0')
         .concat(lpadExpression(homeworkId.stringValue(), 10, '0'));
   }
 
