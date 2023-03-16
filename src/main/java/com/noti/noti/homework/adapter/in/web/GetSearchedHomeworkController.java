@@ -19,7 +19,7 @@ public class GetSearchedHomeworkController {
 
   @GetMapping("/api/teacher/calendar/search")
   public SuccessResponse<SearchedPageDto> getSearchedHomeworkInfo(Long teacherId, @RequestParam String keyword, int size, String cursorId) {
-    List<SearchedHomework> searchedHomeworkList = getSearchedHomeworkQuery.getInSearchedHomeworks(
+    List<SearchedHomework> searchedHomeworkList = getSearchedHomeworkQuery.getSearchedHomeworks(
         new SearchedHomeworkCommand(teacherId, keyword, cursorId, size));
     SearchedPageDto response = new SearchedPageDto(searchedHomeworkList);
     return SuccessResponse.create200SuccessResponse(response);

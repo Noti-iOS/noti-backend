@@ -15,7 +15,7 @@ public class GetSearchedHomeworkService implements GetSearchedHomeworkQuery {
   private final FindSearchedHomeworkPort findSearchedHomeworkPort;
 
   @Override
-  public List<SearchedHomework> getInSearchedHomeworks(SearchedHomeworkCommand command) {
+  public List<SearchedHomework> getSearchedHomeworks(SearchedHomeworkCommand command) {
     return findSearchedHomeworkPort.findSearchedHomeworks(
         command.getTeacherId(), command.getKeyword(), command.getSize(), command.getCursorId());
 

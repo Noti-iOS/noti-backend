@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface GetSearchedHomeworkQuery {
 
-  List<SearchedHomework> getInSearchedHomeworks(SearchedHomeworkCommand command);
+  List<SearchedHomework> getSearchedHomeworks(SearchedHomeworkCommand command);
 
 }
