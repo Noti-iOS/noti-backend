@@ -7,7 +7,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
-import com.noti.noti.homework.application.port.out.OutSearchedHomework;
+import com.noti.noti.homework.application.port.out.SearchedHomework;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.querydsl.core.types.ConstantImpl;
@@ -125,11 +125,11 @@ public class HomeworkQueryRepository {
    * @param cursorId 커서 아이디
    * @return homeworkName에 검색어를 포함한 size개의 숙제 목록
    */
-  public List<OutSearchedHomework.SearchedHomework> findSearchedHomework(Long teacherId, String keyword, int size, String cursorId) {
+  public List<SearchedHomework> findSearchedHomework(Long teacherId, String keyword, int size, String cursorId) {
 
     return queryFactory
         .select(
-            Projections.fields(OutSearchedHomework.SearchedHomework.class,
+            Projections.fields(SearchedHomework.class,
                 homeworkJpaEntity.homeworkName,
                 lessonJpaEntity.lessonName,
                 lessonJpaEntity.startTime,

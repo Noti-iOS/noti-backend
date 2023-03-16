@@ -3,7 +3,7 @@ package com.noti.noti.homework.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.config.QuerydslTestConfig;
-import com.noti.noti.homework.application.port.out.OutSearchedHomework.SearchedHomework;
+import com.noti.noti.homework.application.port.out.SearchedHomework;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
