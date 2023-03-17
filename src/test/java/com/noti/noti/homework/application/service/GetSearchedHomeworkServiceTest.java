@@ -1,7 +1,7 @@
 package com.noti.noti.homework.application.service;
 
 import com.noti.noti.common.MonkeyUtils;
-import com.noti.noti.homework.application.port.in.SearchedHomeworkCommand;
+import com.noti.noti.homework.application.port.in.InSearchedPageDto;
 import com.noti.noti.homework.application.port.out.FindSearchedHomeworkPort;
 import com.noti.noti.homework.application.port.out.SearchedHomework;
 import java.util.List;
@@ -39,10 +39,10 @@ class GetSearchedHomeworkServiceTest {
       Mockito.when(findSearchedHomeworkPort.findSearchedHomeworks(Mockito.anyLong(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString()))
           .thenReturn(List.of());
 
-      List<SearchedHomework> searchedHomeworks = getSearchedHomeworkService.getSearchedHomeworks(
-          new SearchedHomeworkCommand(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt()));
+      InSearchedPageDto inSearchedPageDto = getSearchedHomeworkService.getSearchedHomeworks(
+          Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt());
 
-      Assertions.assertThat(searchedHomeworks).isEmpty();
+      Assertions.assertThat(inSearchedPageDto.getSearchedHomeworks()).isEmpty();
 
     }
 
@@ -51,10 +51,10 @@ class GetSearchedHomeworkServiceTest {
       Mockito.when(findSearchedHomeworkPort.findSearchedHomeworks(Mockito.anyLong(), Mockito.anyString(), Mockito.anyInt(), Mockito.anyString()))
           .thenReturn(MonkeyUtils.MONKEY.giveMeBuilder(SearchedHomework.class).sampleList(3));
 
-      List<SearchedHomework> searchedHomeworks = getSearchedHomeworkService.getSearchedHomeworks(
-          new SearchedHomeworkCommand(Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt()));
+      InSearchedPageDto inSearchedPageDto = getSearchedHomeworkService.getSearchedHomeworks(
+          Mockito.anyLong(), Mockito.anyString(), Mockito.anyString(), Mockito.anyInt());
 
-      Assertions.assertThat(searchedHomeworks).isNotEmpty();
+      Assertions.assertThat(inSearchedPageDto.getSearchedHomeworks()).isNotEmpty();
     }
 
   }
