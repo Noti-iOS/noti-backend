@@ -15,8 +15,7 @@ public class GetSearchedHomeworkService implements GetSearchedHomeworkQuery {
   private final FindSearchedHomeworkPort findSearchedHomeworkPort;
 
   @Override
-  public InSearchedPageDto getSearchedHomeworks(Long teacherId, String keyword, String cursorId,
-      int size) {
+  public InSearchedPageDto getSearchedHomeworks(Long teacherId, String keyword, String cursorId, int size) {
     List<SearchedHomework> searchedHomeworks = findSearchedHomeworkPort.findSearchedHomeworks(teacherId, keyword, size, cursorId);
     return new InSearchedPageDto(searchedHomeworks, searchedHomeworks.size() < size);
   }
