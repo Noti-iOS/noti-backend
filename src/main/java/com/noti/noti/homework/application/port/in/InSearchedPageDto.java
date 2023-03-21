@@ -7,8 +7,10 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class InSearchedPageDto {
 
   private String nextCursorId;
@@ -16,12 +18,13 @@ public class InSearchedPageDto {
   private Boolean last;
 
   public InSearchedPageDto(List<SearchedHomework> searchedHomeworks, boolean last) {
-    this.nextCursorId = searchedHomeworks.get(searchedHomeworks.size()-1).getCursorId();
+    this.nextCursorId = (searchedHomeworks.size() < 1) ? "" : searchedHomeworks.get(searchedHomeworks.size()-1).getCursorId();
     searchedHomeworks.forEach(searchedHomework -> this.searchedHomeworks.add(new InSearchedHomework(searchedHomework)));
     this.last = last;
   }
 
   @Getter
+  @NoArgsConstructor
   static public class InSearchedHomework {
 
     private String homeworkName;
