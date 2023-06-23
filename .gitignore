@@ -39,6 +39,4 @@ out/
 .vscode/
 src/main/resources/**.yaml
 
-!src/main/resources/application-localdb.yaml
-
 .jqwik-database

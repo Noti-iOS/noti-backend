@@ -13,6 +13,8 @@ import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(ReplaceUnderscores.class)
+@DisplayName("GetFilteredHomeworkServiceTest 클래스")
 class GetFilteredHomeworkServiceTest {
 
   @InjectMocks
@@ -29,6 +33,7 @@ class GetFilteredHomeworkServiceTest {
 
   @Mock
   FindFilteredHomeworkPort findFilteredHomeworkPort;
+
 
   List<OutFilteredHomeworkFrequency> createOutList() {
     OutFilteredHomeworkFrequency out1 = new OutFilteredHomeworkFrequency(
@@ -78,5 +83,6 @@ class GetFilteredHomeworkServiceTest {
     }
 
   }
+
 
 }

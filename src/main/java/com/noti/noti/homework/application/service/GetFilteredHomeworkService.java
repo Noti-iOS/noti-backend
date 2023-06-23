@@ -24,5 +24,7 @@ public class GetFilteredHomeworkService implements GetFilteredHomeworkQuery {
         .map(InFilteredHomeworkFrequency::new)
         .collect(Collectors.toList());
   }
+
+
 }
 

@@ -7,6 +7,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.SearchedHomework;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
@@ -95,14 +96,14 @@ public class HomeworkQueryRepository {
         .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(
             eqTeacherId(teacherId),
-            eqLessonId(lessonId),
+            eqLessonIdOfTeacher(lessonId),
             betweenYearMonth(startDateOfMonth, endDateOfMonth)
         )
         .groupBy(lessonJpaEntity.startTime)
         .fetch();
   }
 
-  private BooleanExpression eqLessonId(Long lessonId) {
+  private BooleanExpression eqLessonIdOfTeacher(Long lessonId) {
     log.info("lesson Id: {} ", lessonId);
     return lessonId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(lessonId) : null;
   }
@@ -116,6 +117,22 @@ public class HomeworkQueryRepository {
     }
   }
 
+  public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime date) {
+    return queryFactory
+        .select(Projections.constructor(OutHomeworkContent.class,
+            homeworkJpaEntity.homeworkName,
+            studentHomeworkJpaEntity.studentJpaEntity.id.count().as("studentCnt"),
+            studentHomeworkJpaEntity.homeworkStatus.when(true).then(1L).otherwise(0L)
+                .sum().as("completeCnt")))
+        .from(studentHomeworkJpaEntity)
+        .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
+        .where(
+            eqLessonOfHomework(lessonId),
+            eqYearAndMonthOfStartTime(date)
+        )
+        .groupBy(homeworkJpaEntity)
+        .fetch();
+  }
 
   /**
    * 숙제의 startTime과 id를 오름차순으로 정렬했을 때, cursorId 보다 작은 size개의 homework 목록을 반환한다.
@@ -155,11 +172,17 @@ public class HomeworkQueryRepository {
     return keyword != null ? homeworkJpaEntity.homeworkName.like("%" + keyword + "%") : null;
   }
 
+  private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
+  }
   private BooleanExpression containsHomeworkName(String keyword) {
     log.info("keyword {}", keyword);
     return keyword != null ? homeworkJpaEntity.homeworkName.contains(keyword) : null;
   }
 
+  private BooleanExpression eqLessonOfHomework(Long lessonId) {
+    return lessonId != null ? homeworkJpaEntity.lessonJpaEntity.id.eq(lessonId) : null;
+  }
   private BooleanExpression gtNextCursorId(String cursorId) {
     StringExpression cursorIdByDateAndId = generateCursorIdByTimeAndId(homeworkJpaEntity.startTime, homeworkJpaEntity.id);
     return cursorId.equals("0") ? null : cursorIdByDateAndId.gt(cursorId);

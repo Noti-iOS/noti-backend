@@ -2,8 +2,10 @@ package com.noti.noti.student.domain.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Student {
 
   private Long id;
