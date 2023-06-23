@@ -8,12 +8,18 @@ import static com.querydsl.core.group.GroupBy.list;
 
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
+import com.noti.noti.homework.application.port.out.SearchedHomework;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -128,12 +134,73 @@ public class HomeworkQueryRepository {
         .fetch();
   }
 
+  /**
+   * 숙제의 startTime과 id를 오름차순으로 정렬했을 때, cursorId 보다 작은 size개의 homework 목록을 반환한다.
+   * @param teacherId 선생님 ID
+   * @param keyword 검색어
+   * @param size 페이지 안의 컨텐츠 개수
+   * @param cursorId 커서 아이디
+   * @return homeworkName에 검색어를 포함한 size개의 숙제 목록
+   */
+  public List<SearchedHomework> findSearchedHomework(Long teacherId, String keyword, int size, String cursorId) {
+
+    return queryFactory
+        .select(
+            Projections.fields(SearchedHomework.class,
+                homeworkJpaEntity.homeworkName,
+                lessonJpaEntity.lessonName,
+                lessonJpaEntity.startTime,
+                lessonJpaEntity.endTime,
+                homeworkJpaEntity.startTime.as("startDate"),
+                generateCursorIdByTimeAndId(homeworkJpaEntity.startTime, homeworkJpaEntity.id).as("cursorId")
+            )
+        )
+        .from(homeworkJpaEntity)
+        .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
+        .where(
+//            likeHomeworkName(keyword),
+            containsHomeworkName(keyword),
+            gtNextCursorId(cursorId),
+            eqTeacherId(teacherId)
+        )
+        .orderBy(homeworkJpaEntity.startTime.asc(), homeworkJpaEntity.id.asc())
+        .limit(size)
+        .fetch();
+  }
+  private BooleanExpression likeHomeworkName(String keyword) {
+    log.info("keyword {}", keyword);
+    return keyword != null ? homeworkJpaEntity.homeworkName.like("%" + keyword + "%") : null;
+  }
+
   private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
     return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
+  }
+  private BooleanExpression containsHomeworkName(String keyword) {
+    log.info("keyword {}", keyword);
+    return keyword != null ? homeworkJpaEntity.homeworkName.contains(keyword) : null;
   }
 
   private BooleanExpression eqLessonOfHomework(Long lessonId) {
     return lessonId != null ? homeworkJpaEntity.lessonJpaEntity.id.eq(lessonId) : null;
+  }
+  private BooleanExpression gtNextCursorId(String cursorId) {
+    StringExpression cursorIdByDateAndId = generateCursorIdByTimeAndId(homeworkJpaEntity.startTime, homeworkJpaEntity.id);
+    return cursorId.equals("0") ? null : cursorIdByDateAndId.gt(cursorId);
+  }
+
+  private StringExpression generateCursorIdByTimeAndId(DateTimePath<LocalDateTime> localDateTime, NumberPath<Long> homeworkId) {
+    return lpadExpression(dateFormatExpression(localDateTime, "%Y%m%d%H%i%s"), 14, '0')
+        .concat(lpadExpression(homeworkId.stringValue(), 10, '0'));
+  }
+
+  private StringExpression lpadExpression(StringExpression expression, int length, char c) {
+    return StringExpressions.lpad(expression, length, c);
+  }
+
+  private StringExpression dateFormatExpression(DateTimePath<LocalDateTime> localDateTime, String pattern) {
+    return Expressions.dateTemplate(String.class,
+        "function('date_format', {0}, {1})",
+        localDateTime, ConstantImpl.create(pattern)).stringValue();
   }
 
 }

@@ -4,11 +4,13 @@ import com.noti.noti.homework.adapter.out.persistence.jpa.HomeworkJpaRepository;
 import com.noti.noti.homework.adapter.out.persistence.jpa.model.HomeworkJpaEntity;
 import com.noti.noti.homework.application.port.out.FindFilteredHomeworkPort;
 import com.noti.noti.homework.application.port.out.FindHomeworkContentPort;
+import com.noti.noti.homework.application.port.out.FindSearchedHomeworkPort;
 import com.noti.noti.homework.application.port.out.FindTodaysHomeworkPort;
 import com.noti.noti.homework.application.port.out.SaveDeadlineAlarmPort;
 import com.noti.noti.homework.application.port.out.SaveHomeworkPort;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
+import com.noti.noti.homework.application.port.out.SearchedHomework;
 import com.noti.noti.homework.application.port.out.TodayHomeworkCondition;
 import com.noti.noti.homework.application.port.out.TodaysHomework;
 import com.noti.noti.homework.domain.model.Homework;
@@ -26,7 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, SaveHomeworkPort,
-    SaveDeadlineAlarmPort, FindFilteredHomeworkPort, FindHomeworkContentPort {
+    SaveDeadlineAlarmPort, FindFilteredHomeworkPort, FindHomeworkContentPort,
+    FindSearchedHomeworkPort {
 
   private final HomeworkMapper homeworkMapper;
   private final HomeworkJpaRepository homeworkJpaRepository;
@@ -84,5 +87,10 @@ public class HomeworkPersistenceAdapter implements FindTodaysHomeworkPort, SaveH
   public List<OutHomeworkContent> findHomeworkContents(Long lessonId, LocalDateTime startOfMonth) {
 
     return homeworkQueryRepository.findHomeworkContents(lessonId, startOfMonth);
+  }
+
+  @Override
+  public List<SearchedHomework> findSearchedHomeworks(Long teacherId, String keyword, int size, String cursorId) {
+    return homeworkQueryRepository.findSearchedHomework(teacherId, keyword, size, cursorId);
   }
 }
