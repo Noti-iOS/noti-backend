@@ -13,9 +13,9 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class SearchedHomeworkRequest {
 
-  @NotNull
-  @Schema(description = "선생님 id", required = true, example = "1")
-  private Long teacherId;
+//  @NotNull
+//  @Schema(description = "선생님 id", required = true, example = "1")
+//  private Long teacherId;
 
   @NotNull
   @Schema(description = "검색어", required = true, example = "영어단어 day")
@@ -33,8 +33,8 @@ public class SearchedHomeworkRequest {
   private String cursorId;
 
 
-  public SearchedHomeworkRequest(Long teacherId, String keyword, int size, String cursorId) {
-    this.teacherId = teacherId;
+  public SearchedHomeworkRequest(String keyword, int size, String cursorId) {
+//    this.teacherId = teacherId;
     this.keyword = keyword;
     this.size = size;
     this.cursorId = cursorId;

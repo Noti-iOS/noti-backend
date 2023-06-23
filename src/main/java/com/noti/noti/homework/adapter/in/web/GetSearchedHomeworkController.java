@@ -39,11 +39,12 @@ public class GetSearchedHomeworkController {
                   schema = @Schema(implementation = ErrorResponse.class))})
       })
   @GetMapping("/api/teacher/calendar/search")
-  public ResponseEntity<SuccessResponse<SearchedPageDto>> getSearchedHomeworkInfo(@RequestBody @Valid SearchedHomeworkRequest request) {
+  public ResponseEntity<SuccessResponse<SearchedPageDto>> getSearchedHomeworkInfo(@RequestBody @Valid SearchedHomeworkRequest request,
+      @AuthenticationPrincipal UserDetails userDetails) {
 
-//    Long teacherId = Long.parseLong(userDetails.getUsername());
+    Long teacherId = Long.parseLong(userDetails.getUsername());
 
-    InSearchedPageDto searchedHomeworks = getSearchedHomeworkQuery.getSearchedHomeworks(request.getTeacherId(), request.getKeyword(), request.getCursorId(), request.getSize());
+    InSearchedPageDto searchedHomeworks = getSearchedHomeworkQuery.getSearchedHomeworks(teacherId, request.getKeyword(), request.getCursorId(), request.getSize());
     SearchedPageDto response = new SearchedPageDto(searchedHomeworks);
 
     return ResponseEntity.ok().body(SuccessResponse.create200SuccessResponse(response));
