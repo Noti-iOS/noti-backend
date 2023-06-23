@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,8 @@ public class GetSearchedHomeworkController {
       })
   @GetMapping("/api/teacher/calendar/search")
   public ResponseEntity<SuccessResponse<SearchedPageDto>> getSearchedHomeworkInfo(@RequestBody @Valid SearchedHomeworkRequest request) {
+
+//    Long teacherId = Long.parseLong(userDetails.getUsername());
 
     InSearchedPageDto searchedHomeworks = getSearchedHomeworkQuery.getSearchedHomeworks(request.getTeacherId(), request.getKeyword(), request.getCursorId(), request.getSize());
     SearchedPageDto response = new SearchedPageDto(searchedHomeworks);

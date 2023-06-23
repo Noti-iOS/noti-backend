@@ -59,7 +59,7 @@ class GetSearchedHomeworkControllerTest {
         when(getSearchedHomeworkQuery.getSearchedHomeworks(anyLong(), anyString(), anyString(), anyInt()))
             .thenReturn(createInSearchedPageDto("1", createInSearchedList(3), false));
 
-        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 3, "1"));
+        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 3, "111111111111111111111111"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/search")
                 .content(content)
@@ -78,7 +78,7 @@ class GetSearchedHomeworkControllerTest {
         when(getSearchedHomeworkQuery.getSearchedHomeworks(anyLong(), anyString(), anyString(), anyInt()))
             .thenReturn(createInSearchedPageDto(null, createInSearchedList(0), false));
 
-        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 0, "1"));
+        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 0, "111111111111111111111111"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/search")
                 .content(content)
@@ -101,7 +101,7 @@ class GetSearchedHomeworkControllerTest {
         when(getSearchedHomeworkQuery.getSearchedHomeworks(anyLong(), anyString(), anyString(), anyInt()))
             .thenReturn(createInSearchedPageDto(null, createInSearchedList(0), false));
 
-        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 0, "1"));
+        byte[] content = objectMapper.writeValueAsBytes(new SearchedHomeworkRequest(1L, "", 0, "111111111111111111111111"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/search")
                 .content(content)

@@ -7,9 +7,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchedPageDto {
 
   @Schema(description = "검색 결과 목록 중 마지막 원소의 커서 아이디, 다음 원소가 없다면 빈 문자열(\"\")을 반환", example = "202305011310070000000011")
@@ -28,6 +31,8 @@ public class SearchedPageDto {
         .forEach(in -> this.searchedHomeworks.add(new SearchedHomeworkDto(in)));
   }
 
+  @Getter
+  @NoArgsConstructor(access = AccessLevel.PROTECTED)
   private class SearchedHomeworkDto {
 
     @Schema(description = "검색결과로 나온 숙제 이름", example = "쎈 수학 p.10 ~ p.12")
