@@ -141,7 +141,8 @@ public class HomeworkQueryRepository {
         .from(homeworkJpaEntity)
         .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(
-            likeHomeworkName(keyword),
+//            likeHomeworkName(keyword),
+            containsHomeworkName(keyword),
             gtNextCursorId(cursorId),
             eqTeacherId(teacherId)
         )
@@ -152,6 +153,11 @@ public class HomeworkQueryRepository {
   private BooleanExpression likeHomeworkName(String keyword) {
     log.info("keyword {}", keyword);
     return keyword != null ? homeworkJpaEntity.homeworkName.like("%" + keyword + "%") : null;
+  }
+
+  private BooleanExpression containsHomeworkName(String keyword) {
+    log.info("keyword {}", keyword);
+    return keyword != null ? homeworkJpaEntity.homeworkName.contains(keyword) : null;
   }
 
   private BooleanExpression gtNextCursorId(String cursorId) {
