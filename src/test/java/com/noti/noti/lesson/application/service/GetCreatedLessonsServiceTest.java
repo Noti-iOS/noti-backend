@@ -33,9 +33,9 @@ class GetCreatedLessonsServiceTest {
   private final CreatedLessonCommand command = new CreatedLessonCommand(TEACHER_ID);
 
   private List<OutCreatedLesson> createLessons() {
-    OutCreatedLesson lesson1 = new OutCreatedLesson("lesson1");
-    OutCreatedLesson lesson2 = new OutCreatedLesson("lesson2");
-    OutCreatedLesson lesson3 = new OutCreatedLesson("lesson3");
+    OutCreatedLesson lesson1 = new OutCreatedLesson(1L, "lesson1");
+    OutCreatedLesson lesson2 = new OutCreatedLesson(2L, "lesson2");
+    OutCreatedLesson lesson3 = new OutCreatedLesson(3L, "lesson3");
     return List.of(lesson1, lesson2, lesson3);
   }
 
