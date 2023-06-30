@@ -130,6 +130,7 @@ class LessonQueryRepository {
 
     return queryFactory
         .select(Projections.constructor(OutCreatedLesson.class,
+            lessonJpaEntity.id.as("lessonId"),
             lessonJpaEntity.lessonName))
         .from(lessonJpaEntity)
         .where(eqTeacherId(teacherId))
