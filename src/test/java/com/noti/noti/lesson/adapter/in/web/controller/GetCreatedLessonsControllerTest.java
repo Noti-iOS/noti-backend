@@ -43,9 +43,9 @@ class GetCreatedLessonsControllerTest {
 
   List<InCreatedLesson> createInCreatedLessons() {
 
-    OutCreatedLesson lesson1 = new OutCreatedLesson("lesson1");
-    OutCreatedLesson lesson2 = new OutCreatedLesson("lesson2");
-    OutCreatedLesson lesson3 = new OutCreatedLesson("lesson3");
+    OutCreatedLesson lesson1 = new OutCreatedLesson(1L, "lesson1");
+    OutCreatedLesson lesson2 = new OutCreatedLesson(2L, "lesson2");
+    OutCreatedLesson lesson3 = new OutCreatedLesson(3L, "lesson3");
 
     InCreatedLesson inLesson1 = new InCreatedLesson(lesson1);
     InCreatedLesson inLesson2 = new InCreatedLesson(lesson2);
