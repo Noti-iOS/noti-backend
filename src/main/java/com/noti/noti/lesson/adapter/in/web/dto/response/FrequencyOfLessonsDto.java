@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class FrequencyOfLessonsDto {
 
   @Schema(description = "숙업이 있는 날짜", example = "2023-01-27")
-  private LocalDate dateOfLesson;
+  private LocalDate date;
   @Schema(description = "dateOfLesson 날짜에 해당하는 수업 수", example = "3")
-  private Long frequencyOfLesson;
+  private Long count;
 
   public FrequencyOfLessonsDto(LocalDate dateOfLesson, Long frequencyOfLesson) {
-    this.dateOfLesson = dateOfLesson;
-    this.frequencyOfLesson = frequencyOfLesson;
+    this.date = dateOfLesson;
+    this.count = frequencyOfLesson;
   }
 }
