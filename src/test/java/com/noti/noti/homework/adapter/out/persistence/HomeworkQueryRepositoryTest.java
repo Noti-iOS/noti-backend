@@ -178,6 +178,24 @@ class HomeworkQueryRepositoryTest {
     }
   }
 
+
+  @Sql("/data/homework.sql")
+  @Nested
+  class findHomeworkContents_메소드는 {
+
+    @Test
+    void 주어진_날짜에_해당하는_수업에_대한_숙제를_반환한다() {
+      List<OutHomeworkContent> homeworkContents = homeworkQueryRepository.findHomeworkContents(1L,
+          LocalDate.now().atStartOfDay());
+
+      assertThat(homeworkContents.size()).isEqualTo(3);
+    }
+
+
+
+  }
+
+
   @Nested
   @Sql("/data/homework.sql")
   class findFilteredHomeworkFrequency_메소드는 {
@@ -195,4 +213,5 @@ class HomeworkQueryRepositoryTest {
     }
 
  }
+
 }
