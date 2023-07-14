@@ -72,6 +72,24 @@ class GetFilteredHomeworkServiceTest {
       assertThat(in.get(1)).isInstanceOf(InFilteredHomeworkFrequency.class);
     }
 
+    @DisplayName("모든 조건을 충족할 때 OutFilteredHomeworkFrequency 와 같은 내용 반환")
+    @Test
+    void return_same_content_OutFilteredHomeworkFrequency() {
+
+      // 어댑터로 넘어가는 포트 mock
+      when(findFilteredHomeworkPort.findFilteredHomeworks(any(), anyLong(), anyLong()))
+          .thenReturn(createOutList());
+
+      List<InFilteredHomeworkFrequency> in = getFilteredHomeworkService.getFilteredHomeworks(
+          validCommand());
+
+      for (int i = 0; i < 3; i++) {
+        assertThat(in.get(i).getDate()).isEqualTo(createOutList().get(i).getDate());
+        assertThat(in.get(i).getHomeworksCnt()).isEqualTo(createOutList().get(i).getHomeworkCnt());
+      }
+
+    }
+
     @DisplayName("선생님이 만든 수업이 없으면 InFilteredHomeworkFrequency 타입의 빈 리스트 반환")
     @Test
     void notMeetAllCond() {
