@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @Validated
-public class GetFilteredHomeworkController {
+public class GetCalendarFrequencyController {
 
   private final GetFilteredHomeworkQuery getFilteredHomeworkQuery;
   private final GetFrequencyOfLessonsQuery getFrequencyOfLessonsQuery;

@@ -7,7 +7,7 @@ import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
-import com.noti.noti.homework.adapter.in.web.GetFilteredHomeworkController;
+import com.noti.noti.homework.adapter.in.web.GetCalendarFrequencyController;
 import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ import org.springframework.util.MultiValueMap;
 @DisplayName("GetFrequencyOfLessonsControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Import(JacksonConfiguration.class)
-@WebMvcTest(controllers = GetFilteredHomeworkController.class,
+@WebMvcTest(controllers = GetCalendarFrequencyController.class,
     excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 class GetFrequencyOfLessonsControllerTest {
