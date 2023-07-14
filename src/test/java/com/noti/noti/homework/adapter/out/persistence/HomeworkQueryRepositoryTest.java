@@ -3,7 +3,9 @@ package com.noti.noti.homework.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.config.QuerydslTestConfig;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.SearchedHomework;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -173,6 +175,22 @@ class HomeworkQueryRepositoryTest {
           assertThat(searchedHomeworks).isEmpty();
       }
     }
+  }
+
+  @Sql("/data/homework.sql")
+  @Nested
+  class findHomeworkContents_메소드는 {
+
+    @Test
+    void 주어진_날짜에_해당하는_수업에_대한_숙제를_반환한다() {
+      List<OutHomeworkContent> homeworkContents = homeworkQueryRepository.findHomeworkContents(1L,
+          LocalDate.now().atStartOfDay());
+
+      assertThat(homeworkContents.size()).isEqualTo(3);
+    }
+
+
+
   }
 
 }

@@ -173,6 +173,7 @@ public class HomeworkQueryRepository {
   }
 
   private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    log.info("startDate : {}, endDate : {}", date, date.plusDays(1).minusSeconds(1));
     return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
   }
   private BooleanExpression containsHomeworkName(String keyword) {
