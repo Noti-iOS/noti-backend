@@ -50,7 +50,15 @@ public class GetFrequencyOfLessonsController {
       @AuthenticationPrincipal UserDetails userDetails) {
 
     long teacherId = Long.parseLong(userDetails.getUsername());
-    String yearMonth = new StringBuilder().append(year).append("-").append(month).toString();
+    String yearMonth;
+
+    StringBuilder sb = new StringBuilder();
+    if (month < 10) {
+      yearMonth = sb.append(year).append("-0").append(month).toString();
+      System.out.println("yearMonth = " + yearMonth);
+    } else {
+      yearMonth = sb.append(year).append("-").append(month).toString();
+    }
 
     List<DateFrequencyOfLessons> frequencyOfLessons = getFrequencyOfLessonsQuery.findFrequencyOfLessons(yearMonth, teacherId);
     List<FrequencyOfLessonsDto> frequencyOfLessonsDto = new ArrayList<>();
