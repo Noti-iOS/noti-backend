@@ -37,11 +37,12 @@ class GetFilteredHomeworkServiceTest {
 
   List<OutFilteredHomeworkFrequency> createOutList() {
     OutFilteredHomeworkFrequency out1 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 25), 2);
+
+        LocalDate.of(2023, 2, 25).atStartOfDay(), 2L);
     OutFilteredHomeworkFrequency out2 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 26), 1);
+        LocalDate.of(2023, 2, 26).atStartOfDay(), 1L);
     OutFilteredHomeworkFrequency out3 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 27), 4);
+        LocalDate.of(2023, 2, 27).atStartOfDay(), 4L);
     return List.of(out1, out2, out3);
   }
 
