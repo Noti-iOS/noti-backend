@@ -7,6 +7,7 @@ import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
 import com.noti.noti.config.JacksonConfiguration;
 import com.noti.noti.config.security.jwt.filter.CustomJwtFilter;
+import com.noti.noti.homework.adapter.in.web.GetFilteredHomeworkController;
 import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ import org.springframework.util.MultiValueMap;
 @DisplayName("GetFrequencyOfLessonsControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Import(JacksonConfiguration.class)
-@WebMvcTest(controllers = GetFrequencyOfLessonsController.class,
+@WebMvcTest(controllers = GetFilteredHomeworkController.class,
     excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
 class GetFrequencyOfLessonsControllerTest {
@@ -66,7 +67,7 @@ class GetFrequencyOfLessonsControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 주어진_날짜에_대한_날짜내용과_분반_수_반환() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(createLessons());
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "12"))) // ex. /api/teacher/calendar/2023/1
@@ -81,7 +82,7 @@ class GetFrequencyOfLessonsControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 빈_리스트_반환() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "2")))
@@ -100,7 +101,7 @@ class GetFrequencyOfLessonsControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 월을_잘못_전달_시_예외코드_400발생() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "0")))
@@ -113,7 +114,7 @@ class GetFrequencyOfLessonsControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 년을_잘못_전달_시_예외코드_400발생() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("-1", "2")))
@@ -124,7 +125,7 @@ class GetFrequencyOfLessonsControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 타입을_잘못_전달_시_예외코드_400발생() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(notCreateLessons());
 
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "JULY")))
@@ -138,7 +139,7 @@ class GetFrequencyOfLessonsControllerTest {
 
     @Test
     void 예외코드_401발생() throws Exception {
-      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(String.class), any(Long.class)))
+      when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
           .thenReturn(createLessons());
       mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/all").params(createInfo("2023", "2")))
           .andExpect(MockMvcResultMatchers.status().is(401));
