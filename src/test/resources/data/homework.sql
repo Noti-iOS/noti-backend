@@ -1,4 +1,3 @@
-
 insert into teacher values (1, 'teacher@gmail.com', 'teacher', '', '', 'TEACHER', 'KAKAO');
 insert into teacher values (2, 'teacher2@gmail.com', 'teacher2', '', '', 'TEACHER', 'KAKAO');
 insert into teacher values (3, 'teacher3@gmail.com', 'teacher3', '', '', 'TEACHER', 'KAKAO');
@@ -39,7 +38,6 @@ insert into homework (homework_id, created_at, modified_at, content, end_time, h
 insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, lesson_id) values (5, now(), now(), 'p 0 ~ 10', now(), '물리 숙제', now(), 4);
 insert into homework (homework_id, created_at, modified_at, content, end_time, homework_name, start_time, lesson_id) values (6, now(), now(), 'p 0 ~ 10', now() + INTERVAL 1 DAY, '물리2 숙제', now(), 5);
 
-
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (1, now(), now(), false, 1, 1);
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (2, now(), now(), false, 1, 2);
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (3, now(), now(), false, 1, 3);
@@ -66,3 +64,4 @@ insert into student_homework (student_homework_id, created_at, modified_at, home
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (18, now(), now(), true, 8, 1);
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (19, now(), now(), true, 8, 2);
 insert into student_homework (student_homework_id, created_at, modified_at, homework_status, homework_id, student_id) values (20, now(), now(), true, 8, 3)
+

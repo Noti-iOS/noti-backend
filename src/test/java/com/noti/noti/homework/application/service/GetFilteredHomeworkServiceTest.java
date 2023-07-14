@@ -37,11 +37,12 @@ class GetFilteredHomeworkServiceTest {
 
   List<OutFilteredHomeworkFrequency> createOutList() {
     OutFilteredHomeworkFrequency out1 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 25), 2);
+
+        LocalDate.of(2023, 2, 25).atStartOfDay(), 2L);
     OutFilteredHomeworkFrequency out2 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 26), 1);
+        LocalDate.of(2023, 2, 26).atStartOfDay(), 1L);
     OutFilteredHomeworkFrequency out3 = new OutFilteredHomeworkFrequency(
-        LocalDate.of(2023, 2, 27), 4);
+        LocalDate.of(2023, 2, 27).atStartOfDay(), 4L);
     return List.of(out1, out2, out3);
   }
 
@@ -69,6 +70,24 @@ class GetFilteredHomeworkServiceTest {
           validCommand());
       assertThat(in).isInstanceOf(List.class);
       assertThat(in.get(1)).isInstanceOf(InFilteredHomeworkFrequency.class);
+    }
+
+    @DisplayName("모든 조건을 충족할 때 OutFilteredHomeworkFrequency 와 같은 내용 반환")
+    @Test
+    void return_same_content_OutFilteredHomeworkFrequency() {
+
+      // 어댑터로 넘어가는 포트 mock
+      when(findFilteredHomeworkPort.findFilteredHomeworks(any(), anyLong(), anyLong()))
+          .thenReturn(createOutList());
+
+      List<InFilteredHomeworkFrequency> in = getFilteredHomeworkService.getFilteredHomeworks(
+          validCommand());
+
+      for (int i = 0; i < 3; i++) {
+        assertThat(in.get(i).getDate()).isEqualTo(createOutList().get(i).getDate());
+        assertThat(in.get(i).getHomeworksCnt()).isEqualTo(createOutList().get(i).getHomeworkCnt());
+      }
+
     }
 
     @DisplayName("선생님이 만든 수업이 없으면 InFilteredHomeworkFrequency 타입의 빈 리스트 반환")

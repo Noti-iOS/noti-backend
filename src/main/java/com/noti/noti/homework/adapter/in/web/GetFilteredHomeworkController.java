@@ -11,11 +11,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,18 +47,27 @@ public class GetFilteredHomeworkController {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))})
   })
-  @GetMapping("/api/teacher/calendar/filtered")
+  @GetMapping("/api/teacher/calendar")
   @Parameter(name = "userDetails", hidden = true)
-  public ResponseEntity<SuccessResponse<List<FilteredHomeworkDto>>> getFilteredHomeworkInfo(@RequestParam @Min(0) int year, @RequestParam @Range(max = 12, min = 1) int month, @AuthenticationPrincipal
-      UserDetails userDetails,@RequestParam Long lessonId) { // 예외처리
+  public ResponseEntity<SuccessResponse<List<FilteredHomeworkDto>>> getFilteredHomeworkInfo(@RequestParam @Min(0) int year, @RequestParam @Range(max = 12, min = 1) int month,
+      @AuthenticationPrincipal UserDetails userDetails, @RequestParam String filter) { // 예외처리
     long teacherId = Long.parseLong(userDetails.getUsername());
 
-    List<InFilteredHomeworkFrequency> inFilteredHomeworkFrequencies = getFilteredHomeworkQuery.getFilteredHomeworks(
-        new FilteredHomeworkCommand(teacherId, lessonId, year, month));
-    List<FilteredHomeworkDto> filteredHomeworkDtos = new ArrayList<>();
-    inFilteredHomeworkFrequencies.forEach(in -> filteredHomeworkDtos.add(new FilteredHomeworkDto(in)));
+    if (filter.equals("all")) {
+      HttpHeaders headers = new HttpHeaders();
+      headers.setLocation(URI.create("/api/teacher/calendar/all?year=" + year + "&month=" + month));
+      return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 
-    return ResponseEntity.ok().body(SuccessResponse.create200SuccessResponse(filteredHomeworkDtos));
+    } else {
+      Long filterLessonId = Long.parseLong(filter);
+      List<InFilteredHomeworkFrequency> inFilteredHomeworkFrequencies = getFilteredHomeworkQuery.getFilteredHomeworks(
+          new FilteredHomeworkCommand(teacherId, filterLessonId, year, month));
+      List<FilteredHomeworkDto> filteredHomeworkDtos = new ArrayList<>();
+      inFilteredHomeworkFrequencies.forEach(in -> filteredHomeworkDtos.add(new FilteredHomeworkDto(in)));
+
+      return ResponseEntity.ok().body(SuccessResponse.create200SuccessResponse(filteredHomeworkDtos));
+    }
+
   }
 }
 
