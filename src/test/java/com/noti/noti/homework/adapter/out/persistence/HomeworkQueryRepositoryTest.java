@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.config.QuerydslTestConfig;
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.SearchedHomework;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

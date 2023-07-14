@@ -129,7 +129,7 @@ class GetFilteredHomeworkControllerTest {
     MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
     info.add("year", String.valueOf(year));
     info.add("month", String.valueOf(month));
-    info.add("filter", String.valueOf(lessonId));
+    info.add("lessonType", String.valueOf(lessonId));
     return info;
   }
 

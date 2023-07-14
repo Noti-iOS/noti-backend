@@ -50,16 +50,16 @@ public class GetFilteredHomeworkController {
   @GetMapping("/api/teacher/calendar")
   @Parameter(name = "userDetails", hidden = true)
   public ResponseEntity<SuccessResponse<List<FilteredHomeworkDto>>> getFilteredHomeworkInfo(@RequestParam @Min(0) int year, @RequestParam @Range(max = 12, min = 1) int month,
-      @AuthenticationPrincipal UserDetails userDetails, @RequestParam String filter) { // 예외처리
+      @AuthenticationPrincipal UserDetails userDetails, @RequestParam String lessonType) { // 예외처리
     long teacherId = Long.parseLong(userDetails.getUsername());
 
-    if (filter.equals("all")) {
+    if (lessonType.equals("all")) {
       HttpHeaders headers = new HttpHeaders();
       headers.setLocation(URI.create("/api/teacher/calendar/all?year=" + year + "&month=" + month));
       return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 
     } else {
-      Long filterLessonId = Long.parseLong(filter);
+      Long filterLessonId = Long.parseLong(lessonType);
       List<InFilteredHomeworkFrequency> inFilteredHomeworkFrequencies = getFilteredHomeworkQuery.getFilteredHomeworks(
           new FilteredHomeworkCommand(teacherId, filterLessonId, year, month));
       List<FilteredHomeworkDto> filteredHomeworkDtos = new ArrayList<>();
