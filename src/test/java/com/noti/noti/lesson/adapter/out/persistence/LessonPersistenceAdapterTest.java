@@ -14,6 +14,7 @@ import com.noti.noti.lesson.domain.model.Lesson;
 import com.noti.noti.teacher.adpater.out.persistence.TeacherMapper;
 import com.noti.noti.teacher.domain.Teacher;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -183,8 +184,6 @@ class LessonPersistenceAdapterTest {
     @Nested
     class 년_월이_주어지고 {
 
-      final String yearMonth = YearMonth.now().toString();
-
       Long teacherId1 = 1L;
       Long teacherId2 = 2L;
       Long teacherId3 = 3L;
@@ -196,14 +195,16 @@ class LessonPersistenceAdapterTest {
         @Test
         void 주어진_월에서_숙제가_있는_날짜와_분반_수를_반환한다() {
 
+          LocalDate now = LocalDate.now();
+
           List<FrequencyOfLessons> frequencyOfLessons1 = lessonPersistenceAdapter.findFrequencyOfLessons(
-              yearMonth, teacherId1);
+              now.getYear(), now.getMonth().getValue(), teacherId1);
 
           List<FrequencyOfLessons> frequencyOfLessons2 = lessonPersistenceAdapter.findFrequencyOfLessons(
-              yearMonth, teacherId2);
+              now.getYear(), now.getMonth().getValue(), teacherId2);
 
           List<FrequencyOfLessons> frequencyOfLessons3 = lessonPersistenceAdapter.findFrequencyOfLessons(
-              yearMonth, teacherId3);
+              now.getYear(), now.getMonth().getValue(), teacherId3);
 
           assertThat(frequencyOfLessons1).size().isEqualTo(2);
           assertThat(frequencyOfLessons2).size().isEqualTo(2);
@@ -218,8 +219,10 @@ class LessonPersistenceAdapterTest {
 
         @Test
         void 비어있는_list를_반환한다() {
+          LocalDate now = LocalDate.now();
+
           List<FrequencyOfLessons> frequencyOfLessons = lessonPersistenceAdapter.findFrequencyOfLessons(
-              yearMonth, teacherId1);
+              now.getYear(), now.getMonth().getValue(), teacherId1);
 
           assertThat(frequencyOfLessons).isEmpty();
         }

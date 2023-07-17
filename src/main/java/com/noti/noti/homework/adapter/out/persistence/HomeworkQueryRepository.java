@@ -5,6 +5,10 @@ import static com.noti.noti.lesson.adapter.out.persistence.jpa.model.QLessonJpaE
 import static com.noti.noti.studenthomework.adapter.out.persistence.jpa.model.QStudentHomeworkJpaEntity.studentHomeworkJpaEntity;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
+import static com.querydsl.core.types.dsl.Expressions.as;
+import static com.querydsl.core.types.dsl.Expressions.booleanOperation;
+import static com.querydsl.core.types.dsl.Expressions.constant;
+import static com.querydsl.core.types.dsl.Expressions.dateTemplate;
 
 import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
 import com.noti.noti.homework.application.port.out.OutHomeworkContent;
@@ -16,7 +20,6 @@ import com.querydsl.core.types.Ops;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringExpressions;
@@ -70,7 +73,7 @@ public class HomeworkQueryRepository {
 
   private BooleanExpression currentTimeOperation(LocalDateTime now) {
     log.info("now: {}", now);
-    return now != null ? Expressions.booleanOperation(Ops.BETWEEN, Expressions.constant(now),
+    return now != null ? booleanOperation(Ops.BETWEEN, constant(now),
         homeworkJpaEntity.startTime, homeworkJpaEntity.endTime) : null;
   }
 
@@ -89,23 +92,25 @@ public class HomeworkQueryRepository {
   public List<OutFilteredHomeworkFrequency> findFilteredHomeworkFrequency(Long teacherId, Long lessonId, LocalDateTime startDateOfMonth, LocalDateTime endDateOfMonth) {
     return queryFactory
         .select(Projections.constructor(OutFilteredHomeworkFrequency.class,
-            homeworkJpaEntity.startTime.as("date"),
+            as(constant(startDateOfMonth.getYear()), "year"),
+            as(constant(startDateOfMonth.getMonthValue()), "month"),
+            homeworkJpaEntity.startTime.dayOfMonth().as("day"),
             homeworkJpaEntity.id.count().as("homeworkCnt")
         ))
         .from(homeworkJpaEntity)
         .innerJoin(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(
             eqTeacherId(teacherId),
-            eqLessonIdOfTeacher(lessonId),
+            eqLessonId(lessonId),
             betweenYearMonth(startDateOfMonth, endDateOfMonth)
         )
-        .groupBy(lessonJpaEntity.startTime)
+        .groupBy(homeworkJpaEntity.startTime.dayOfMonth(), homeworkJpaEntity.startTime.yearMonth())
         .fetch();
   }
 
-  private BooleanExpression eqLessonIdOfTeacher(Long lessonId) {
+  private BooleanExpression eqLessonId(Long lessonId) {
     log.info("lesson Id: {} ", lessonId);
-    return lessonId != null ? lessonJpaEntity.teacherJpaEntity.id.eq(lessonId) : null;
+    return lessonId != null ? lessonJpaEntity.id.eq(lessonId) : null;
   }
 
   private BooleanExpression betweenYearMonth(LocalDateTime start, LocalDateTime end) {
@@ -173,6 +178,7 @@ public class HomeworkQueryRepository {
   }
 
   private BooleanExpression eqYearAndMonthOfStartTime(LocalDateTime date) {
+    log.info("startDate : {}, endDate : {}", date, date.plusDays(1).minusSeconds(1));
     return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
   }
   private BooleanExpression containsHomeworkName(String keyword) {
@@ -198,7 +204,7 @@ public class HomeworkQueryRepository {
   }
 
   private StringExpression dateFormatExpression(DateTimePath<LocalDateTime> localDateTime, String pattern) {
-    return Expressions.dateTemplate(String.class,
+    return dateTemplate(String.class,
         "function('date_format', {0}, {1})",
         localDateTime, ConstantImpl.create(pattern)).stringValue();
   }

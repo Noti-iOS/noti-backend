@@ -16,9 +16,9 @@ public class GetFrequencyOfLessonsService implements GetFrequencyOfLessonsQuery{
   private final FrequencyOfLessonsPort frequencyOfLessonsPort;
 
   @Override
-  public List<DateFrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
+  public List<DateFrequencyOfLessons> findFrequencyOfLessons(int year, int month, Long teacherId) {
 
-    List<FrequencyOfLessons> frequencyOfLessons = frequencyOfLessonsPort.findFrequencyOfLessons(yearMonth, teacherId);
+    List<FrequencyOfLessons> frequencyOfLessons = frequencyOfLessonsPort.findFrequencyOfLessons(year, month, teacherId);
     List<DateFrequencyOfLessons> dateFrequencyOfLessonsList = new ArrayList<>();
 
     frequencyOfLessons.forEach(

@@ -3,7 +3,11 @@ package com.noti.noti.homework.adapter.out.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.noti.noti.config.QuerydslTestConfig;
+import com.noti.noti.homework.application.port.out.OutFilteredHomeworkFrequency;
+import com.noti.noti.homework.application.port.out.OutHomeworkContent;
 import com.noti.noti.homework.application.port.out.SearchedHomework;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -174,5 +178,41 @@ class HomeworkQueryRepositoryTest {
       }
     }
   }
+
+
+  @Sql("/data/homework.sql")
+  @Nested
+  class findHomeworkContents_메소드는 {
+
+    @Test
+    void 주어진_날짜에_해당하는_수업에_대한_숙제를_반환한다() {
+      List<OutHomeworkContent> homeworkContents = homeworkQueryRepository.findHomeworkContents(1L,
+          LocalDate.now().atStartOfDay());
+
+      assertThat(homeworkContents.size()).isEqualTo(3);
+    }
+
+
+
+  }
+
+
+  @Nested
+  @Sql("/data/homework.sql")
+  class findFilteredHomeworkFrequency_메소드는 {
+
+    @Test
+    void 주어진_수업에_대한_숙제_빈도를_반환한다() {
+
+      LocalDateTime startOfMonth = LocalDate.now().atStartOfDay();
+      LocalDateTime endOfMonth = LocalDate.now().atStartOfDay().plusMonths(1).minusSeconds(1);
+      List<OutFilteredHomeworkFrequency> filteredHomeworkFrequency = homeworkQueryRepository.findFilteredHomeworkFrequency(
+          1L, 1L, startOfMonth, endOfMonth);
+
+      assertThat(filteredHomeworkFrequency.size()).isEqualTo(3);
+
+    }
+
+ }
 
 }
