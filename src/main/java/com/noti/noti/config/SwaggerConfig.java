@@ -43,6 +43,14 @@ public class SwaggerConfig {
   }
 
   @Bean
+  public GroupedOpenApi notificationApi() {
+    return GroupedOpenApi.builder()
+        .group("NOTI-notification")
+        .pathsToMatch("/api/notification/**")
+        .build();
+  }
+
+  @Bean
   public OpenAPI springNotiOpenAPI() {
     return new OpenAPI()
         .info(new Info().title("NOTI API")
