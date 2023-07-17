@@ -33,10 +33,10 @@ import org.springframework.util.MultiValueMap;
 @DisplayName("GetFilteredHomeworkControllerTest 클래스")
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @Import(JacksonConfiguration.class)
-@WebMvcTest(controllers = GetFilteredHomeworkController.class,
+@WebMvcTest(controllers = GetCalendarFrequencyController.class,
     excludeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE, classes = CustomJwtFilter.class))
-class GetFilteredHomeworkControllerTest {
+class GetCalendarFrequencyControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -129,7 +129,7 @@ class GetFilteredHomeworkControllerTest {
     MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
     info.add("year", String.valueOf(year));
     info.add("month", String.valueOf(month));
-    info.add("filter", String.valueOf(lessonId));
+    info.add("lessonType", String.valueOf(lessonId));
     return info;
   }
 

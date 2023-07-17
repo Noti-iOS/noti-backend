@@ -14,8 +14,8 @@ import com.noti.noti.lesson.application.port.out.StudentsInLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLesson;
 import com.noti.noti.lesson.application.port.out.TodaysLessonSearchConditon;
 import com.noti.noti.lesson.domain.model.Lesson;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +53,8 @@ class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
   }
 
   @Override
-  public List<FrequencyOfLessons> findFrequencyOfLessons(String yearMonth, Long teacherId) {
-    LocalDateTime startTime = stringToLocalDateTime(yearMonth);
+  public List<FrequencyOfLessons> findFrequencyOfLessons(int year, int month, Long teacherId) {
+    LocalDateTime startTime = LocalDate.of(year, month, 1).atStartOfDay();
     LocalDateTime endTime = startTime.plusMonths(1);
 
     return lessonQueryRepository.findFrequencyOfLesson(startTime, endTime, teacherId);
@@ -68,22 +68,6 @@ class LessonPersistenceAdapter implements SaveLessonPort, FindLessonPort,
   public boolean existsById(Long lessonId) {
     return lessonJpaRepository.existsById(lessonId);
   }
-
-  /**
-   * 문자열을 LocalDateTime으로 변환
-   *
-   * @param yearMonth '년-월' 형식의 문자열
-   * @return 해당 '년-월'에서 1일의 LocalDateTime
-   */
-  private LocalDateTime stringToLocalDateTime(String yearMonth) {
-
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(yearMonth).append("-01 00:00:00.000");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-
-    return LocalDateTime.parse(stringBuilder, formatter);
-  }
-
 
   @Override
   public List<OutCreatedLesson> findCreatedLessons(Long teacherId) {
