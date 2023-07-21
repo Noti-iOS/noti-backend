@@ -41,3 +41,5 @@ src/main/resources/**.yaml
 
 .jqwik-database
 /src/main/resources/import.sql
+
+serviceAccountKey.json
