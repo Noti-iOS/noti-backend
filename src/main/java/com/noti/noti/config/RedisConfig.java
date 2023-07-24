@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisKeyValueAdapter.EnableKeyspaceEvents;
+import org.springframework.data.redis.core.RedisKeyValueAdapter.ShadowCopy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -16,8 +17,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableRedisRepositories(enableKeyspaceEvents = EnableKeyspaceEvents.ON_STARTUP, keyspaceNotificationsConfigParameter = "")
+@EnableRedisRepositories(enableKeyspaceEvents = EnableKeyspaceEvents.ON_STARTUP, keyspaceNotificationsConfigParameter = "", shadowCopy = ShadowCopy.OFF)
 public class RedisConfig {
+
   private final RedisProperties redisProperties;
   private final String PATTERN = "__keyevent@*__:expired";
 
@@ -36,7 +38,8 @@ public class RedisConfig {
   }
 
   @Bean
-  public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory, ExpirationListener expirationListener) {
+  public RedisMessageListenerContainer redisMessageListenerContainer(
+      RedisConnectionFactory redisConnectionFactory, ExpirationListener expirationListener) {
     RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
     redisMessageListenerContainer.setConnectionFactory(redisConnectionFactory);
     redisMessageListenerContainer.addMessageListener(expirationListener, new PatternTopic(PATTERN));
