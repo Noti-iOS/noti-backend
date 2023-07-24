@@ -5,6 +5,7 @@ import static com.noti.noti.notification.adapter.out.persistence.MessageHeader.*
 import com.google.firebase.messaging.ApnsConfig;
 import com.google.firebase.messaging.Aps;
 import com.google.firebase.messaging.MulticastMessage;
+import com.google.firebase.messaging.Notification;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,17 @@ public class MessageGenerator {
   public MulticastMessage generateMulticastMessageForSilent(List<String> fcmTokens) {
     return MulticastMessage.builder().addAllTokens(fcmTokens)
         .setApnsConfig(generateApnsConfigForSilent())
+        .setNotification(generateNotificationForSilent())
         .build();
+  }
+
+  /**
+   * silent message Notification
+   *
+   * @return Notification for silent push
+   */
+  private Notification generateNotificationForSilent(){
+    return Notification.builder().setTitle("updateFcmToken").build();
   }
 
   /**
@@ -33,9 +44,8 @@ public class MessageGenerator {
    */
   private ApnsConfig generateApnsConfigForSilent() {
     return ApnsConfig.builder()
-        .setAps(Aps.builder().setContentAvailable(true).setCategory("update-fcmToken").build())
-        .putHeader(
-            APNS_PUSH_TYPE.getHeader(), "background")
+        .setAps(Aps.builder().setContentAvailable(true).build())
+        .putHeader(APNS_PUSH_TYPE.getHeader(), "background")
         .putHeader(APNS_PRIORITY.getHeader(), "5").build();
   }
 }
