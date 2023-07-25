@@ -21,7 +21,6 @@ public class FcmTokenMapper {
   public FcmToken mapToDomainEntity(FcmTokenRedisEntity fcmTokenRedisEntity) {
     return FcmToken.builder()
         .fcmToken(fcmTokenRedisEntity.getFcmToken())
-        .deviceNum(fcmTokenRedisEntity.getDeviceNum())
         .userId(fcmTokenRedisEntity.getUserId())
         .build();
   }
@@ -35,7 +34,6 @@ public class FcmTokenMapper {
   public FcmTokenRedisEntity mapToRedisEntity(FcmToken fcmToken) {
     return FcmTokenRedisEntity.builder()
         .fcmToken(fcmToken.getFcmToken())
-        .deviceNum(fcmToken.getDeviceNum())
         .userId(fcmToken.getUserId())
         .build();
   }

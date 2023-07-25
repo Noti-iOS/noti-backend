@@ -52,8 +52,7 @@ public class SaveFcmTokenController {
     long userId = Long.parseLong(userDetails.getUsername());
 
     FcmToken fcmToken = saveFcmTokenUsecase.apply(
-        new SaveFcmTokenCommand(saveFcmTokenRequest.getFcmToken(),
-            saveFcmTokenRequest.getDeviceNum(), userId));
+        new SaveFcmTokenCommand(saveFcmTokenRequest.getFcmToken(), userId));
 
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(SuccessResponse.create201SuccessResponse());

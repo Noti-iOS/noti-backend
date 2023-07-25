@@ -49,39 +49,12 @@ class SaveFcmTokenControllerTest {
   ObjectMapper objectMapper;
 
   @Nested
-  class 메서드는 {
-
-    @Nested
-    class deviceNum_key가_없는_요청이_주어지면 {
-
-      final String EMPTY_DEVICE_NUM_REQUEST =
-          "{"
-              + "\"fcmToken\": \"fcmToken\""
-              + "}";
-
-      @WithAuthUser(id = "1", role = "ROLE_TEACHER")
-      @Test
-      void 응답코드_400_에러가_발생한다() throws Exception {
-
-        mockMvc.perform(post("/api/notification/tokens")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(EMPTY_DEVICE_NUM_REQUEST))
-            .andExpectAll(
-                status().isBadRequest(),
-                result -> assertThat(result.getResolvedException()).isInstanceOf(
-                    MethodArgumentNotValidException.class)
-            );
-      }
-    }
+  class saveFcmToken_메서드는 {
 
     @Nested
     class fcmToken_key가_없는_요청이_주어지면 {
 
-      final String EMPTY_FCM_TOKEN_REQUEST =
-          "{"
-              + "\"deviceNum\": \"deviceNum\""
-              + "}";
+      final String EMPTY_FCM_TOKEN_REQUEST = "{}";
 
       @WithAuthUser(id = "1", role = "ROLE_TEACHER")
       @Test
@@ -104,7 +77,6 @@ class SaveFcmTokenControllerTest {
 
       final String WHITE_SPACE_REQUEST =
           "{"
-              + "\"deviceNum\": \"deviceNum\","
               + "\"fcmToken\": \"\""
               + "}";
 
@@ -149,7 +121,6 @@ class SaveFcmTokenControllerTest {
 
         FcmToken returnedFcmToken = FcmToken.builder()
             .fcmToken(givenRequest.getFcmToken())
-            .deviceNum(givenRequest.getDeviceNum())
             .userId(1L)
             .build();
 

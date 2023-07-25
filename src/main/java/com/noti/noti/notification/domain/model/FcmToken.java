@@ -8,15 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FcmToken {
 
-  private String deviceNum;
-
   private Long userId;
-
   private String fcmToken;
 
   @Builder
-  public FcmToken(String deviceNum, Long userId, String fcmToken) {
-    this.deviceNum = deviceNum;
+  public FcmToken(Long userId, String fcmToken) {
     this.userId = userId;
     this.fcmToken = fcmToken;
   }

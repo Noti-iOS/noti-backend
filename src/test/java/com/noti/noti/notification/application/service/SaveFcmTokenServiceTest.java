@@ -38,13 +38,11 @@ class SaveFcmTokenServiceTest {
       @Test
       void 성공적으로_요청을_저장하고_저장된_FcmToken을_반환한다 (){
         SaveFcmTokenCommand saveFcmTokenCommand = MonkeyUtils.MONKEY.giveMeBuilder(SaveFcmTokenCommand.class)
-            .setNotNull("deviceNum")
             .minSize("userId", 1)
             .setNotNull("fcmToken")
             .sample();
 
         FcmToken savedFcmToken = FcmToken.builder()
-            .deviceNum(saveFcmTokenCommand.getDeviceNum())
             .userId(saveFcmTokenCommand.getUserId())
             .fcmToken(saveFcmTokenCommand.getFcmToken())
             .build();
@@ -52,7 +50,7 @@ class SaveFcmTokenServiceTest {
         when(saveFcmTokenPort.saveFcmToken(any())).thenReturn(savedFcmToken);
 
         FcmToken fcmToken = saveFcmTokenService.apply(saveFcmTokenCommand);
-        assertThat(fcmToken.getDeviceNum()).isEqualTo(saveFcmTokenCommand.getDeviceNum());
+        assertThat(fcmToken.getFcmToken()).isEqualTo(saveFcmTokenCommand.getFcmToken());
       }
     }
   }

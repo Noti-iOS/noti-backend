@@ -34,30 +34,31 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
 
       @Test
       void 성공적으로_해당_객체를_저장하고_저장된_객체를_반환한다 (){
-        FcmToken givenFcmToken = MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).setNull("deviceNum").sample();
+        FcmToken givenFcmToken = MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).setNotNull("fcmToken").sample();
         FcmToken savedFcmToken = fcmTokenPersistenceAdapter.saveFcmToken(givenFcmToken);
 
-        assertThat(savedFcmToken.getDeviceNum()).isNotNull();
+        assertThat(savedFcmToken.getFcmToken()).isNotNull();
       }
     }
 
     @Nested
     class 이미_존재하는_ID의_FcmToken_엔티티가_주어지면 {
 
-      final String DEVICE_NUM = "deviceNum";
+      final String FCM_TOKEN = "FCMTOKEN";
 
       @Test
       void 성공적으로_값을_업데이트하고_갱신된_객체를_반환한다 (){
         FcmToken savedFcmToken = fcmTokenPersistenceAdapter.saveFcmToken(
-            MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).set("deviceNum", DEVICE_NUM).sample());
+            MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).set("fcmToken", FCM_TOKEN)
+                .setNotNull("userId").sample());
 
         FcmToken givenFcmToken = MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class)
-            .set("deviceNum", DEVICE_NUM).set("fcmToken", "updated").sample();
+            .set("fcmToken", FCM_TOKEN).set("userId", 1L).sample();
 
         FcmToken updatedFcmToken = fcmTokenPersistenceAdapter.saveFcmToken(givenFcmToken);
         assertAll(
-            () -> assertThat(updatedFcmToken.getFcmToken()).isNotEqualTo(savedFcmToken.getFcmToken()),
-            () -> assertThat(updatedFcmToken.getDeviceNum()).isEqualTo(savedFcmToken.getDeviceNum())
+            () -> assertThat(updatedFcmToken.getFcmToken()).isEqualTo(savedFcmToken.getFcmToken()),
+            () -> assertThat(updatedFcmToken.getUserId()).isNotEqualTo(savedFcmToken.getUserId())
         );
       }
     }
