@@ -5,7 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.noti.noti.common.MonkeyUtils;
 import com.noti.noti.common.RedisTestContainerConfig;
+import com.noti.noti.notification.adapter.out.persistence.model.FcmTokenRedisEntity;
 import com.noti.noti.notification.domain.model.FcmToken;
+import java.util.List;
+import net.jqwik.api.Arbitraries;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
@@ -26,6 +31,14 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
   @Autowired
   private FcmTokenPersistenceAdapter fcmTokenPersistenceAdapter;
 
+  @Autowired
+  private FcmTokenRedisRepository fcmTokenRedisRepository;
+
+  @AfterEach
+  void deleteAll() {
+    fcmTokenRedisRepository.deleteAll();
+  }
+
   @Nested
   class saveFcmToken_메서드는 {
 
@@ -33,8 +46,9 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
     class 새로운_FcmToken_엔티티가_주어지면 {
 
       @Test
-      void 성공적으로_해당_객체를_저장하고_저장된_객체를_반환한다 (){
-        FcmToken givenFcmToken = MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).setNotNull("fcmToken").sample();
+      void 성공적으로_해당_객체를_저장하고_저장된_객체를_반환한다() {
+        FcmToken givenFcmToken = MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class)
+            .setNotNull("fcmToken").sample();
         FcmToken savedFcmToken = fcmTokenPersistenceAdapter.saveFcmToken(givenFcmToken);
 
         assertThat(savedFcmToken.getFcmToken()).isNotNull();
@@ -47,7 +61,7 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
       final String FCM_TOKEN = "FCMTOKEN";
 
       @Test
-      void 성공적으로_값을_업데이트하고_갱신된_객체를_반환한다 (){
+      void 성공적으로_값을_업데이트하고_갱신된_객체를_반환한다() {
         FcmToken savedFcmToken = fcmTokenPersistenceAdapter.saveFcmToken(
             MonkeyUtils.MONKEY.giveMeBuilder(FcmToken.class).set("fcmToken", FCM_TOKEN)
                 .setNotNull("userId").sample());
@@ -63,5 +77,41 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
       }
     }
   }
+
+  @Nested
+  class findAll_메서드는 {
+
+    @Nested
+    class 조회할_Token이_존재하지_않으면 {
+
+      @Test
+      void 빈_리스트를_반환한다() {
+        List<String> fcmTokenKey = fcmTokenPersistenceAdapter.findAllFcmTokenKey();
+        assertThat(fcmTokenKey).isEmpty();
+      }
+    }
+
+    @Nested
+    class 조회할_Token이_존재하면 {
+
+      @BeforeEach
+      void init() {
+        List<FcmTokenRedisEntity> fcmTokenRedisEntities = MonkeyUtils.MONKEY.giveMeBuilder(
+                FcmTokenRedisEntity.class).setNull("fcmToken")
+            .set("userId", Arbitraries.longs().greaterOrEqual(1L))
+            .minSize("userId", 1)
+            .sampleList(100);
+
+        fcmTokenRedisRepository.saveAll(fcmTokenRedisEntities);
+      }
+
+      @Test
+      void fcmToken의_key_리스트를_반환한다() {
+        List<String> fcmTokenKey = fcmTokenPersistenceAdapter.findAllFcmTokenKey();
+        assertThat(fcmTokenKey).isNotEmpty();
+      }
+    }
+  }
+
 
 }
