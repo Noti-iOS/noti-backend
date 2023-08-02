@@ -18,7 +18,6 @@ public class SaveFcmTokenService implements SaveFcmTokenUsecase {
     FcmToken fcmToken = FcmToken.builder()
         .fcmToken(saveFcmTokenCommand.getFcmToken())
         .userId(saveFcmTokenCommand.getUserId())
-        .deviceNum(saveFcmTokenCommand.getDeviceNum())
         .build();
 
     FcmToken savedFcmToken = saveFcmTokenPort.saveFcmToken(fcmToken);

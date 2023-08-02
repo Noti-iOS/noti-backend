@@ -56,6 +56,9 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// firebase admin sdk
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+
 	// m1 spring cloud gateway
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.82.Final:osx-aarch_64'
 
@@ -85,7 +88,7 @@ processResources.dependsOn('copyPrivate')
 task copyPrivate(type: Copy) {
 	copy {
 		from './noti-config'
-		include "*.yaml"
+		include "*.yaml", "*.json"
 		into 'src/main/resources'
 	}
 }
