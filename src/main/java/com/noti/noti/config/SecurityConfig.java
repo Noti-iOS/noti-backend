@@ -43,6 +43,7 @@ public class SecurityConfig {
         .authorizeRequests()
         .antMatchers("/api/teacher/login/**", "/", "/favicon.ico", "/swagger-ui.html", "/swagger-ui/**",
             "/api-docs/**").permitAll()
+        .antMatchers(HttpMethod.PATCH, "/api/notification/tokens").permitAll()
         .antMatchers( "/api/auth/reissue").permitAll()
         .antMatchers("/api/teacher/**").hasRole("TEACHER")
         .anyRequest().authenticated()
