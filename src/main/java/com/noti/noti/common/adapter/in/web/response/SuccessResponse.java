@@ -29,6 +29,11 @@ public class SuccessResponse<T> {
     return new SuccessResponse(SUCCESS_MESSAGE, 201, null);
   }
 
+  public static SuccessResponse create200SuccessResponse() {
+
+    return new SuccessResponse(SUCCESS_MESSAGE, 200, null);
+  }
+
   public static <T> SuccessResponse create200SuccessResponse(T data) {
 
     return new SuccessResponse(SUCCESS_MESSAGE, 200, data);

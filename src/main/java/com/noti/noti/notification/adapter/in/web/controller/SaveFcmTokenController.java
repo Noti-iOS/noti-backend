@@ -31,7 +31,7 @@ public class SaveFcmTokenController {
 
   private final SaveFcmTokenUsecase saveFcmTokenUsecase;
 
-  @Operation(tags = "FCM Token 저장, 갱신 API ", summary = "saveFcmToken", description = "FCM Token 저장, 갱신",
+  @Operation(tags = "FCM Token 저장 API ", summary = "saveFcmToken", description = "FCM Token 저장",
       responses = {
           @ApiResponse(responseCode = "201", description = "성공", useReturnTypeSchema = true),
           @ApiResponse(responseCode = "500", description = "서버에러", content = {

@@ -19,6 +19,13 @@ public enum ErrorCode {
   */
 
   /**
+   * FcmToken 관련 error code
+   *
+   */
+
+  FCM_TOKEN_NOT_FOUND(404, "F001", "해당 FCM 토큰 정보가 존재하지 않습니다"),
+
+  /**
    * JWT 관련 error code
    */
   EXPIRED_JWT(401, "J001", "만료된 토큰입니다"),

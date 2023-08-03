@@ -10,7 +10,6 @@ import org.springframework.data.redis.core.index.Indexed;
 
 /**
  * 사용자의 Fcm Token 정보를 저장할 Redis Entity 입니다.
- * deviceNum은 디바이스 고유 번호로 유니크하기 때문에 id로 사용하고,
  * 문서의 요구사항에 따라 2개월의 만료기간을 설정했습니다.
  */
 @RedisHash(value = "fcmToken", timeToLive = 60 * 60 * 24 * 60)

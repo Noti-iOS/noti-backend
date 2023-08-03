@@ -7,6 +7,7 @@ import com.noti.noti.common.MonkeyUtils;
 import com.noti.noti.common.RedisTestContainerConfig;
 import com.noti.noti.notification.adapter.out.persistence.model.FcmTokenRedisEntity;
 import com.noti.noti.notification.domain.model.FcmToken;
+import java.time.Duration;
 import java.util.List;
 import net.jqwik.api.Arbitraries;
 import org.junit.jupiter.api.AfterEach;
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataRedisTest
@@ -34,9 +37,73 @@ class FcmTokenPersistenceAdapterTest extends RedisTestContainerConfig {
   @Autowired
   private FcmTokenRedisRepository fcmTokenRedisRepository;
 
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
+
   @AfterEach
   void deleteAll() {
     fcmTokenRedisRepository.deleteAll();
+  }
+
+  @Nested
+  class existsById_메서드는 {
+
+    final String ID = "ID";
+    final String KEY = "fcmToken:ID";
+
+    @Nested
+    class ID에_해당하는_Key가_존재하면 {
+
+      @BeforeEach
+      void setup() {
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        hashOperations.put(KEY, "fcmToken", ID);
+      }
+
+      @Test
+      void true를_반환한다() {
+        boolean isExists = fcmTokenPersistenceAdapter.existsById(ID);
+        assertThat(isExists).isTrue();
+      }
+    }
+
+    @Nested
+    class ID에_해당하는_Key가_존재하지_않으면 {
+
+      @Test
+      void false를_반환한다() {
+        boolean isExists = fcmTokenPersistenceAdapter.existsById(ID);
+        assertThat(isExists).isFalse();
+      }
+    }
+  }
+
+  @Nested
+  class updateFcmTokenTtl_메서드는 {
+
+    final String ID = "ID";
+    final String KEY = "fcmToken:ID";
+
+    @BeforeEach
+    void setup() {
+      HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+      hashOperations.put(KEY, "fcmToken", ID);
+      stringRedisTemplate.expire(KEY, Duration.ofSeconds(30));
+    }
+
+    @Nested
+    class 만료기간을_갱신할_객체가_주어지면 {
+
+      @Test
+      void 성공적으로_만료기간을_갱신한다() {
+        Long expire = stringRedisTemplate.getExpire(KEY);
+
+        fcmTokenPersistenceAdapter.updateFcmTokenTtlById(ID);
+
+        Long updatedExpire = stringRedisTemplate.getExpire(KEY);
+        assertThat(expire).isNotEqualTo(updatedExpire);
+      }
+    }
   }
 
   @Nested
