@@ -6,18 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class CreatedLessonsDto {
 
-  private List<CreatedLesson> createdLessons;
+  @Schema(description = "생성한 분반 리스트")
+  private List<CreatedLesson> createdLessons = new ArrayList<>();
 
   public CreatedLessonsDto(List<InCreatedLesson> dtoList) {
-    List<CreatedLesson> createdLessons = dtoList.stream().map(CreatedLesson::new).collect(Collectors.toList());
+    this.createdLessons = dtoList.stream().map(CreatedLesson::new).collect(Collectors.toList());
   }
 
   @Getter
-  public class CreatedLesson {
+  private class CreatedLesson {
     @Schema(description = "분반 아이디", example = "1")
     private Long lessonId;
 

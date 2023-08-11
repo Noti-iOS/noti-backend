@@ -72,7 +72,7 @@ class GetCreatedLessonsControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/createdLessons"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.size()").value(3));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.createdLessons.size()").value(3));
       }
 
       @Test
@@ -85,7 +85,7 @@ class GetCreatedLessonsControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.size()").value(0));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.createdLessons.size()").value(0));
       }
 
     }
