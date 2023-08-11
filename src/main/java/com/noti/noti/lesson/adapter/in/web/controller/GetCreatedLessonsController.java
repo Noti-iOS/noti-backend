@@ -40,7 +40,7 @@ public class GetCreatedLessonsController {
               schema = @Schema(implementation = ErrorResponse.class))})
   })
   @GetMapping("/api/teacher/calendar/createdLessons")
-  @Parameter(name = "UserDetails", hidden = true)
+  @Parameter(name = "userDetails", hidden = true)
   public ResponseEntity<SuccessResponse<List<CreatedLessonsDto>>> getLessonsByTeacherId(@AuthenticationPrincipal
       UserDetails userDetails) {
     Long teacherId = Long.parseLong(userDetails.getUsername());
