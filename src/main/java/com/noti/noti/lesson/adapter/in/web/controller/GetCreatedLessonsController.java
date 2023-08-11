@@ -46,9 +46,9 @@ public class GetCreatedLessonsController {
     Long teacherId = Long.parseLong(userDetails.getUsername());
 
     List<InCreatedLesson> inCreatedLessons = getCreatedLessonsQuery.createdLessons(new CreatedLessonCommand(teacherId));
-    List<CreatedLessonsDto> createdLessonsDto = inCreatedLessons.stream().map(CreatedLessonsDto::new).collect(Collectors.toList());
+    CreatedLessonsDto response = new CreatedLessonsDto(inCreatedLessons);
 
-    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(createdLessonsDto));
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }
 
 
