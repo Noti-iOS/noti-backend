@@ -40,15 +40,15 @@ public class GetCreatedLessonsController {
               schema = @Schema(implementation = ErrorResponse.class))})
   })
   @GetMapping("/api/teacher/calendar/createdLessons")
-  @Parameter(name = "UserDetails", hidden = true)
+  @Parameter(name = "userDetails", hidden = true)
   public ResponseEntity<SuccessResponse<List<CreatedLessonsDto>>> getLessonsByTeacherId(@AuthenticationPrincipal
       UserDetails userDetails) {
     Long teacherId = Long.parseLong(userDetails.getUsername());
 
     List<InCreatedLesson> inCreatedLessons = getCreatedLessonsQuery.createdLessons(new CreatedLessonCommand(teacherId));
-    List<CreatedLessonsDto> createdLessonsDto = inCreatedLessons.stream().map(CreatedLessonsDto::new).collect(Collectors.toList());
+    CreatedLessonsDto response = new CreatedLessonsDto(inCreatedLessons);
 
-    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(createdLessonsDto));
+    return ResponseEntity.ok(SuccessResponse.create200SuccessResponse(response));
   }
 
 
