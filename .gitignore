@@ -38,6 +38,7 @@ out/
 ### VS Code ###
 .vscode/
 src/main/resources/**.yaml
+src/main/resources/db/
 
 .jqwik-database
 /src/main/resources/import.sql
