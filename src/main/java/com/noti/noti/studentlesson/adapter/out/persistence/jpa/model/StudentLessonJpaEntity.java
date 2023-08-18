@@ -30,6 +30,9 @@ public class StudentLessonJpaEntity {
   @Column
   private boolean focusStatus;
 
+  @Column
+  private boolean isDeleted;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "lesson_id")
   private LessonJpaEntity lessonJpaEntity;
@@ -39,10 +42,11 @@ public class StudentLessonJpaEntity {
   private StudentJpaEntity studentJpaEntity;
 
   @Builder
-  public StudentLessonJpaEntity(Long id, boolean focusStatus, LessonJpaEntity lessonJpaEntity,
-      StudentJpaEntity studentJpaEntity) {
+  public StudentLessonJpaEntity(Long id, boolean focusStatus, boolean isDeleted,
+      LessonJpaEntity lessonJpaEntity, StudentJpaEntity studentJpaEntity) {
     this.id = id;
     this.focusStatus = focusStatus;
+    this.isDeleted = isDeleted;
     this.lessonJpaEntity = lessonJpaEntity;
     this.studentJpaEntity = studentJpaEntity;
   }
