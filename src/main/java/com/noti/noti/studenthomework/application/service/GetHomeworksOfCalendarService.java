@@ -17,9 +17,10 @@ public class GetHomeworksOfCalendarService implements GetHomeworksOfCalendarQuer
   private final FindHomeworksOfCalendarPort findHomeworksOfCalendarPort;
 
   @Override
-  public List<InHomeworkOfGivenDate> findHomeworksOfCalendar(LocalDate date, Long teacherId) {
-    List<OutHomeworkOfGivenDate> outHomeworkOfGivenDates = findHomeworksOfCalendarPort.findHomeworksOfCalendar(
-        date, teacherId);
+  public List<InHomeworkOfGivenDate> findHomeworksOfCalendar(Long lessonId, LocalDate date, Long teacherId) {
+    List<OutHomeworkOfGivenDate> outHomeworkOfGivenDates = findHomeworksOfCalendarPort
+        .findHomeworksOfCalendar(lessonId, date, teacherId);
+
     List<InHomeworkOfGivenDate> inHomeworkOfGivenDates = new ArrayList<>();
 
     outHomeworkOfGivenDates.forEach(
