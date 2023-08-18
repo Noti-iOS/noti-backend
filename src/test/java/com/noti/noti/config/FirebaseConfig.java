@@ -5,9 +5,9 @@ import com.google.firebase.FirebaseOptions;
 import com.noti.noti.common.MockGoogleCredentials;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Configuration;
 
-@TestConfiguration
+@Configuration
 public class FirebaseConfig {
 
   @PostConstruct
