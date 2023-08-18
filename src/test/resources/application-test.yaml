@@ -11,17 +11,18 @@ spring:
       data-source-properties:
         rewriteBatchedStatements: true
 
+  flyway:
+    enabled: true
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
         order_updates: true
         order_inserts: true
         format_sql: true
         show_sql: true
-
 
 jwt:
   secret: secretKey-test-jwt-for-noti-project-update
