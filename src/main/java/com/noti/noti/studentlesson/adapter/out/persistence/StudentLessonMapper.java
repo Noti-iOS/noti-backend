@@ -18,6 +18,7 @@ public class StudentLessonMapper {
     return StudentLesson.builder()
         .id(studentLessonJpaEntity.getId())
         .focusStatus(studentLessonJpaEntity.isFocusStatus())
+        .isDeleted(studentLessonJpaEntity.isDeleted())
         .lesson(lessonMapper.mapToDomainEntity(studentLessonJpaEntity.getLessonJpaEntity()))
         .student(studentMapper.mapToDomainEntity(studentLessonJpaEntity.getStudentJpaEntity()))
         .build();
@@ -27,6 +28,7 @@ public class StudentLessonMapper {
     return StudentLessonJpaEntity.builder()
         .id(studentLesson.getId())
         .focusStatus(studentLesson.isFocusStatus())
+        .isDeleted(studentLesson.isDeleted())
         .studentJpaEntity(studentMapper.mapToJpaEntity(studentLesson.getStudent()))
         .lessonJpaEntity(lessonMapper.mapToJpaEntity(studentLesson.getLesson()))
         .build();

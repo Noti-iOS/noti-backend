@@ -60,10 +60,10 @@ class LessonPersistenceAdapterTest {
     }
 
     @Nested
-    class 조건에_해당하는_수업은_존재하고_학생은_존재하지_않는다면 {
+    class 조건에_해당하는_학생이_존재하지_않는다면 {
 
       @Test
-      void studentIds_목록은_비어있는_StudentsInLesson_Optional_객체를_반환한다() {
+      void 비어있는_Optional_객체를_반환한다() {
         Optional<StudentsInLesson> returnedStudentsInLesson = lessonPersistenceAdapter
             .findLessonAndStudentsById(4L);
 
@@ -78,7 +78,7 @@ class LessonPersistenceAdapterTest {
     class 조건에_해당하는_수업과_학생이_존재하면 {
 
       @Test
-      void 정보가_모두_담긴_StudentsInLesson_Optional_객체를_반환한다() {
+      void 정보가_모두_담긴_Optional_객체를_반환한다() {
         Optional<StudentsInLesson> returnedStudentsInLesson = lessonPersistenceAdapter
             .findLessonAndStudentsById(1L);
 

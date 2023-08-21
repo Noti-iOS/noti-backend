@@ -10,13 +10,16 @@ public class StudentLesson {
 
   private Long id;
   private boolean focusStatus;
+  private boolean isDeleted;
   private Lesson lesson;
   private Student student;
 
   @Builder
-  public StudentLesson(Long id, boolean focusStatus, Lesson lesson, Student student) {
+  public StudentLesson(Long id, boolean focusStatus, boolean isDeleted, Lesson lesson,
+      Student student) {
     this.id = id;
     this.focusStatus = focusStatus;
+    this.isDeleted = isDeleted;
     this.lesson = lesson;
     this.student = student;
   }
