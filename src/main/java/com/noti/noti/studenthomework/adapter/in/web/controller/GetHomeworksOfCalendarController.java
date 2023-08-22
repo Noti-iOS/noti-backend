@@ -46,16 +46,23 @@ public class GetHomeworksOfCalendarController {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))})
   })
-  @GetMapping("/api/teacher/homeworks")
+  @GetMapping("/api/teacher/calendar/homeworks")
   @Parameter(name = "userDetails", hidden = true)
   ResponseEntity<SuccessResponse<List<HomeworkOfGivenDateDto>>> getHomeworksOfCalendar(
-      @RequestParam Long lessonType,
+      @RequestParam String lessonType,
       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
       @AuthenticationPrincipal UserDetails userDetails
   ) {
     long teacherId = Long.parseLong(userDetails.getUsername());
 
-    List<InHomeworkOfGivenDate> inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(lessonType, date, teacherId);
+    List<InHomeworkOfGivenDate> inHomeworkOfGivenDate;
+
+    if (lessonType.equals("all")) {
+      inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(null, date, teacherId);
+    } else {
+      inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(Long.parseLong(lessonType), date, teacherId);
+    }
+
 
 
     List<HomeworkOfGivenDateDto> responseDto = new ArrayList<>();
