@@ -77,7 +77,7 @@ class StudentHomeworkAdapterTest {
 
         @Test
         void 빈_리스트를_반환한다() {
-          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(1L, LocalDate.now(), 1L);
+          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(1L, LocalDate.now(), 3L);
           Assertions.assertThat(homeworks).isEmpty();
         }
 
@@ -88,8 +88,8 @@ class StudentHomeworkAdapterTest {
 
         @Test
         void 빈_리스트를_반환한다() {
-          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(1L, LocalDate.now(), 1L);
-          Assertions.assertThat(homeworks).isEmpty();
+          List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(1L, LocalDate.now().plusYears(3), 1L);
+          Assertions.assertThat(homeworks.size()).isEqualTo(0);
         }
       }
 
@@ -100,7 +100,7 @@ class StudentHomeworkAdapterTest {
         void 숙제_리스트를_반환한다() {
           List<OutHomeworkOfGivenDate> homeworks = studentHomeworkAdapter.findHomeworksOfCalendar(1L, LocalDate.now(), 1L);
 
-          Assertions.assertThat(homeworks.size()).isEqualTo(4);
+          Assertions.assertThat(homeworks.get(0).getHomeworks().size()).isEqualTo(3);
         }
       }
     }
