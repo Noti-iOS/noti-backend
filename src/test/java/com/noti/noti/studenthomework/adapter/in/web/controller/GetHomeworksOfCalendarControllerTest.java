@@ -3,6 +3,8 @@ package com.noti.noti.studenthomework.adapter.in.web.controller;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
@@ -82,12 +84,12 @@ class GetHomeworksOfCalendarControllerTest {
       String month = Integer.toString(now.getMonth().getValue());
       String day = Integer.toString(now.getDayOfMonth());
 
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
-          .andExpect(MockMvcResultMatchers.status().isOk())
-          .andExpect(MockMvcResultMatchers.jsonPath("$.[0].lessonId").value(3L))
-          .andExpect(MockMvcResultMatchers.jsonPath("$.[2].lessonName").value("lesson1"))
-          .andExpect(MockMvcResultMatchers.jsonPath("$.[2].homeworks.length()").value(2))
-          .andExpect(MockMvcResultMatchers.jsonPath("$.[1].homeworks.length()").value(1));
+      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.data.[0].lessonId").value(3L))
+          .andExpect(jsonPath("$.data.[2].lessonName").value("lesson1"))
+          .andExpect(jsonPath("$.data.[2].homeworks.length()").value(2))
+          .andExpect(jsonPath("$.data.[1].homeworks.length()").value(1));
     }
 
   }
@@ -106,9 +108,9 @@ class GetHomeworksOfCalendarControllerTest {
       String month = Integer.toString(now.getMonth().getValue());
       String day = Integer.toString(now.getDayOfMonth());
 
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
-          .andExpect(MockMvcResultMatchers.status().isOk())
-          .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
+      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.data").isEmpty());
     }
 
   }
@@ -127,8 +129,8 @@ class GetHomeworksOfCalendarControllerTest {
       String month = now.getMonth().toString();
       String day = now.getDayOfWeek().toString();
 
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day)) // ex. /api/teacher/calendar/2023/JANUARY/TUESDAY
-          .andExpect(MockMvcResultMatchers.status().is(400));
+      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day)) // ex. /api/teacher/calendar/2023/JANUARY/TUESDAY
+          .andExpect(status().is(400));
 
     }
 
@@ -147,8 +149,8 @@ class GetHomeworksOfCalendarControllerTest {
       String month = Integer.toString(now.getMonth().getValue());
       String day = Integer.toString(now.getDayOfMonth());
 
-      mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
-          .andExpect(MockMvcResultMatchers.status().is(401));
+      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+          .andExpect(status().is(401));
 
     }
 
