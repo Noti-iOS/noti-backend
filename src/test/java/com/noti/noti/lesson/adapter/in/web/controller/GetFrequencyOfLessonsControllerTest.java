@@ -1,7 +1,10 @@
 package com.noti.noti.lesson.adapter.in.web.controller;
 
+import static com.noti.noti.common.adapter.in.web.response.SuccessResponse.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.common.adapter.in.web.response.SuccessResponse;
@@ -97,11 +100,11 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(createLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "12", "all"))) // ex. /api/teacher/calendar/2023/1
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(4));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "12", "all"))) // ex. /api/teacher/calendar/2023/1
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(200))
+            .andExpect(jsonPath("$.message").value(SUCCESS_MESSAGE))
+            .andExpect(jsonPath("$.data.length()").value(4));
       }
 
       @Test
@@ -110,11 +113,11 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(notCreateLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "12", "all")))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(0));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "12", "all")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(200))
+            .andExpect(jsonPath("$.message").value(SUCCESS_MESSAGE))
+            .andExpect(jsonPath("$.data.length()").value(0));
 
       }
 
@@ -129,8 +132,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(notCreateLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "13", "all")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "13", "all")))
+            .andExpect(status().is(400));
 
       }
 
@@ -140,8 +143,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(notCreateLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "0", "all")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "0", "all")))
+            .andExpect(status().is(400));
 
       }
 
@@ -151,8 +154,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(notCreateLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("-1", "2", "all")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("-1", "2", "all")))
+            .andExpect(status().is(400));
 
       }
 
@@ -162,8 +165,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(notCreateLessons());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "JULY", "all")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "JULY", "all")))
+            .andExpect(status().is(400));
 
       }
     }
@@ -175,8 +178,8 @@ class GetFrequencyOfLessonsControllerTest {
       void 예외코드_401발생() throws Exception {
         when(getFrequencyOfLessonsQuery.findFrequencyOfLessons(any(Integer.class), any(Integer.class), any(Long.class)))
             .thenReturn(createLessons());
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "2", "all")))
-            .andExpect(MockMvcResultMatchers.status().is(401));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "2", "all")))
+            .andExpect(status().is(401));
 
       }
 
@@ -196,11 +199,11 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "12", "1"))) // ex. /api/teacher/calendar/2023/1
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(4));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "12", "1"))) // ex. /api/teacher/calendar/2023/1
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(200))
+            .andExpect(jsonPath("$.message").value(SUCCESS_MESSAGE))
+            .andExpect(jsonPath("$.data.length()").value(4));
       }
 
       @Test
@@ -209,11 +212,11 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(notCreateInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "12", "1")))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(SuccessResponse.SUCCESS_MESSAGE))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.data.length()").value(0));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "12", "1")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.status").value(200))
+            .andExpect(jsonPath("$.message").value(SUCCESS_MESSAGE))
+            .andExpect(jsonPath("$.data.length()").value(0));
 
       }
 
@@ -228,8 +231,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "13", "1")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "13", "1")))
+            .andExpect(status().is(400));
 
       }
 
@@ -239,8 +242,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "0", "1")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "0", "1")))
+            .andExpect(status().is(400));
 
       }
 
@@ -250,8 +253,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("-1", "2", "1")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("-1", "2", "1")))
+            .andExpect(status().is(400));
 
       }
 
@@ -261,8 +264,8 @@ class GetFrequencyOfLessonsControllerTest {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "JULY", "1")))
-            .andExpect(MockMvcResultMatchers.status().is(400));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "JULY", "1")))
+            .andExpect(status().is(400));
 
       }
     }
@@ -274,8 +277,8 @@ class GetFrequencyOfLessonsControllerTest {
       void 예외코드_401발생() throws Exception {
         when(getFilteredHomeworkQuery.getFilteredHomeworks(any(FilteredHomeworkCommand.class)))
             .thenReturn(createInFilteredHomeworkFrequency());
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/teacher/calendar").params(createInfo("2023", "2", "1")))
-            .andExpect(MockMvcResultMatchers.status().is(401));
+        mockMvc.perform(get("/api/teacher/calendar").params(createInfo("2023", "2", "1")))
+            .andExpect(status().is(401));
 
       }
 
