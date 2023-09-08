@@ -1,11 +1,11 @@
 package com.noti.noti.studenthomework.adapter.in.web.controller;
 
-import static com.noti.noti.common.MonkeyUtils.MONKEY;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.noti.noti.common.WithAuthUser;
 import com.noti.noti.config.JacksonConfiguration;
@@ -27,8 +27,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -82,7 +80,7 @@ class GetHomeworksOfCalendarControllerTest {
       when(getHomeworksOfCalendarQuery.findHomeworksOfCalendar(any(), any(LocalDate.class), anyLong()))
           .thenReturn(createHomeworkOfCalendar());
 
-      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+      mockMvc.perform(get("/api/teacher/calendar/homeworks").params(createInfo("all", "2023-08-12")))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.data.[0].lessonId").value(3L))
           .andExpect(jsonPath("$.data.[2].lessonName").value("lesson1"))
@@ -101,7 +99,7 @@ class GetHomeworksOfCalendarControllerTest {
       when(getHomeworksOfCalendarQuery.findHomeworksOfCalendar(any(), any(LocalDate.class), anyLong()))
           .thenReturn(notCreateHomeworkOfCalendar());
 
-      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+      mockMvc.perform(get("/api/teacher/calendar/homeworks").params(createInfo("all", "2023-08-12")))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.data").isEmpty());
     }
@@ -114,15 +112,10 @@ class GetHomeworksOfCalendarControllerTest {
     @Test
     @WithAuthUser(id = "1", role = "TEACHER")
     void 응답코드_400을_반환한다() throws Exception {
-      when(getHomeworksOfCalendarQuery.findHomeworksOfCalendar(any(LocalDate.class), anyLong()))
+      when(getHomeworksOfCalendarQuery.findHomeworksOfCalendar(anyLong(), any(LocalDate.class), anyLong()))
           .thenReturn(notCreateHomeworkOfCalendar());
 
-      LocalDate now = LocalDate.now();
-      String year = Integer.toString(now.getYear());
-      String month = now.getMonth().toString();
-      String day = now.getDayOfWeek().toString();
-
-      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day)) // ex. /api/teacher/calendar/2023/JANUARY/TUESDAY
+      mockMvc.perform(get("/api/teacher/calendar/homeworks").params(createInfo("all", "2023-JANUARY-12"))) // ex. /api/teacher/calendar/2023/JANUARY/TUESDAY
           .andExpect(status().is(400));
     }
 
@@ -136,9 +129,7 @@ class GetHomeworksOfCalendarControllerTest {
       when(getHomeworksOfCalendarQuery.findHomeworksOfCalendar(anyLong(), any(LocalDate.class), anyLong()))
           .thenReturn(createHomeworkOfCalendar());
 
-      LocalDate now = LocalDate.now();
-
-      mockMvc.perform(get("/api/teacher/calendar/{year}/{month}/{day}", year, month, day))
+      mockMvc.perform(get("/api/teacher/calendar/homeworks").params(createInfo("all", "2023-08-12")))
           .andExpect(status().is(401));
 
     }
