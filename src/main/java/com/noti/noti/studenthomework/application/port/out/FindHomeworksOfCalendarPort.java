@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface FindHomeworksOfCalendarPort {
 
-  List<OutHomeworkOfGivenDate> findHomeworksOfCalendar(LocalDate date, Long teacherId);
+  List<OutHomeworkOfGivenDate> findHomeworksOfCalendar(Long lessonId, LocalDate date, Long teacherId);
 
 }

@@ -29,14 +29,15 @@ public class StudentHomeworkQueryRepository {
    * @param teacherId 선생님 Id
    * @return 수업과 숙제목록, 숙제를 받은 학생의 수와 숙제를 완료한 학생의 수
    */
-  public List<OutHomeworkOfGivenDate> findHomeworkOfCalendar(LocalDateTime date, Long teacherId) {
+  public List<OutHomeworkOfGivenDate> findHomeworkOfCalendar(Long lessonId, LocalDateTime date, Long teacherId) {
 
     return queryFactory
         .from(studentHomeworkJpaEntity)
         .join(studentHomeworkJpaEntity.homeworkJpaEntity, homeworkJpaEntity)
         .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
         .where(eqTeacherId(teacherId),
-            eqYearAndMonthOfStartTime(date)
+            eqYearAndMonthOfStartTime(date),
+            eqLessonId(lessonId)
         )
         .groupBy(studentHomeworkJpaEntity.homeworkJpaEntity)
         .transform(
@@ -68,4 +69,8 @@ public class StudentHomeworkQueryRepository {
     return date != null ? homeworkJpaEntity.startTime.between(date, date.plusDays(1).minusSeconds(1)) : null;
   }
 
+  private BooleanExpression eqLessonId(Long lessonId) {
+    log.info("lessonId: {} ", lessonId);
+    return lessonId != null ? studentHomeworkJpaEntity.homeworkJpaEntity.lessonJpaEntity.id.eq(lessonId) : null;
+  }
 }

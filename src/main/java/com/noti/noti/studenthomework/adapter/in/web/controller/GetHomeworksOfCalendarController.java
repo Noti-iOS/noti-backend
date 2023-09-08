@@ -17,11 +17,13 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,16 +46,25 @@ public class GetHomeworksOfCalendarController {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))})
   })
-  @GetMapping("/api/teacher/calendar/{year}/{month}/{day}")
+  @GetMapping("/api/teacher/calendar/homeworks")
   @Parameter(name = "userDetails", hidden = true)
   ResponseEntity<SuccessResponse<List<HomeworkOfGivenDateDto>>> getHomeworksOfCalendar(
-      @Min(1) @PathVariable int year, @Min(1) @Max(12) @PathVariable int month, @PathVariable int day,
+      @RequestParam String lessonType,
+      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
       @AuthenticationPrincipal UserDetails userDetails
   ) {
     long teacherId = Long.parseLong(userDetails.getUsername());
-    LocalDate date = LocalDate.of(year, month, day);
-    List<InHomeworkOfGivenDate> inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(
-        date, teacherId);
+
+    List<InHomeworkOfGivenDate> inHomeworkOfGivenDate;
+
+    if (lessonType.equals("all")) {
+      inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(null, date, teacherId);
+    } else {
+      inHomeworkOfGivenDate = getHomeworksOfCalendarQuery.findHomeworksOfCalendar(Long.parseLong(lessonType), date, teacherId);
+    }
+
+
+
     List<HomeworkOfGivenDateDto> responseDto = new ArrayList<>();
     inHomeworkOfGivenDate.forEach(
         homeworkOfGivenDate -> responseDto.add(

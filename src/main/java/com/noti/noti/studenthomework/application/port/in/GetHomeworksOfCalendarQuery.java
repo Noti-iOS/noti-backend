@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface GetHomeworksOfCalendarQuery {
 
-  List<InHomeworkOfGivenDate> findHomeworksOfCalendar(LocalDate date, Long teacherId);
+  List<InHomeworkOfGivenDate> findHomeworksOfCalendar(Long lessonId, LocalDate date, Long teacherId);
 
 }

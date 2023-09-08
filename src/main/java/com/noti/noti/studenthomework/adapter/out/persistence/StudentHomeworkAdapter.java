@@ -22,8 +22,8 @@ public class StudentHomeworkAdapter implements FindHomeworksOfCalendarPort,
   private final JdbcTemplate jdbcTemplate;
 
   @Override
-  public List<OutHomeworkOfGivenDate> findHomeworksOfCalendar(LocalDate date, Long teacherId) {
-    return studentHomeworkQueryRepository.findHomeworkOfCalendar(date.atStartOfDay(), teacherId);
+  public List<OutHomeworkOfGivenDate> findHomeworksOfCalendar(Long lessonId, LocalDate date, Long teacherId) {
+    return studentHomeworkQueryRepository.findHomeworkOfCalendar(lessonId, date.atStartOfDay(), teacherId);
   }
 
   @Override
