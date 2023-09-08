@@ -34,7 +34,7 @@ public class GetCalendarFrequencyController {
   private final GetFilteredHomeworkQuery getFilteredHomeworkQuery;
   private final GetFrequencyOfLessonsQuery getFrequencyOfLessonsQuery;
 
-  @Operation(tags = "해당 분반의 숙제 수 조회 API", summary = "getFilteredHomeworkInfo", description = "해당 분반의 숙제 날짜와 숙제 수를 조회한다.",
+  @Operation(tags = "해당 날짜의 숙제 또는 수업 수 조회 API", summary = "GetCalendarFrequency", description = "주어진 월에 대한 수업 수(lessonType=all) 또는 숙제 수(lessonType={수업 아이디}) 리스트를 응답한다.",
   responses = {
       @ApiResponse(responseCode = "200", description = "성공", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
