@@ -33,13 +33,13 @@ public class GetHomeworksOfCalendarController {
 
   private final GetHomeworksOfCalendarQuery getHomeworksOfCalendarQuery;
 
-  @Operation(tags = "날짜에 해당하는 숙업, 숙제 목록 조회 API", summary = "HomeworksOfCalendarInfo", description = "요청한 날짜와 수업 타입에 따라, 수업목록 및 숙제목록을 조회한다.",
+  @Operation(tags = "날짜에 해당하는 수업, 숙제 목록 조회 API", summary = "getHomeworksOfCalendar", description = "요청 날짜에 해당하는 수업목록 및 숙제목록을 조회한다.",
   responses = {
       @ApiResponse(responseCode = "200", description = "성공", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "500", description = "서버에러", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
-      @ApiResponse(responseCode = "401", description = "안증되지 않은 유저입니다", content = {
+      @ApiResponse(responseCode = "401", description = "인증되지 않은 유저입니다", content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = ErrorResponse.class))}),
       @ApiResponse(responseCode = "400", description = "올바르지 않은 값입니다.", content = {
