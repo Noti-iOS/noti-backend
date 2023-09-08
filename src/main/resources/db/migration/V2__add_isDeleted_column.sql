@@ -1,0 +1,1 @@
+ALTER TABLE student_lesson ADD COLUMN is_deleted bit NOT NULL DEFAULT 0;
