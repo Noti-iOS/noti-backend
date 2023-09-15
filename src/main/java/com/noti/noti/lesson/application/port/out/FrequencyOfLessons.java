@@ -10,8 +10,8 @@ public class FrequencyOfLessons {
   private Integer dayOfMonth;
   private Long frequencyOfLesson;
 
-  public FrequencyOfLessons(Integer dateOfLesson, Long frequencyOfLesson) {
-    this.dayOfMonth = dateOfLesson;
+  public FrequencyOfLessons(Integer dayOfMonth, Long frequencyOfLesson) {
+    this.dayOfMonth = dayOfMonth;
     this.frequencyOfLesson = frequencyOfLesson;
   }
 }
