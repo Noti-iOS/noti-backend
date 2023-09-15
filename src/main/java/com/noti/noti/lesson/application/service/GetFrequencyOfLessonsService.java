@@ -4,6 +4,7 @@ import com.noti.noti.lesson.application.port.in.DateFrequencyOfLessons;
 import com.noti.noti.lesson.application.port.in.GetFrequencyOfLessonsQuery;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessons;
 import com.noti.noti.lesson.application.port.out.FrequencyOfLessonsPort;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,8 @@ public class GetFrequencyOfLessonsService implements GetFrequencyOfLessonsQuery{
 
     frequencyOfLessons.forEach(
         frequencyLessons -> dateFrequencyOfLessonsList
-            .add(new DateFrequencyOfLessons(frequencyLessons.getDateOfLesson(), frequencyLessons.getFrequencyOfLesson())));
+            .add(new DateFrequencyOfLessons(
+                LocalDate.of(year, month, frequencyLessons.getDayOfMonth()), frequencyLessons.getFrequencyOfLesson())));
 
     return dateFrequencyOfLessonsList;
   }
