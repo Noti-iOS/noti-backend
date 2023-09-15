@@ -114,15 +114,14 @@ class LessonQueryRepository {
 
     return queryFactory
         .select(Projections.constructor(FrequencyOfLessons.class,
-            homeworkJpaEntity.endTime.as("dateOfLesson"),
-            homeworkJpaEntity.lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
+            homeworkJpaEntity.endTime.dayOfMonth().as("dayOfMonth"),
+            lessonJpaEntity.id.countDistinct().as("frequencyOfLesson")))
         .from(homeworkJpaEntity)
         .join(homeworkJpaEntity.lessonJpaEntity, lessonJpaEntity)
-        .on(homeworkJpaEntity.lessonJpaEntity.id.eq(lessonJpaEntity.id))
         .where(
             homeworkJpaEntity.endTime.between(start, end.minusSeconds(1)),
             eqTeacherId(teacherId))
-        .groupBy(homeworkJpaEntity.endTime)
+        .groupBy(homeworkJpaEntity.endTime.dayOfMonth())
         .fetch();
   }
 

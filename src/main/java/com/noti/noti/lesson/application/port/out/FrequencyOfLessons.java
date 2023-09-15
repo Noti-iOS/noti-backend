@@ -1,7 +1,5 @@
 package com.noti.noti.lesson.application.port.out;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FrequencyOfLessons {
 
-  private LocalDate dateOfLesson;
+  private Integer dayOfMonth;
   private Long frequencyOfLesson;
 
-  public FrequencyOfLessons(LocalDateTime dateOfLesson, Long frequencyOfLesson) {
-    this.dateOfLesson = dateOfLesson.toLocalDate();
+  public FrequencyOfLessons(Integer dateOfLesson, Long frequencyOfLesson) {
+    this.dayOfMonth = dateOfLesson;
     this.frequencyOfLesson = frequencyOfLesson;
   }
 }
